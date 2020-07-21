@@ -1,5 +1,9 @@
-import Page from '../components/page'
+import TheHeader from '../components/header/TheHeader'
 
 export default function Index() {
-  return <Page />
+  return (
+    <div>
+      <TheHeader />
+    </div>
+  )
 }

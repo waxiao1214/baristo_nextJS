@@ -67,7 +67,7 @@ h1, h2, h3, h4, h5, h6 {line-height: 1.25;}
 .btn-h80 {border-radius:40px; height: 80px;}
 .text-gray, .text-gray a {  color: #828282;}
 .text-yellow, .text-yellow a {color: #fbaf02;}
-.text-normal, .text-normal a {color: #080040; !important;}
+.text-normal, .text-normal a {color: #080040 !important;}
 .text-ghi, .text-ghi a { color: #6c6c6c;}
 .text-xam, .text-xam a { color: #888;}
 .text-green, .text-green a {  color: #6fcf97;}

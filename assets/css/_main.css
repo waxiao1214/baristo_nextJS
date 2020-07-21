@@ -1,1 +1,5 @@
-@import './styles.css'
+@import './bootstrap.min.css';
+@import './font-awesome.min.css';
+@import './responsive.css';
+@import './reset.css';
+@import './styles.css';
