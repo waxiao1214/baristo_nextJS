@@ -7,11 +7,13 @@ import PageSectionIndexOurRestaurant from '../components/pageSection/index/PageS
 import PageSectionIndexOurResource from '../components/pageSection/index/PageSectionIndexOurResource'
 import PageSectionIndexOurChef from '../components/pageSection/index/PageSectionIndexOurChef'
 import PageSectionIndexOurLocation from '../components/pageSection/index/PageSectionIndexOurLocation'
+import PageSectionIndexHero from '../components/pageSection/index/PageSectionIndexHero'
 
 export default function Index() {
   return (
     <div>
       <TheHeader />
+      <PageSectionIndexHero />
       <PageSectionIndexSpecialCruise />
       <PageSectionIndexDeliveryAvailability />
       <PageSectionIndexChefsChoices />
