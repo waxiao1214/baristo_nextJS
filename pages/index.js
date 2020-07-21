@@ -5,6 +5,7 @@ import PageSectionIndexSpecialCruise from '../components/pageSection/index/PageS
 import PageSectionIndexDeliveryAvailability from '../components/pageSection/index/PageSectionIndexDeliveryAvailability'
 import PageSectionIndexOurRestaurant from '../components/pageSection/index/PageSectionIndexOurRestaurant'
 import PageSectionIndexOurResource from '../components/pageSection/index/PageSectionIndexOurResource'
+import PageSectionIndexOurChef from '../components/pageSection/index/PageSectionIndexOurChef'
 
 export default function Index() {
   return (
@@ -14,6 +15,7 @@ export default function Index() {
       <PageSectionIndexDeliveryAvailability />
       <PageSectionIndexChefsChoices />
       <PageSectionIndexOurRestaurant />
+      <PageSectionIndexOurChef />
       <PageSectionIndexOurResource />
       <TheFooter />
     </div>
