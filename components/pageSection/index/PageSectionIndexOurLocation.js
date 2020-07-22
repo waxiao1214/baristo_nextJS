@@ -19,7 +19,7 @@ const PageSectionIndexOurLocation = () => {
                     <h3 className="text-center">Central London</h3>
                 </div>
             </div>
-            <div className="text-center"><button className="btn btn-h80 btn-white font-20 font-demi inflex-center-center" tabindex="0">CONTAC US</button></div>
+            <div className="text-center"><button className="btn btn-h80 btn-white font-20 font-demi inflex-center-center" >CONTAC US</button></div>
         </div>
     </section>)
 }
