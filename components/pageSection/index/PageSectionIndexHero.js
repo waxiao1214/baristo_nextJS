@@ -7,7 +7,7 @@ const PageSectionIndexHero = () => {
     return (<section class="banner">
         <div class="banner-slider">
             <Swiper
-                spaceBetween={50}
+                spaceBetween={0}
                 slidesPerView={1}
                 onSlideChange={() => console.log('slide change')}
                 onSwiper={(swiper) => console.log(swiper)}
