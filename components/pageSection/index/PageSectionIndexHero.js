@@ -5,22 +5,36 @@ import axios from '../../../lib/axios'
 
 
 const PageSectionIndexHero = () => {
-    const [slides, setstate] = useState([]);
+    const [slides, setSlides] = useState([]);
     const { t, i18n } = useTranslation();
 
     const fetchData = async () => {
         try {
             const url = `customer/web/home-service/carousel?branchId=1&culture=${i18n.language}`
             const response = await axios.get(url);
-            console.log(response.data);
+
+            setSlides(response.data.result);
         } catch (error) {
             console.error(error);
         }
     }
 
+    const actionButton = (slide) => {
+        if (slide.isActionButtonAvailable) {
+            return (<a
+                className="btn btn-h80 btn-yellow inflex-center-center"
+                href={slide.actionButtonLink}
+            >
+                {slide.actionButtonText}<span> </span><i className="ti-arrow-right"></i>
+            </a>);
+        } else {
+            return '';
+        }
+    }
+
     useEffect(() => {
         fetchData();
-    }, [slides]);
+    }, []);
 
     return (<section className="banner">
         <div className="banner-slider">
@@ -30,28 +44,20 @@ const PageSectionIndexHero = () => {
                 onSlideChange={() => console.log('slide change')}
                 onSwiper={(swiper) => console.log(swiper)}
             >
-                <SwiperSlide>
-                    <div className="banner-item" style={{ background: `url('images/picture/banner.png') no-repeat right bottom /cover` }}>
-                        <div className="banner-text">
-                            <div className="container">
-                                <h4>We supply</h4>
-                                <h3>The Highest Quality And Tasty Food</h3>
-                                <button className="btn btn-h80 btn-yellow inflex-center-center">EXPLORE <i className="ti-arrow-right"></i> </button>
+                {slides.map((slide, index) => {
+                    return (<SwiperSlide key={index}>
+                        <div className="banner-item" style={{ background: `url(${slide.imageUrl}) no-repeat right bottom /cover` }}>
+                            <div className="banner-text">
+                                <div className="container">
+                                    <h4>{slide.preText}</h4>
+                                    <h3>{slide.mainText}</h3>
+
+                                    {actionButton(slide)}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                    <div className="banner-item" style={{ background: `url('images/picture/banner.png') no-repeat right bottom /cover` }}>
-                        <div className="banner-text">
-                            <div className="container">
-                                <h4>We supply</h4>
-                                <h3>The Highest Quality And Tasty Food</h3>
-                                <button className="btn btn-h80 btn-yellow inflex-center-center">EXPLORE <i className="ti-arrow-right"></i> </button>
-                            </div>
-                        </div>
-                    </div>
-                </SwiperSlide>
+                    </SwiperSlide>)
+                })}
             </Swiper>
         </div>
 
