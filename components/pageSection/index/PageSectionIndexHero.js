@@ -1,11 +1,29 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import axios from '../../../lib/axios'
+
 
 const PageSectionIndexHero = () => {
     const [slides, setstate] = useState([]);
+    const { t, i18n } = useTranslation();
 
-    return (<section class="banner">
-        <div class="banner-slider">
+    const fetchData = async () => {
+        try {
+            const url = `customer/web/home-service/carousel?branchId=1&culture=${i18n.language}`
+            const response = await axios.get(url);
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, [slides]);
+
+    return (<section className="banner">
+        <div className="banner-slider">
             <Swiper
                 spaceBetween={0}
                 slidesPerView={1}
@@ -13,23 +31,23 @@ const PageSectionIndexHero = () => {
                 onSwiper={(swiper) => console.log(swiper)}
             >
                 <SwiperSlide>
-                    <div class="banner-item" style={{ background: `url('images/picture/banner.png') no-repeat right bottom /cover` }}>
-                        <div class="banner-text">
-                            <div class="container">
+                    <div className="banner-item" style={{ background: `url('images/picture/banner.png') no-repeat right bottom /cover` }}>
+                        <div className="banner-text">
+                            <div className="container">
                                 <h4>We supply</h4>
                                 <h3>The Highest Quality And Tasty Food</h3>
-                                <button class="btn btn-h80 btn-yellow inflex-center-center" onclick="window.location.href=base_url + 'menu.html'">EXPLORE <i class="ti-arrow-right"></i> </button>
+                                <button className="btn btn-h80 btn-yellow inflex-center-center">EXPLORE <i className="ti-arrow-right"></i> </button>
                             </div>
                         </div>
                     </div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <div class="banner-item" style={{ background: `url('images/picture/banner.png') no-repeat right bottom /cover` }}>
-                        <div class="banner-text">
-                            <div class="container">
+                    <div className="banner-item" style={{ background: `url('images/picture/banner.png') no-repeat right bottom /cover` }}>
+                        <div className="banner-text">
+                            <div className="container">
                                 <h4>We supply</h4>
                                 <h3>The Highest Quality And Tasty Food</h3>
-                                <button class="btn btn-h80 btn-yellow inflex-center-center" onclick="window.location.href=base_url + 'menu.html'">EXPLORE <i class="ti-arrow-right"></i> </button>
+                                <button className="btn btn-h80 btn-yellow inflex-center-center">EXPLORE <i className="ti-arrow-right"></i> </button>
                             </div>
                         </div>
                     </div>
