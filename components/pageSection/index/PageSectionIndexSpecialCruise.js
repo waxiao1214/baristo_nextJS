@@ -1,4 +1,4 @@
-const PageSectionIndexSpecialCruise = () => {
+const PageSectionIndexSpecialCruise = ({ specialCruises }) => {
     return (<section className="special-cruise pd-100">
         <div className="container">
             <h2 className="title"><span>Special Cruise</span></h2>

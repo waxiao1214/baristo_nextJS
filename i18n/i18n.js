@@ -4,7 +4,7 @@ import enTranslation from './locals/en/translation';
 // the translations
 // (tip move them in a JSON file and import them)
 const resources = {
-    "en-US": {
+    "en": {
         translation: {
             ...enTranslation
         }
@@ -15,7 +15,7 @@ i18n
     .use(initReactI18next) // passes i18n down to react-i18next
     .init({
         resources,
-        lng: "en-US",
+        lng: "en",
 
         keySeparator: true, // we do not use keys in form messages.welcome
 
