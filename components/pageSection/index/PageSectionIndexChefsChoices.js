@@ -19,7 +19,7 @@ const PageSectionIndexChefsChoices = ({ chefChoices }) => {
                 {
                     chefChoices.map(chefChoice => {
                         return (
-                            <div className="col-md-4">
+                            <div className="col-md-4" key={chefChoice.id}>
                                 <ProductChefItemCard chefChoice={chefChoice}/>
                             </div>
                         )
