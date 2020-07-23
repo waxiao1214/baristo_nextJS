@@ -1,11 +1,17 @@
-const PageSectionIndexOurChef = () => {
+const PageSectionIndexOurChef = ({chefStory}) => {
+    const { medias } = chefStory;
+    
     return (<section className="our-chef pd-100">
         <div className="container">
             <div className="row">
                 <div className="col-md-5">
                     <div className="our-chef-left">
-                        <h2 className="title text-left"><span>Our’s Chef</span></h2>
-                        <div className="desc font-24 mgb-20">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam suscipit sapien a convallis lobortis. </div>
+                        <h2 className="title text-left">
+                            <span>{chefStory.title}</span>
+                        </h2>
+                        <div className="desc font-24 mgb-20">
+                            {chefStory.description}
+                        </div>
                         <div className="font-demi font-20 mgb-10">JOHN KENERDY</div>
                         <p className="font-demi font-16 text-xam">CO-FOUNDER</p>
                         <div className="social flex-center font-18 mgt-30">
@@ -13,7 +19,9 @@ const PageSectionIndexOurChef = () => {
                             <a href="" title="" className="fa fa-twitter"></a>
                             <a href="" title="" className="fa fa-pinterest"></a>
                         </div>
-                        <div className="signatures mgt-30"><img src="images/picture/signatures.png" alt="" title="" /> </div>
+                        <div className="signatures mgt-30">
+                            <img src="images/picture/signatures.png" alt="" title="" />
+                        </div>
                     </div>
                 </div>
                 <div className="col-md-7">
@@ -21,8 +29,6 @@ const PageSectionIndexOurChef = () => {
                         <div className="row">
                             <div className="col-md-8">
                                 <div className="slider slider-for">
-                                    <div className="item-for"><img src="images/picture/chef.png" alt="" title="" /> </div>
-                                    <div className="item-for"><img src="images/picture/chef.png" alt="" title="" /> </div>
                                     <div className="item-for"><img src="images/picture/chef.png" alt="" title="" /> </div>
                                 </div>
                             </div>
