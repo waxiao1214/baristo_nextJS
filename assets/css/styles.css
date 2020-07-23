@@ -357,9 +357,15 @@
 .our-button {
 	margin-top: 60px;
 }
-.our-button button {
-	width: 170px;
+.our-button a, .our-button button {
+	min-width: 170px;
+	color: #fbaf02;
 }
+
+.our-button a:hover, .our-button button:hover {
+	color: #fff;
+}
+
 .customer-info {
 	margin-top: -60px;
 	z-index: 2;

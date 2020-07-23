@@ -111,7 +111,7 @@ export default function Index(props) {
       <PageSectionIndexSpecialCruise specialCruises={props.specialCruises} />
       <PageSectionIndexDeliveryAvailability />
       <PageSectionIndexChefsChoices chefChoices={props.chefChoices}/>
-      <PageSectionIndexOurRestaurant />
+      <PageSectionIndexOurRestaurant subBanner={props.subBanner}/>
       <PageSectionIndexOurChef />
       <PageSectionIndexOurLocation />
       <PageSectionIndexOurResource appResources={props.appResources}/>
