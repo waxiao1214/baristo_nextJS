@@ -34,6 +34,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         count: initialState.count,
       }
+    case 'ADD_SETTINGS':
+      return {
+        ...state,
+        settings: action.payload.settings
+      }
     default:
       return state
   }

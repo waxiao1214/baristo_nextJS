@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import i18n from '../i18n/i18n'
 import TheHeader from '../components/header/TheHeader'
 import TheFooter from '../components/footer/TheFooter'
@@ -16,7 +17,6 @@ const getSpecialCruises = async () => {
   try {
     const url = `customer/web/home-service/special-cruise?branchId=1&culture=${i18n.language}&deliveryType=Delivery`
     const response = await axios.get(url);
-    console.log('re', response)
 
     return response.data.result;
   } catch (error) {
@@ -30,7 +30,6 @@ const getChefChoices = async () => {
   try {
     const url = `customer/web/home-service/chef-choice?branchId=1&culture=${i18n.language}`
     const response = await axios.get(url);
-    console.log('re', response)
 
     return response.data.result;
   } catch (error) {
@@ -44,7 +43,6 @@ const getAppResources = async () => {
   try {
     const url = `customer/web/home-service/app-resources?branchId=1`
     const response = await axios.get(url);
-    console.log('re', response)
 
     return response.data.result;
   } catch (error) {
@@ -58,7 +56,6 @@ const getSubBanner = async () => {
   try {
     const url = `customer/web/home-service/sub-banner?branchId=1`
     const response = await axios.get(url);
-    console.log('re', response)
 
     return response.data.result;
   } catch (error) {
@@ -72,7 +69,6 @@ const getChefStory = async () => {
   try {
     const url = `customer/web/home-service/chef-story?branchId=1&culture=${i18n.language}`
     const response = await axios.get(url);
-    console.log('re', response)
 
     return response.data.result;
   } catch (error) {
@@ -88,6 +84,7 @@ export async function getServerSideProps(context) {
   const appResources = await getAppResources();
   const subBanner = await getSubBanner();
   const chefStory = await getChefStory();
+  const settings = await getSettings();
 
   return {
     props: {
@@ -95,14 +92,35 @@ export async function getServerSideProps(context) {
       chefChoices,
       appResources,
       subBanner,
-      chefStory
+      chefStory,
+      settings
     }, // will be passed to the page component as props
   }
 }
 
-export default function Index(props) {
+const getSettings = async () => {
+  try {
+    const url = `/settings?mediaTypeFilters=LOGO&mediaTypeFilters=FAVI_ICON&mediaTypeFilters=MOBILE_PROFILE_IMAGE&mediaTypeFilters=MOBILE_START_SCREEN&mediaTypeFilters=MOBILE_WELCOME_SCREEN`
+    const response = await axios.get(url);
 
-  useEffect(() => getSpecialCruises, [])
+    console.log(response.data.result);
+    return response.data.result;
+  } catch (error) {
+    console.error(error);
+
+    return [];
+  }
+}
+
+export default function Index(props) {
+  const dispatch = useDispatch();
+
+  dispatch({
+    type: 'ADD_SETTINGS',
+    payload: {
+      settings: props.settings
+    }
+  });
 
   return (
     <div>
