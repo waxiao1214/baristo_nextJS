@@ -344,8 +344,9 @@
 	padding-bottom: 150px;
 }
 .our-restaurant {
-	background: url('../images/picture/our-restaurant.png') no-repeat bottom
-		right / cover;
+	background-size: cover;
+	background-position: bottom right;
+	background-repeat: no-repeat;
 	padding: 160px 0;
 }
 .our-res-right .title {
