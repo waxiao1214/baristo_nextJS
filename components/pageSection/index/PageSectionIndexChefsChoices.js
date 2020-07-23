@@ -1,4 +1,6 @@
-const PageSectionIndexChefsChoices = () => {
+import ProductChefItemCard from '../../product/ProductChefItemCard'
+
+const PageSectionIndexChefsChoices = ({ chefChoices }) => {
     return (<section className="chef-choice pd-100">
         <div className="container">
             <h2 className="title"><span>Chef’s Choice</span></h2>
@@ -14,42 +16,15 @@ const PageSectionIndexChefsChoices = () => {
                         <p className="chef-comment">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut turpis lacinia.</p>
                     </div>
                 </div>
-                <div className="col-md-4">
-                    <div className="chef-item relative">
-                        <div className="ch-image"><a href="" title=""><img src="images/picture/choice-1.png" alt="" title="" /> </a> </div>
-                        <div className="ch-text text-center">
-                            <h3 className="title-sm mgb-10"><a href="" title="">Healthy Meal</a> </h3>
-                            <p className="desc text-gray font-18">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut turpis lacinia.</p>
-                        </div>
-                        <div className="text-center order-abs">
-                            <button className="btn btn-yellow btn-h60 font-18 font-demi" data-toggle="modal" data-target="#product-detail">ORDER NOW</button>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-4">
-                    <div className="chef-item relative">
-                        <div className="ch-image"><a href="" title=""><img src="images/picture/choice-2.png" alt="" title="" /> </a> </div>
-                        <div className="ch-text text-center">
-                            <h3 className="title-sm mgb-10"><a href="" title="">Healthy Meal</a> </h3>
-                            <p className="desc text-gray font-18">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut turpis lacinia.</p>
-                        </div>
-                        <div className="text-center order-abs">
-                            <button className="btn btn-yellow btn-h60 font-18 font-demi " data-toggle="modal" data-target="#product-detail">ORDER NOW</button>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-4">
-                    <div className="chef-item relative">
-                        <div className="ch-image"><a href="" title=""><img src="images/picture/choice-3.png" alt="" title="" /> </a> </div>
-                        <div className="ch-text text-center">
-                            <h3 className="title-sm mgb-10"><a href="" title="">Healthy Meal</a> </h3>
-                            <p className="desc text-gray font-18">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut turpis lacinia.</p>
-                        </div>
-                        <div className="text-center order-abs">
-                            <button className="btn btn-yellow btn-h60 font-18 font-demi " data-toggle="modal" data-target="#product-detail">ORDER NOW</button>
-                        </div>
-                    </div>
-                </div>
+                {
+                    chefChoices.map(chefChoice => {
+                        return (
+                            <div className="col-md-4">
+                                <ProductChefItemCard chefChoice={chefChoice}/>
+                            </div>
+                        )
+                    })
+                }
             </div>
         </div>
     </section>)

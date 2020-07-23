@@ -301,11 +301,16 @@
 }
 .ch-image {
 	position: absolute;
-	left: 0;
-	right: 0;
+	left: 50%;
+	transform: translateX(-50%);
 	top: -85px;
 	text-align: center;
+	overflow: hidden;
 	z-index: 2;
+	height: 10rem;
+	width: 10rem;
+	border-radius: 9999px;
+	box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
 }
 .order-abs {
 	position: absolute;
