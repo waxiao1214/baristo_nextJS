@@ -1,5 +1,6 @@
 const PageSectionIndexOurChef = ({chefStory}) => {
     const { medias } = chefStory;
+    const verticalMedias = medias.slice(1);
     
     return (<section className="our-chef pd-100">
         <div className="container">
@@ -29,27 +30,24 @@ const PageSectionIndexOurChef = ({chefStory}) => {
                         <div className="row">
                             <div className="col-md-8">
                                 <div className="slider slider-for">
-                                    <div className="item-for"><img src="images/picture/chef.png" alt="" title="" /> </div>
+                                    <div className="item-for">
+                                        <img src={medias[0].mediaLink} alt="" title="" />
+                                    </div>
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="slider slider-nav">
-                                    <div className="item-nav item-video">
-                                        <div className="item-nav-cache relative">
-                                            <img src="images/picture/chef-2.png" alt="" title="" />
-                                            <span className="absolute item-video-abs"><img src="images/icon/icon-play-2.svg" alt="" title="" /> </span>
-                                        </div>
-                                    </div>
-                                    <div className="item-nav">
-                                        <div className="item-nav-cache">
-                                            <img src="images/picture/chef-3.png" alt="" title="" />
-                                        </div>
-                                    </div>
-                                    <div className="item-nav">
-                                        <div className="item-nav-cache">
-                                            <img src="images/picture/chef-4.png" alt="" title="" />
-                                        </div>
-                                    </div>
+                                    {
+                                        verticalMedias.map((media) => {
+                                            return (
+                                                <div className="item-nav">
+                                                    <div className="item-nav-cache">
+                                                        <img src={media.mediaLink} alt="" title="" />
+                                                    </div>
+                                                </div>
+                                            )
+                                        })
+                                    }
                                 </div>
                             </div>
                         </div>
