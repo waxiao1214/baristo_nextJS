@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 
 const HeaderTop = () => {
-    const { languages } = useSelector((state) => state.settings);
+    const { languages, tenantDetails } = useSelector((state) => state.settings);
     const { t, i18n } = useTranslation();
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
 
@@ -45,12 +45,15 @@ const HeaderTop = () => {
                             <span className="language-value" onClick={toggleLanguageDropdown}>{i18n.language}</span>
                             {dropdown(isLanguageDropdownOpen)}
                         </div>
-                        <div className="social flex-center">
-                            <span>FOLLOW US:</span>
-                            <a href="" title="" className="fa fa-facebook"></a>
-                            <a href="" title="" className="fa fa-pinterest"></a>
-                            <a href="" title="" className="fa fa-twitter"></a>
-                        </div>
+                        {
+                            !tenantDetails.socialLinks ? '' :
+                            <div className="social flex-center">
+                                <span>FOLLOW US:</span>
+                                <a href="" title="" className="fa fa-facebook"></a>
+                                <a href="" title="" className="fa fa-pinterest"></a>
+                                <a href="" title="" className="fa fa-twitter"></a>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
