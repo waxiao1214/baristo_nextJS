@@ -1,4 +1,32 @@
+import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+
 const HeaderTop = () => {
+    const { languages } = useSelector((state) => state.settings);
+    const { t, i18n } = useTranslation();
+    const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+
+    const toggleLanguageDropdown = () => {
+        setIsLanguageDropdownOpen(!isLanguageDropdownOpen)
+    };
+
+    const dropdown = (isActive) => {
+        if (isActive) {
+            return (
+                <ul className="choice-lang">
+                    {
+                        languages.map((language) => {
+                            return (
+                                <li key={language.name}>{language.name}</li>
+                            )
+                        })
+                    }
+                </ul>
+            )
+        }
+    }
+
     return (<section className="header-top">
         <div className="container">
             <div className="row">
@@ -14,11 +42,8 @@ const HeaderTop = () => {
                 <div className="col-md-6 col-6">
                     <div className="header-top_right flex-center-end">
                         <div className="language">
-                            <span className="language-value">EN</span>
-                            <ul className="choice-lang">
-                                <li>EN</li>
-                                <li>Vi</li>
-                            </ul>
+                            <span className="language-value" onClick={toggleLanguageDropdown}>{i18n.language}</span>
+                            {dropdown(isLanguageDropdownOpen)}
                         </div>
                         <div className="social flex-center">
                             <span>FOLLOW US:</span>
