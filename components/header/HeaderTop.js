@@ -1,12 +1,21 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import BaseSocialLink from '../base/BaseSocialLink';
 
 const HeaderTop = () => {
     const { languages, tenantDetails } = useSelector((state) => state.settings);
     const { t, i18n } = useTranslation();
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+    const [socialLinks, setSocialLinks] = useState([])
 
+    useEffect(() => {
+        const socialLinks = !tenantDetails.socialLinks ? [] : tenantDetails.socialLinks.split(';');
+
+        setSocialLinks(socialLinks);
+    }, [])
+    
+    
     const toggleLanguageDropdown = () => {
         setIsLanguageDropdownOpen(!isLanguageDropdownOpen)
     };
@@ -51,12 +60,14 @@ const HeaderTop = () => {
                             {dropdown(isLanguageDropdownOpen)}
                         </div>
                         {
-                            !tenantDetails.socialLinks ? '' :
+                            socialLinks.length === 0 ? '' :
                             <div className="social flex-center">
-                                <span>FOLLOW US:</span>
-                                <a href="" title="" className="fa fa-facebook"></a>
-                                <a href="" title="" className="fa fa-pinterest"></a>
-                                <a href="" title="" className="fa fa-twitter"></a>
+                                    <span>FOLLOW US:</span>
+                                    {
+                                        socialLinks.map((link, index) => {
+                                            return (<BaseSocialLink link={link} key={index} />);
+                                        })
+                                    }
                             </div>
                         }
                     </div>
