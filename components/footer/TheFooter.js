@@ -28,13 +28,6 @@ const TheFooter = () => {
                     </div>
                 </div>
                 <div className="col-md-4">
-                    <div className="footer-2">
-                        <h4>SUBCRIBE</h4>
-                        <form className="search">
-                            <input type="text" placeholder="E-Mail" />
-                            <button type="submit"><i className="fa fa-send"></i> </button>
-                        </form>
-                    </div>
                 </div>
                 <div className="col-md-12">
                     <div className="footer-bottom flex-center-between">
