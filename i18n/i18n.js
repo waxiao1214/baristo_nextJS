@@ -12,6 +12,15 @@ const resources = {
                 "notAvailable": 'Delivery is not available'
             }
         },
+    },
+    "de": {
+        translation: {
+            'test': 'asdf',
+            "delivery": {
+                "available": 'asdf',
+                "notAvailable": 'asdfasdf'
+            }
+        },
     }
 };
 

@@ -11,6 +11,11 @@ const HeaderTop = () => {
         setIsLanguageDropdownOpen(!isLanguageDropdownOpen)
     };
 
+    const changeLanguage = (language) => {
+        i18n.changeLanguage(language);
+        setIsLanguageDropdownOpen(false);
+    }
+
     const dropdown = (isActive) => {
         if (isActive) {
             return (
@@ -18,7 +23,7 @@ const HeaderTop = () => {
                     {
                         languages.map((language) => {
                             return (
-                                <li key={language.name}>{language.name}</li>
+                                <li onClick={() => changeLanguage(language.name)} key={language.name}>{language.name}</li>
                             )
                         })
                     }
