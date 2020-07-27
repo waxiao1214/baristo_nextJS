@@ -21,7 +21,7 @@ const getSpecialCruises = async () => {
     return response.data.result;
   } catch (error) {
     console.error(error);
-    
+
     return [];
   }
 }
@@ -114,11 +114,25 @@ const getSettings = async () => {
 
 export default function Index(props) {
   const dispatch = useDispatch();
+  const { branches } = useSelector((state) => state.settings);
+  const [currentBranch, setCurrentBranch] = useState({});
+
+  useEffect(() => {
+    console.log(branches);
+    setCurrentBranch(branches.filter(branch => branch.primaryBranch)[0]);
+  }, []);
 
   dispatch({
     type: 'ADD_SETTINGS',
     payload: {
       settings: props.settings
+    }
+  });
+
+  dispatch({
+    type: 'SET_CURRENT_BRANCH',
+    payload: {
+      branch: currentBranch
     }
   });
 
@@ -128,11 +142,11 @@ export default function Index(props) {
       <PageSectionIndexHero />
       <PageSectionIndexSpecialCruise specialCruises={props.specialCruises} />
       <PageSectionIndexDeliveryAvailability />
-      <PageSectionIndexChefsChoices chefChoices={props.chefChoices}/>
-      <PageSectionIndexOurRestaurant subBanner={props.subBanner}/>
-      <PageSectionIndexOurChef chefStory={props.chefStory}/>
+      <PageSectionIndexChefsChoices chefChoices={props.chefChoices} />
+      <PageSectionIndexOurRestaurant subBanner={props.subBanner} />
+      <PageSectionIndexOurChef chefStory={props.chefStory} />
       <PageSectionIndexOurLocation />
-      <PageSectionIndexOurResource appResources={props.appResources}/>
+      <PageSectionIndexOurResource appResources={props.appResources} />
       <TheFooter />
     </div>
   )

@@ -8,7 +8,8 @@ const initialState = {
   lastUpdate: 0,
   light: false,
   count: 0,
-  settings: {}
+  settings: {},
+  currentBranch: {}
 }
 
 const reducer = (state = initialState, action) => {
@@ -38,6 +39,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         settings: action.payload.settings
+      }
+    case 'SET_CURRENT_BRANCH': 
+      return {
+        ...state,
+        currentBranch: action.payload.branch
       }
     default:
       return state
