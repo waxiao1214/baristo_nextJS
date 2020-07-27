@@ -1,7 +1,12 @@
-const PageSectionIndexOurChef = ({chefStory}) => {
+import React, { useState } from 'react';
+import useSocialMediaLinks from '../../../hooks/useSocialMediaLinks';
+import BaseSocialLink from '../../base/BaseSocialLink';
+
+const PageSectionIndexOurChef = ({ chefStory }) => {
     const { medias } = chefStory;
-    const verticalMedias = medias.slice(1);
-    
+    const [verticalMedias, setVeriticalMedias] = useState(medias.slice(1));
+    const socialLinks = useSocialMediaLinks(chefStory.socialMediaLinks);
+
     return (<section className="our-chef pd-100">
         <div className="container">
             <div className="row">
@@ -15,11 +20,16 @@ const PageSectionIndexOurChef = ({chefStory}) => {
                         </div>
                         <div className="font-demi font-20 mgb-10">JOHN KENERDY</div>
                         <p className="font-demi font-16 text-xam">CO-FOUNDER</p>
-                        <div className="social flex-center font-18 mgt-30">
-                            <a href="" title="" className="fa fa-facebook"></a>
-                            <a href="" title="" className="fa fa-twitter"></a>
-                            <a href="" title="" className="fa fa-pinterest"></a>
-                        </div>
+                        {
+                            socialLinks.length === 0 ? '' :
+                                (<div className="social flex-center font-18 mgt-30">
+                                    {
+                                        socialLinks.map((link, index) => {
+                                            return (<BaseSocialLink link={link} key={index} />);
+                                        })
+                                    }
+                                </div>)
+                        }
                         <div className="signatures mgt-30">
                             <img src="images/picture/signatures.png" alt="" title="" />
                         </div>
@@ -40,7 +50,7 @@ const PageSectionIndexOurChef = ({chefStory}) => {
                                     {
                                         verticalMedias.map((media) => {
                                             return (
-                                                <div className="item-nav">
+                                                <div className="item-nav" key={media.id}>
                                                     <div className="item-nav-cache">
                                                         <img src={media.mediaLink} alt="" title="" />
                                                     </div>
