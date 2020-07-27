@@ -1,9 +1,14 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
+import BaseSocialLink from '../base/BaseSocialLink';
+import useSocialMediaLinks from '../../hooks/useSocialMediaLinks';
 
 const TheFooter = () => {
-    const { currentBranch } = useSelector((state) => state.settings);
-    
+    const { contactDetails, streetName, streetNumber, city } = useSelector((state) => state.currentBranch);
+    const { tenantDetails } = useSelector((state) => state.settings);
+
+    const socialLinks = useSocialMediaLinks(tenantDetails.socialLinks);
+
     return (<section className="footer" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
         xmlns="http://www.w3.org/1999/html">
         <div className="container">
@@ -12,25 +17,37 @@ const TheFooter = () => {
                     <div className="footer-1">
                         <div className="logo-footer"><a href="" title=""><img src="images/icon/logo-white.svg" alt="" title="" /> </a></div>
                         <div className="desc font-16">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut turpis lacinia. Etiam suscipit sapien a convallis </div>
-                        <div className="social">
-                            <a href="" title="" className="fa fa-facebook"></a>
-                            <a href="" title="" className="fa fa-twitter"></a>
-                            <a href="" title="" className="fa fa-pinterest"></a>
-                        </div>
+                        {socialLinks.length !== 0 &&
+                            <div className="social">
+                                {
+                                    socialLinks.map((link, index) => {
+                                        return (<BaseSocialLink link={link} key={index} />);
+                                    })
+                                }
+                            </div>
+                        }
                     </div>
                 </div>
                 <div className="col-md-4">
-                    <div className="footer-2">
-                        <h4>CONTACT INFO</h4>
-                        <div className="footer-info footer-address"><span>123 Street, Knightsbridge, Central London</span></div>
-                        <div className="footer-info footer-phone"><a href="" title="">1-800-234-23-2389</a></div>
-                        <div className="footer-info footer-mail"><a href="" title="">Infor@gmail.com</a></div>
-                        <div className="footer-info footer-clock">
-                            <div className="flex-center-between"><span>Lunch</span><span>Everyday</span></div>
-                            <div className="flex-center-between"><span>Dinner: Mon- Thu</span><span>18:00- 21:30</span></div>
-                            <div className="flex-center-between"><span>Dinner: Fri- Sun</span><span>19:00- 21:30</span></div>
+                    {contactDetails &&
+                        <div className="footer-2">
+                            <h4>CONTACT INFO</h4>
+                            <div className="footer-info footer-address">
+                            <span>{streetNumber && `${streetNumber},`}{streetName && ` ${streetName}`}{city && `, ${city}`}</span>
+                            </div>
+                            <div className="footer-info footer-phone">
+                            <a href={`tel:${contactDetails.workPhone}`}>{contactDetails.workPhone}</a>
+                            </div>
+                            <div className="footer-info footer-mail">
+                            <a href={`mailto:${contactDetails.email}`}>{contactDetails.email}</a>
+                            </div>
+                            <div className="footer-info footer-clock">
+                                <div className="flex-center-between"><span>Lunch</span><span>Everyday</span></div>
+                                <div className="flex-center-between"><span>Dinner: Mon- Thu</span><span>18:00- 21:30</span></div>
+                                <div className="flex-center-between"><span>Dinner: Fri- Sun</span><span>19:00- 21:30</span></div>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
                 <div className="col-md-4">
                 </div>
