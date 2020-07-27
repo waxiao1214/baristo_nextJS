@@ -117,6 +117,7 @@ export default function Index(props) {
   const { branches } = useSelector((state) => state.settings);
   const [currentBranch, setCurrentBranch] = useState({});
   const [contentWidgets, setContentWidgets] = useState({});
+  const [isDeliveryAvailabilitySectionVisible, setIsDeliveryAvailabilitySectionVisible] = useState(true);
 
   dispatch({
     type: 'ADD_SETTINGS',
@@ -143,6 +144,13 @@ export default function Index(props) {
     setContentWidgets(contentWidgets);
   }, [currentBranch]);
 
+  useEffect(() => {
+    if (!currentBranch.contentWidgets) return;
+
+    const { deliveryOption } = currentBranch.deliverySetting;
+    setIsDeliveryAvailabilitySectionVisible(deliveryOption === 'DeliveryOnly' || deliveryOption === 'DeliveryAndPickup');
+  }, [currentBranch]);
+
   dispatch({
     type: 'SET_CURRENT_BRANCH',
     payload: {
@@ -159,7 +167,9 @@ export default function Index(props) {
       {contentWidgets.SPECIALCRUISE &&
         <PageSectionIndexSpecialCruise specialCruises={props.specialCruises} />
       }
-      <PageSectionIndexDeliveryAvailability />
+      {isDeliveryAvailabilitySectionVisible &&
+        <PageSectionIndexDeliveryAvailability />
+      }
       {contentWidgets.CHEFSCHOICE &&
         <PageSectionIndexChefsChoices chefChoices={props.chefChoices} />
       }
