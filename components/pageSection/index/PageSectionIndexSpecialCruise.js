@@ -1,9 +1,12 @@
 import ProductCard from '../../product/ProductCard'
+import { useTranslation } from 'react-i18next';
 
 const PageSectionIndexSpecialCruise = ({ specialCruises }) => {
+    const { t } = useTranslation(['home']);
+
     return (<section className="special-cruise pd-100">
         <div className="container">
-            <h2 className="title"><span>Special Cruise</span></h2>
+            <h2 className="title"><span>{t('special_cruise')}</span></h2>
             <div className="row">
                 {
                     specialCruises.map(specialCruise => {
