@@ -7,7 +7,7 @@ const getSettings = async () => {
     const url = `/settings?mediaTypeFilters=LOGO&mediaTypeFilters=FAVI_ICON&mediaTypeFilters=MOBILE_PROFILE_IMAGE&mediaTypeFilters=MOBILE_START_SCREEN&mediaTypeFilters=MOBILE_WELCOME_SCREEN`
     const response = await axios.get(url);
 
-    console.log(response.data.result);
+    console.log('adding settings2');
     return response.data.result;
   } catch (error) {
     console.error(error);
@@ -28,12 +28,6 @@ export async function getServerSideProps() {
   const { dispatch } = reduxStore
 
   const settings = await getSettings();
-
-  dispatch({
-    type: 'TICK',
-    light: false,
-    lastUpdate: Date.now(),
-  })
 
   dispatch({
     type: 'ADD_SETTINGS',

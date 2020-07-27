@@ -1,4 +1,9 @@
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+
 const TheFooter = () => {
+    const { currentBranch } = useSelector((state) => state.settings);
+    
     return (<section className="footer" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
         xmlns="http://www.w3.org/1999/html">
         <div className="container">

@@ -13,7 +13,7 @@ const HeaderTop = () => {
         const socialLinks = !tenantDetails.socialLinks ? [] : tenantDetails.socialLinks.split(';');
 
         setSocialLinks(socialLinks);
-    }, [])
+    }, [tenantDetails])
     
     
     const toggleLanguageDropdown = () => {
