@@ -8,6 +8,7 @@ const TheFooter = () => {
     const { tenantDetails } = useSelector((state) => state.settings);
 
     const socialLinks = useSocialMediaLinks(tenantDetails.socialLinks);
+    const logo = useSelector((state) => state.logo);
 
     return (<section className="footer" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
         xmlns="http://www.w3.org/1999/html">
@@ -15,7 +16,7 @@ const TheFooter = () => {
             <div className="row">
                 <div className="col-md-4">
                     <div className="footer-1">
-                        <div className="logo-footer"><a href="" title=""><img src="images/icon/logo-white.svg" alt="" title="" /> </a></div>
+                        <div className="logo-footer"><a href="" title=""><img src={logo} alt="" title="" /> </a></div>
                         <div className="desc font-16">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut turpis lacinia. Etiam suscipit sapien a convallis </div>
                         {socialLinks.length !== 0 &&
                             <div className="social">

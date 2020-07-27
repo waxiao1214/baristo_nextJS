@@ -9,7 +9,8 @@ const initialState = {
   light: false,
   count: 0,
   settings: {},
-  currentBranch: {}
+  currentBranch: {},
+  logo: ''
 }
 
 const reducer = (state = initialState, action) => {
@@ -45,6 +46,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         currentBranch: action.payload.branch
       }
+    case 'SET_LOGO': {
+      return {
+        ...state,
+        logo: action.payload.logo
+      }
+    }
     default:
       return state
   }

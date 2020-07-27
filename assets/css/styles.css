@@ -95,6 +95,13 @@
 	right: 0;
 	z-index: 2;
 }
+.logo {
+	display: flex;
+	max-height: 4.5rem;
+}
+.logo img {
+	height: 100%;
+}
 .search {
 	background: #fff;
 	border-radius: 30px;
@@ -488,7 +495,12 @@
 	color: #fff;
 }
 .logo-footer {
+	display: flex;
+	max-height: 4.5rem;
 	margin-bottom: 20px;
+}
+.logo-footer img {
+	height: 100%;
 }
 .footer .social {
 	margin-top: 20px;

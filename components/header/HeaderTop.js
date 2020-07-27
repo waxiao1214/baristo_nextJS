@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import BaseSocialLink from '../base/BaseSocialLink';

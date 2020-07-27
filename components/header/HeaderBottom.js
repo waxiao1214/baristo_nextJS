@@ -1,10 +1,14 @@
+import { useSelector } from 'react-redux';
+
 const HeaderBottom = () => {
+    const logo = useSelector((state) => state.logo);
+
     return (<section className="header-bottom">
         <div className="container">
             <div className="row">
                 <div className="col-md-2 between-mb flex-center">
                     <div className="logo">
-                        <a href="index.html" title=""><img src="images/icon/logo.svg" alt="" /> </a>
+                        <a href="index.html" title=""><img src={logo} alt="" /> </a>
                     </div>
                     <div className="right-mb relative visible-mobile">
                         <button className="btn-default btn-search-mb"><i className="fa fa-search"></i> </button>

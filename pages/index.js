@@ -132,6 +132,13 @@ export default function Index(props) {
     setCurrentBranch(branches.filter(branch => branch.primaryBranch)[0]);
   }, [branches]);
 
+  dispatch({
+    type: 'SET_CURRENT_BRANCH',
+    payload: {
+      branch: currentBranch
+    }
+  });
+
   useEffect(() => {
     if (!currentBranch.contentWidgets) return;
 
@@ -151,12 +158,21 @@ export default function Index(props) {
     setIsDeliveryAvailabilitySectionVisible(deliveryOption === 'DeliveryOnly' || deliveryOption === 'DeliveryAndPickup');
   }, [currentBranch]);
 
-  dispatch({
-    type: 'SET_CURRENT_BRANCH',
-    payload: {
-      branch: currentBranch
-    }
-  });
+  useEffect(() => {
+    if (!currentBranch.contentWidgets) return;
+
+    let logo;
+
+    logo = currentBranch.applicationMedia.filter(media => media.type === 'LOGO')[0].blobLink;
+
+    dispatch({
+      type: 'SET_LOGO',
+      payload: {
+        logo
+      }
+    });
+    
+  }, [currentBranch]);
 
   return (
     <div>
