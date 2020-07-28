@@ -1721,6 +1721,9 @@ body.modal-open-2 {
 	text-align: center;
 	width: 70px;
 }
+.modal.show {
+	display: block;
+}
 #verify-phone-number.modal.show .modal-dialog {
 	margin-top: 70px;
 }

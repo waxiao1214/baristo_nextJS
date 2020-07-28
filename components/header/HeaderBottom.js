@@ -1,9 +1,13 @@
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import ModalFilterSearch from '../modal/filter/ModalFilterSeach';
 
 const HeaderBottom = () => {
     const logo = useSelector((state) => state.logo);
+    const [isFilterModalActive, setIsFilterModalActive] = useState(false);
 
     return (<section className="header-bottom">
+        <ModalFilterSearch isActive={isFilterModalActive} close={() => setIsFilterModalActive(false)}/>
         <div className="container">
             <div className="row">
                 <div className="col-md-2 between-mb flex-center">
@@ -25,10 +29,12 @@ const HeaderBottom = () => {
                             <div className="col-md-6 abs-mb">
                                 <div className="search-relative relative">
                                     <form className="search">
-                                        <button type="submit"><i className="fa fa-search"></i> </button>
+                                        <button type="submit">
+                                            <i className="fa fa-search"></i>
+                                        </button>
                                         <input type="text" placeholder="Searching..." />
                                     </form>
-                                    <button className="btn-tranfer btn-filter" data-target="#search-filter" data-toggle="modal"><i className="fa fa-filter"></i> </button>
+                                    <button onClick={() => setIsFilterModalActive(true)} className="btn-tranfer btn-filter" data-target="#search-filter" data-toggle="modal"><i className="fa fa-filter"></i> </button>
                                 </div>
                             </div>
                             <div className="col-md-6 visible-desktop">
