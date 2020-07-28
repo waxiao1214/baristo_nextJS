@@ -7,7 +7,7 @@ const PageSectionIndexDeliveryAvailability = () => {
     const [postalCodes, setPostalCodes] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [deliveryMessage, setDeliveryMessage] = useState('');
-    const { t } = useTranslation();
+    const { t } = useTranslation(['common']);
 
     const getPostalCodes = async (inputValue) => {
         try {
@@ -41,10 +41,10 @@ const PageSectionIndexDeliveryAvailability = () => {
         const result = await deliveryCheck(inputValue);
         const { specialMessage, isDeliveryAvailable } = result;
         if (isDeliveryAvailable) {
-            message = specialMessage ? specialMessage : t('delivery.available');
+            message = specialMessage ? specialMessage : t('available');
             setDeliveryMessage(message);
         } else {
-            message = specialMessage ? specialMessage : t('delivery.available');
+            message = specialMessage ? specialMessage : t('not_available');
             setDeliveryMessage(message);
         }
     }

@@ -1,3 +1,4 @@
 export default {
-    "test": "test asdf"
+    "available": "Available",
+    "not_available": "Not available"
 }
