@@ -224,6 +224,9 @@
 .product-image {
 	margin-bottom: 30px;
 }
+.product-size-variation {
+	margin-top: 1.5rem;
+}
 .desc {
 	line-height: 1.5;
 }
@@ -236,10 +239,10 @@
 	z-index: 2;
 	transition: all ease 0.3s;
 }
-.delivery a {
+.delivery button {
 	background-image: url('../images/icon/icon-truck.svg');
 }
-.delivery a:hover {
+.delivery button:hover {
 	background-color: #080040;
 	color: #fff;
 }
@@ -1825,6 +1828,12 @@ body.modal-open-2 {
 }
 .product-component > span img {
 	margin-right: 10px;
+}
+.product-price-size {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 1.125rem;
 }
 .old-price > span {
 	color: #6b6c7e;
