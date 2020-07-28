@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import ModalFilterSearch from '../modal/filter/ModalFilterSeach';
+import ModalChangeBranch from '../modal/branch/ModalChangeBranch';
 
 const HeaderBottom = () => {
     const logo = useSelector((state) => state.logo);
     const { branchName } = useSelector((state) => state.currentBranch);
     const [isFilterModalActive, setIsFilterModalActive] = useState(false);
+    const [isBranchModalActive, setIsBranchModalActive] = useState(false);
 
     return (<section className="header-bottom">
         <ModalFilterSearch isActive={isFilterModalActive} close={() => setIsFilterModalActive(false)} />
+        <ModalChangeBranch isActive={isBranchModalActive} close={() => setIsBranchModalActive(false)}/>
         <div className="container">
             <div className="row">
                 <div className="col-md-2 between-mb flex-center">
@@ -41,9 +44,9 @@ const HeaderBottom = () => {
                             <div className="col-md-6 visible-desktop">
                                 <div className="header-action">
                                     {branchName &&
-                                        <a className="location">
+                                        <div className="link" className="location" onClick={() => setIsBranchModalActive(true)}>
                                             <i className="fa fa-map-marker"></i>{branchName}
-                                        </a>
+                                        </div>
                                     }
                                     <button className="btn-tranfer btn-login" data-target="#sign-in" data-toggle="modal">LOGIN</button>
                                     <button className="btn btn-white btn-h60 btn-join" data-target="#sign-up" data-toggle="modal">JOIN NOW</button>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-const ModalFilterSearch = ({ isActive, close}) => {
+const ModalFilterSearch = ({ isActive, close }) => {
+    const { t } = useTranslation(['common']);
     const [priceFrom, setPriceFrom] = useState(0);
     const [priceTo, setPriceTo] = useState(0);
 
@@ -30,13 +32,13 @@ const ModalFilterSearch = ({ isActive, close}) => {
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-top">
-                            <h2 className="title"><span>Search with Filter</span></h2>
+                            <h2 className="title"><span>{t('search_with_filter')}</span></h2>
                             <button onClick={close} type="button" className="close" data-dismiss="modal" aria-label="Close"><i className="ti-close"></i> </button>
                         </div>
                         <div className="modal-main">
                             <form>
                                 <div className="price-range">
-                                    <h3 className="modal-title-md"><img src="images/icon/local_atm_24px_rounded.svg" alt="" title="" />Price range </h3>
+                                    <h3 className="modal-title-md"><img src="images/icon/local_atm_24px_rounded.svg" alt="" title="" />{t('price_range')}</h3>
                                     <div className="range-box">
                                         <span>From</span>
                                         <div className="formRow--input-wrapper js-inputWrapper">
@@ -109,7 +111,6 @@ const ModalFilterSearch = ({ isActive, close}) => {
             </div>
             <div className="modal-backdrop fade show"></div>
         </div>
-
     );
 };
 

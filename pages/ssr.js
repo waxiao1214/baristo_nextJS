@@ -34,7 +34,7 @@ export async function getServerSideProps() {
     payload: {
       settings
     }
-  })
+  });
 
   return { props: { initialReduxState: reduxStore.getState() } }
 }

@@ -11,10 +11,7 @@ export function getStaticProps() {
   // the store first (like in /pages/ssr.js), this approach can be better and easier
   return {
     props: {
-      initialReduxState: {
-        lastUpdate: Date.now(),
-        light: false,
-      },
+
     },
   }
 }

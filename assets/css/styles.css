@@ -138,6 +138,13 @@
 	align-items: center;
 	justify-content: flex-end;
 }
+
+.header-action link{
+	cursor: pointer;
+}
+.btn--no-shadow {
+	box-shadow: none;
+}
 .btn-join {
 	font-size: 16px;
 	margin-left: 30px;
