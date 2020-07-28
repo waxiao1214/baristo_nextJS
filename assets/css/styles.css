@@ -1711,6 +1711,10 @@ body.modal-open-2 {
 	font-weight: 600;
 	width: 300px;
 }
+.resource-cover img {
+	display: block;
+	max-height: 20rem;
+}
 #form-otp input {
 	border-width: 0 0 4px 0;
 	border-style: solid;

@@ -4,7 +4,7 @@ const PageSectionIndexOurResource = ({appResources}) => {
             <div className="row">
                 <div className="col-md-6">
                     <div className="resource-cover">
-                        <img src="images/picture/Web-Showcase-Project-Presentation.png" alt="" title="" />
+                        <img src={appResources.imageLink} alt="" title="" />
                     </div>
                 </div>
                 <div className="col-md-6">
