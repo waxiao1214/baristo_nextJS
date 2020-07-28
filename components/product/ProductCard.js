@@ -7,7 +7,6 @@ const ProductCard = ({ product }) => {
     const { currency } = useSelector(state => state.settings)
     const { mealPrices } = product;
     const mainMeal = mealPrices[0];
-    const otherMealVariants = mealPrices.slice(1);
 
     /**
      * Check if the discount is still 
@@ -18,6 +17,14 @@ const ProductCard = ({ product }) => {
      */
     const isDiscountStillInRange = (from, to) => {
         if (!from || !to) return false;
+
+        const fromDate = new Date(from);
+        const toDate = new Date(to);
+        const now = new Date();
+
+        if (now < fromDate || now > toDate) return false;
+        
+        return true;
     }
 
     return (
@@ -51,17 +58,17 @@ const ProductCard = ({ product }) => {
                     {product.description}
                 </div>
 
-                {mealPrices.map((meal, index) => {
+                {mealPrices.map((mealPrice, index) => {
                     return (
-                        <div className={index !== 0 ? 'product-size-variation' : ''} key={meal.id}>
+                        <div className={index !== 0 ? 'product-size-variation' : ''} key={mealPrice.id}>
                             <div className="product-price-size">
-                                <div className="product-price text-yellow font-28 font-demi">{`${currency} ${meal.price}`}</div>
-                                <span>{meal.size}</span>
+                                <div className="product-price text-yellow font-28 font-demi">{`${currency} ${mealPrice.price}`}</div>
+                                <span>{mealPrice.size}</span>
                             </div>
-                            {meal.applyDiscount &&
+                            {mealPrice.mealSettings[0].applyDiscount && isDiscountStillInRange(mealPrice.mealSettings[0].from, mealPrice.mealSettings[0].to) &&
                                 <div className="product-sale mgt-10">
                                     <span className="discount inflex-center-center btn-gray btn-h46 btn-bgLeft">
-                                    {t('discount')} {meal.mealSettings[0].discount}{meal.mealSettings[0].discountType === 'Fixed' ? currency : '%'}
+                                    {t('discount')} {mealPrice.mealSettings[0].discount}{mealPrice.mealSettings[0].discountType === 'Fixed' ? currency : '%'}
                                 </span>
                                     <a className="btn-h46 inflex-center-center btn-gray more">{t('more')}</a>
                                 </div>
