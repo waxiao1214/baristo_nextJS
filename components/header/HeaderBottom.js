@@ -5,7 +5,7 @@ import ModalChangeBranch from '../modal/branch/ModalChangeBranch';
 
 const HeaderBottom = () => {
     const logo = useSelector((state) => state.logo);
-    const { branchName } = useSelector((state) => state.currentBranch);
+    const { branchName } = useSelector((state) => state.root.currentBranch);
     const [isFilterModalActive, setIsFilterModalActive] = useState(false);
     const [isBranchModalActive, setIsBranchModalActive] = useState(false);
 

@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 const ModalChangeBranch = ({ close, isActive }) => {
     const { t } = useTranslation(['common']);
-    const { branches } = useSelector((state) => state.settings);
+    const { branches } = useSelector((state) => state.root.settings);
 
     if (!isActive) {
         return '';

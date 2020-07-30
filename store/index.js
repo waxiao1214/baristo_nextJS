@@ -1,17 +1,19 @@
 import { useMemo } from 'react'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import filter from './reducers/filter';
+import { authentication } from './reducers/authentication';
 
 let store
 
 const initialState = {
-  lastUpdate: 0,
-  light: false,
-  count: 0,
-  settings: {},
-  currentBranch: {},
-  logo: ''
+  root: {
+    lastUpdate: 0,
+    light: false,
+    count: 0,
+    settings: {},
+    currentBranch: {},
+    logo: ''
+  }
 }
 
 const reducer = (state = initialState, action) => {
@@ -21,7 +23,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         settings: action.payload.settings
       }
-    case 'SET_CURRENT_BRANCH': 
+    case 'SET_CURRENT_BRANCH':
       return {
         ...state,
         currentBranch: action.payload.branch
@@ -37,9 +39,14 @@ const reducer = (state = initialState, action) => {
   }
 }
 
+const rootReducer = combineReducers({
+  root: reducer,
+  authentication: authentication
+});
+
 function initStore(preloadedState = initialState) {
   return createStore(
-    reducer,
+    rootReducer,
     preloadedState,
     composeWithDevTools(applyMiddleware())
   )

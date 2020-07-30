@@ -4,8 +4,8 @@ import BaseSocialLink from '../base/BaseSocialLink';
 import useSocialMediaLinks from '../../hooks/useSocialMediaLinks';
 
 const TheFooter = () => {
-    const { contactDetails, streetName, streetNumber, city } = useSelector((state) => state.currentBranch);
-    const { tenantDetails } = useSelector((state) => state.settings);
+    const { contactDetails, streetName, streetNumber, city } = useSelector((state) => state.root.currentBranch);
+    const { tenantDetails } = useSelector((state) => state.root.settings);
 
     const socialLinks = useSocialMediaLinks(tenantDetails.socialLinks);
     const logo = useSelector((state) => state.logo);

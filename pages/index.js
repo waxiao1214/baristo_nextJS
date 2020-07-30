@@ -114,7 +114,7 @@ const getSettings = async () => {
 
 export default function Index(props) {
   const dispatch = useDispatch();
-  const { branches } = useSelector((state) => state.settings);
+  const { branches } = useSelector((state) => state.root.settings);
   const [currentBranch, setCurrentBranch] = useState({});
   const [contentWidgets, setContentWidgets] = useState({});
   const [isDeliveryAvailabilitySectionVisible, setIsDeliveryAvailabilitySectionVisible] = useState(true);

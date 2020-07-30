@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 const ProductCard = ({ product }) => {
     const { t } = useTranslation(['common']);
-    const { currency } = useSelector(state => state.settings)
+    const { currency } = useSelector(state => state.root.settings)
     const { mealPrices } = product;
     const mainMeal = mealPrices[0];
 
