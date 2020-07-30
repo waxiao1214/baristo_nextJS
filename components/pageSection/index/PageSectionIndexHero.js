@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import axios from '../../../lib/axios'
-
+import axios from '../../../lib/axios';
 
 const PageSectionIndexHero = () => {
     const [slides, setSlides] = useState([]);
@@ -41,8 +40,7 @@ const PageSectionIndexHero = () => {
             <Swiper
                 spaceBetween={0}
                 slidesPerView={1}
-                onSlideChange={() => console.log('slide change')}
-                onSwiper={(swiper) => console.log(swiper)}
+                pagination={{ clickable: true }}
             >
                 {slides.map((slide, index) => {
                     return (<SwiperSlide key={index}>
