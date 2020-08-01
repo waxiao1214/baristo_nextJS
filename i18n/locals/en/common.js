@@ -19,5 +19,9 @@ export default {
     "password": "Password",
     "email": "Email",
     "what_is_this": "What is this",
-    "understand": "Understand"
+    "understand": "Understand",
+    "input_required": "This input is required",
+    "not_identical": "Not identical",
+    'min_length': "Min length is",
+    "invalid_email": "Invalid email"
 }

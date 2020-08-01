@@ -158,6 +158,10 @@
 .btn-link--no-shadow {
 	box-shadow: none;
 }
+.invalid-input {
+	padding: 0.5rem 1rem 0;
+	color: #cb0000;
+}
 .location,
 .btn-login {
 	color: #828282;
@@ -607,6 +611,7 @@
 	width: 40px;
 }
 .modal-box .modal-dialog {
+	position: relative;
 	max-width: 570px;
 	width: 100%;
 }

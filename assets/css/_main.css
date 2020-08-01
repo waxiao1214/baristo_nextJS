@@ -3,3 +3,4 @@
 @import './responsive.css';
 @import './reset.css';
 @import './styles.css';
+@import './components/_main.scss';

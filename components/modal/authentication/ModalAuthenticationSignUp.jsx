@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -7,18 +7,24 @@ import {
 	toggleRegistrationModal,
 	toggleLoginModal,
 } from '../../../store/actions/authentication.actions';
+import { useForm } from 'react-hook-form';
+import axios from '../../../lib/axios';
+import _ from 'lodash';
+import BaseLoader from '../../../components/base/BaseLoader';
 
 const ModalAuthenticationSignUp = () => {
 	const dispatch = useDispatch();
-	const { t } = useTranslation(['common']);
+	const { register, handleSubmit, watch, errors } = useForm();
+	const { t, i18n } = useTranslation(['common']);
 	const logo = useSelector((state) => state.root.logo);
 	const [isEmailAlreadyRegistered, setIsEmailAlreadyRegistered] = useState(
 		false
 	);
 	const [isCatptchaActive, setIsCatptchaActive] = useState(false);
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [confirmPassword, setConfirmPassword] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
+	const watchPassword = watch('password', '');
+	const watchEmail = watch('email', '');
+	const watchConfirmPassword = watch('confirmPassword', '');
 
 	const boundToggleWhatsThisModal = () => {
 		dispatch(toggleRegistrationModal());
@@ -30,10 +36,33 @@ const ModalAuthenticationSignUp = () => {
 		dispatch(toggleLoginModal());
 	};
 
+	const onSubmit = async (data) => {
+		if (!_.isEmpty(errors)) return;
+		setIsLoading(true);
+
+		try {
+			const response = await axios.post('customer/register', {
+				emailAddress: watchEmail,
+				password: watchPassword,
+				confirmPassword: watchConfirmPassword,
+				captchaResponse: '',
+				language: i18n.language,
+			});
+
+			console.log(response.result);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+
 	return (
 		<div>
 			<div className="modal fade modal-box show" id="sign-up">
 				<div className="modal-dialog" role="document">
+					{isLoading && <BaseLoader />}
 					<div className="modal-content">
 						<div className="text-center pdt-30 relative">
 							<a href="" title="">
@@ -54,17 +83,31 @@ const ModalAuthenticationSignUp = () => {
 						</div>
 						<div className="modal-main">
 							<div className="box-signin">
-								<form className="form-sign mgb-30">
+								<form
+									className="form-sign mgb-30"
+									onSubmit={handleSubmit(onSubmit)}
+								>
 									<div className="name-bg mgb-20">
 										<input
-											type="text"
+											type="email"
+											name="email"
 											placeholder={t('email')}
-											value={email}
-											onChage={(e) =>
-												setEmail(e.target.value)
-											}
 											className="input-radius btn-h50"
+											ref={register({
+												required: true,
+												pattern: /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
+											})}
 										/>
+										{errors.email?.type === 'required' && (
+											<div className="invalid-input">
+												{t('input_required')}
+											</div>
+										)}
+										{errors.email?.type === 'pattern' && (
+											<div className="invalid-input">
+												{t('invalid_email')}
+											</div>
+										)}
 										{isEmailAlreadyRegistered && (
 											<div className="note-warning flex-center">
 												<span>
@@ -90,26 +133,57 @@ const ModalAuthenticationSignUp = () => {
 									<div className="name-bg mgb-20">
 										<input
 											type="password"
+											name="password"
 											placeholder={t('password')}
-											value={password}
-											onChage={(e) =>
-												setPassword(e.target.value)
-											}
 											className="input-radius btn-h50"
+											ref={register({
+												required: true,
+												minLength: 8,
+											})}
 										/>
+										{errors.password?.type ===
+											'required' && (
+											<div className="invalid-input">
+												{t('input_required')}
+											</div>
+										)}
+										{errors.password?.type ===
+											'minLength' && (
+											<div className="invalid-input">
+												{`${t('min_length')} 8`}
+											</div>
+										)}
 									</div>
 									<div className="name-bg mgb-20">
 										<input
 											type="password"
 											placeholder={t('confirm_password')}
-											value={confirmPassword}
-											onChage={(e) =>
-												setConfirmPassword(
-													e.target.value
-												)
-											}
+											name="confirmPassword"
 											className="input-radius btn-h50"
+											ref={register({
+												required: true,
+												validate: (value) =>
+													value === watchPassword,
+											})}
 										/>
+										{errors.confirmPassword?.type ===
+											'required' && (
+											<div className="invalid-input">
+												{t('input_required')}
+											</div>
+										)}
+										{errors.confirmPassword?.type ===
+											'validate' && (
+											<div className="invalid-input">
+												{t('not_identical')}
+											</div>
+										)}
+										{errors.confirmPassword?.type ===
+											'minLength' && (
+											<div className="invalid-input">
+												{`${t('min_length')} 8`}
+											</div>
+										)}
 									</div>
 									{isCatptchaActive && (
 										<div className="captcha flex-center">
@@ -127,10 +201,8 @@ const ModalAuthenticationSignUp = () => {
 									)}
 									<div className="text-center mgt-50">
 										<button
-											type="button"
+											type="submit"
 											className="btn btn-yellow btn-h60 font-20 font-demi w230"
-											data-toggle="modal"
-											data-target="#verify-phone"
 										>
 											{t('sign_up')}
 										</button>
