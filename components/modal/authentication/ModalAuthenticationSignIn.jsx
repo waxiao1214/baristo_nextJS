@@ -1,12 +1,25 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { toggleLoginModal, toggleRegistrationModal } from '../../../store/actions/authentication.actions';
 
 const ModalAuthenticationSignIn = () => {
+	const dispatch = useDispatch();
 	const { t } = useTranslation(['common']);
+
+	const boundToggleLoginModal = () => dispatch(toggleLoginModal());
+
+	const boundToggleRegistrationModal = () => {
+		dispatch(toggleLoginModal());
+		dispatch(toggleRegistrationModal());
+	};
 
 	return (
 		<div>
-			<div className="modal fade modal-box modal-box-sm" id="sign-in">
+			<div
+				className="modal fade modal-box modal-box-sm show"
+				id="sign-in"
+			>
 				<div className="modal-dialog" role="document">
 					<div className="modal-content">
 						<div className="modal-top">
@@ -88,24 +101,23 @@ const ModalAuthenticationSignIn = () => {
 								</div>
 								<div className="text-center font-18">
 									<span className="font-medium text-ghi">
-                                        {t('do_not_have_an_account')}
+										{t('do_not_have_an_account')}
 									</span>
 									<a
-										href="#"
-										title=""
+										onClick={boundToggleRegistrationModal}
 										className="text-yellow link-underlinef font-demi"
-										data-toggle="modal"
-										data-target="#sign-up"
 									>
 										{t('sign_up')}
-									</a>{' '}
+									</a>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div className="modal-backdrop fade show"></div>
+			<div
+				className="modal-backdrop fade show"
+			></div>
 		</div>
 	);
 };

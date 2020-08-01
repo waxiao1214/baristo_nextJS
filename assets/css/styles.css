@@ -155,6 +155,9 @@
 .btn-login {
 	width: auto;
 }
+.btn-link--no-shadow {
+	box-shadow: none;
+}
 .location,
 .btn-login {
 	color: #828282;

@@ -13,3 +13,10 @@ export const toggleWhatsThisModal = () => {
         payload: {}
     }
 }
+
+export const toggleLoginModal = () => {
+    return {
+        type: userConstants.TOGGLE_LOGIN_MODAL,
+        payload: {}
+    }
+}

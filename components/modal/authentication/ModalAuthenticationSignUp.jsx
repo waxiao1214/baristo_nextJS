@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import {
 	toggleWhatsThisModal,
 	toggleRegistrationModal,
+	toggleLoginModal,
 } from '../../../store/actions/authentication.actions';
 
 const ModalAuthenticationSignUp = () => {
@@ -22,6 +23,11 @@ const ModalAuthenticationSignUp = () => {
 	const boundToggleWhatsThisModal = () => {
 		dispatch(toggleRegistrationModal());
 		dispatch(toggleWhatsThisModal());
+	};
+
+	const boundToggleLoginModal = () => {
+		dispatch(toggleRegistrationModal());
+		dispatch(toggleLoginModal());
 	};
 
 	return (
@@ -134,22 +140,22 @@ const ModalAuthenticationSignUp = () => {
 									<span className="font-medium text-ghi">
 										{t('have_an_account')}
 									</span>
-									<a
-										href=""
-										title=""
-										className="text-yellow link-underlinef font-demi"
-										data-target="#sign-in"
-										data-toggle="modal"
+									<button
+										onClick={boundToggleLoginModal}
+										className="btn btn-link btn-link--no-shadow text-yellow link-underlinef font-demi"
 									>
 										{t('sign_in')}
-									</a>
+									</button>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div className="modal-backdrop fade show"></div>
+			<div
+				onClick={() => dispatch(toggleRegistrationModal())}
+				className="modal-backdrop fade show"
+			></div>
 		</div>
 	);
 };
