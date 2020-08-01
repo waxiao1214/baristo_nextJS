@@ -6,6 +6,7 @@ import {
 	toggleWhatsThisModal,
 	toggleRegistrationModal,
 	toggleLoginModal,
+	setUserData
 } from '../../../store/actions/authentication.actions';
 import { useForm } from 'react-hook-form';
 import axios from '../../../lib/axios';
@@ -16,16 +17,19 @@ const ModalAuthenticationSignUp = () => {
 	const dispatch = useDispatch();
 	const { register, handleSubmit, watch, errors } = useForm();
 	const { t, i18n } = useTranslation(['common']);
+
 	const logo = useSelector((state) => state.root.logo);
+
 	const [isEmailAlreadyRegistered, setIsEmailAlreadyRegistered] = useState(
 		false
 	);
 	const [isCatptchaActive, setIsCatptchaActive] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+
 	const watchPassword = watch('password', '');
 	const watchEmail = watch('email', '');
 	const watchConfirmPassword = watch('confirmPassword', '');
-
+	
 	const boundToggleWhatsThisModal = () => {
 		dispatch(toggleRegistrationModal());
 		dispatch(toggleWhatsThisModal());
@@ -48,8 +52,10 @@ const ModalAuthenticationSignUp = () => {
 				captchaResponse: '',
 				language: i18n.language,
 			});
+			
+			const userData = response.result;
+			dispatch(setUserData(userData));
 
-			console.log(response.result);
 		} catch (error) {
 			console.error(error);
 		} finally {

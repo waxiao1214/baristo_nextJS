@@ -4,7 +4,8 @@ const initialState = {
     authentication: {
         isRegistrationModalVisible: false,
         isWhatsThisModalVisible: false,
-        isLoginModalVisible: false
+        isLoginModalVisible: false,
+        currentUser: {}
     }
 };
 
@@ -41,6 +42,12 @@ export function authentication(state = initialState, action) {
             return {
                 ...state,
                 isLoginModalVisible: !state.isLoginModalVisible
+            }
+        
+        case userConstants.SET_CURRENT_USER:
+            return {
+                ...state,
+                currentUser: action.payload.user
             }
 
         default:

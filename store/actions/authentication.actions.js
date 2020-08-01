@@ -20,3 +20,13 @@ export const toggleLoginModal = () => {
         payload: {}
     }
 }
+
+export const setUserData = (user) => {
+    // add the tokens to local storage
+    return {
+        type: userConstants.SET_CURRENT_USER,
+        payload: {
+            user
+        }
+    }
+} 
