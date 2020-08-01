@@ -1,14 +1,22 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { toggleWhatsThisModal } from '../../../store/actions/authentication.actions';
 
 const ModalAuthenticationWhatIsThis = () => {
-    return (
+	const dispatch = useDispatch();
+	const { t } = useTranslation(['common']);
+
+	const boundtoggleWhatsThisModal = () => dispatch(toggleWhatsThisModal());
+
+	return (
 		<div>
-			<div className="modal fade modal-box" id="help-modal">
+			<div className="modal fade modal-box show" id="help-modal">
 				<div className="modal-dialog" role="document">
 					<div className="modal-content">
 						<div className="modal-top">
 							<h2 className="font-32 font-demi text-center mgb-30">
-								<span>What's this?</span>
+								<span>{t('what_is_this')}</span>
 							</h2>
 						</div>
 						<div className="modal-main">
@@ -21,10 +29,9 @@ const ModalAuthenticationWhatIsThis = () => {
 								<button
 									type="button"
 									className="btn btn-yellow btn-h60 font-20 font-demi w230"
-									data-toggle="modal"
-									data-target="#sign-up"
+									onClick={boundtoggleWhatsThisModal}
 								>
-									Understand
+									{t('understand')}
 								</button>
 							</div>
 						</div>
@@ -34,6 +41,6 @@ const ModalAuthenticationWhatIsThis = () => {
 			<div className="modal-backdrop fade show"></div>
 		</div>
 	);
-}
+};
 
 export default ModalAuthenticationWhatIsThis;

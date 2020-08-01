@@ -6,3 +6,10 @@ export const toggleRegistrationModal = () => {
         payload: {}
     }
 }
+
+export const toggleWhatsThisModal = () => {
+    return {
+        type: userConstants.TOGGLE_WHATS_THIS_MODAL,
+        payload: {}
+    }
+}

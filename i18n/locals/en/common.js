@@ -17,5 +17,7 @@ export default {
     "have_an_account": "Have an account?",
     "confirm_password": "Confirm password",
     "password": "Password",
-    "email": "Email"
+    "email": "Email",
+    "what_is_this": "What is this",
+    "understand": "Understand"
 }

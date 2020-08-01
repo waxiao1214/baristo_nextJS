@@ -2,7 +2,8 @@ import { userConstants } from '../../_constants';
 
 const initialState = {
     authentication: {
-        isRegistrationModalVisible: false
+        isRegistrationModalVisible: false,
+        isWhatsThisModalVisible: false
     }
 };
 
@@ -26,8 +27,15 @@ export function authentication(state = initialState, action) {
         case userConstants.TOGGLE_REGISTRATION_MODAL:
             return {
                 ...state,
-                isRegistrationModalVisible: !state.authentication.isRegistrationModalVisible
+                isRegistrationModalVisible: !state.isRegistrationModalVisible
             }
+        
+        case userConstants.TOGGLE_WHATS_THIS_MODAL:
+            return {
+                ...state,
+                isWhatsThisModalVisible: !state.isWhatsThisModalVisible
+            }
+        
         default:
             return state
     }

@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import {
+	toggleWhatsThisModal,
+	toggleRegistrationModal,
+} from '../../../store/actions/authentication.actions';
 
 const ModalAuthenticationSignUp = () => {
+	const dispatch = useDispatch();
 	const { t } = useTranslation(['common']);
 	const logo = useSelector((state) => state.root.logo);
 	const [isEmailAlreadyRegistered, setIsEmailAlreadyRegistered] = useState(
@@ -13,6 +19,11 @@ const ModalAuthenticationSignUp = () => {
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 
+	const boundToggleWhatsThisModal = () => {
+		dispatch(toggleRegistrationModal());
+		dispatch(toggleWhatsThisModal());
+	};
+
 	return (
 		<div>
 			<div className="modal fade modal-box show" id="sign-up">
@@ -20,15 +31,11 @@ const ModalAuthenticationSignUp = () => {
 					<div className="modal-content">
 						<div className="text-center pdt-30 relative">
 							<a href="" title="">
-								<img
-									className="logo-s"
-									src={logo}
-								/>
+								<img className="logo-s" src={logo} />
 							</a>
 							<button
 								type="button"
-								data-toggle="modal"
-								data-target="#help-modal"
+								onClick={boundToggleWhatsThisModal}
 								className="btn-help btn-default"
 							>
 								<img src="images/icon/icon-help.svg" />
