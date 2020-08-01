@@ -11,6 +11,7 @@ import PageSectionIndexOurResource from '../components/pageSection/index/PageSec
 import PageSectionIndexOurChef from '../components/pageSection/index/PageSectionIndexOurChef'
 import PageSectionIndexOurLocation from '../components/pageSection/index/PageSectionIndexOurLocation'
 import PageSectionIndexHero from '../components/pageSection/index/PageSectionIndexHero'
+import AuthenticationContainer from '../containers/authentication/AuthenticationContainer';
 import axios from '../lib/axios'
 
 const getSpecialCruises = async () => {
@@ -201,6 +202,7 @@ export default function Index(props) {
         <PageSectionIndexOurResource appResources={props.appResources} />
       }
       <TheFooter />
+      <AuthenticationContainer />
     </div>
   )
 }

@@ -138,7 +138,9 @@
 	align-items: center;
 	justify-content: flex-end;
 }
-
+.logo-s {
+	max-height: 5rem;
+}
 .header-action link{
 	cursor: pointer;
 }

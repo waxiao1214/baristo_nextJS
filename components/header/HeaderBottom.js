@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import ModalFilterSearch from '../modal/filter/ModalFilterSeach';
 import ModalChangeBranch from '../modal/branch/ModalChangeBranch';
+import { toggleRegistrationModal } from '../../store/actions/authentication.actions';
 
 const HeaderBottom = () => {
-    const logo = useSelector((state) => state.logo);
+    const dispatch = useDispatch();
+    const logo = useSelector((state) => state.root.logo);
     const { branchName } = useSelector((state) => state.root.currentBranch);
     const [isFilterModalActive, setIsFilterModalActive] = useState(false);
     const [isBranchModalActive, setIsBranchModalActive] = useState(false);
+
+    const boundToggleRegistrationModal = () => dispatch(toggleRegistrationModal());
 
     return (<section className="header-bottom">
         <ModalFilterSearch isActive={isFilterModalActive} close={() => setIsFilterModalActive(false)} />
@@ -23,7 +27,7 @@ const HeaderBottom = () => {
                         <button className="btn-default btn-user-mb"><i className="fa fa-user-o"></i> </button>
                         <ul className="user-abs">
                             <li><a href="" title="" data-target="#sign-in" data-toggle="modal">Login</a> </li>
-                            <li><a href="#" title="" data-target="#sign-up" data-toggle="modal">Join Now</a> </li>
+                            <li onClick={boundToggleRegistrationModal}><a href="#" title="" data-target="#sign-up" data-toggle="modal">Join Now</a> </li>
                         </ul>
                     </div>
                 </div>
@@ -48,8 +52,8 @@ const HeaderBottom = () => {
                                             <i className="fa fa-map-marker"></i>{branchName}
                                         </div>
                                     }
-                                    <button className="btn-tranfer btn-login" data-target="#sign-in" data-toggle="modal">LOGIN</button>
-                                    <button className="btn btn-white btn-h60 btn-join" data-target="#sign-up" data-toggle="modal">JOIN NOW</button>
+                                    <button className="btn-tranfer btn-login">LOGIN</button>
+                                    <button onClick={boundToggleRegistrationModal} className="btn btn-white btn-h60 btn-join">JOIN NOW</button>
                                 </div>
                             </div>
                         </div>

@@ -1,17 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 const ModalAuthenticationSignUp = () => {
+	const { t } = useTranslation(['common']);
+	const logo = useSelector((state) => state.root.logo);
+	const [isEmailAlreadyRegistered, setIsEmailAlreadyRegistered] = useState(
+		false
+	);
+	const [isCatptchaActive, setIsCatptchaActive] = useState(false);
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [confirmPassword, setConfirmPassword] = useState('');
+
 	return (
 		<div>
-			<div className="modal fade modal-box" id="sign-up">
+			<div className="modal fade modal-box show" id="sign-up">
 				<div className="modal-dialog" role="document">
 					<div className="modal-content">
 						<div className="text-center pdt-30 relative">
 							<a href="" title="">
 								<img
-									src="images/icon/logo.svg"
-									alt=""
-									title=""
+									className="logo-s"
+									src={logo}
 								/>
 							</a>
 							<button
@@ -34,61 +45,73 @@ const ModalAuthenticationSignUp = () => {
 									<div className="name-bg mgb-20">
 										<input
 											type="text"
-											placeholder="Name"
+											placeholder={t('email')}
+											value={email}
+											onChage={(e) =>
+												setEmail(e.target.value)
+											}
 											className="input-radius btn-h50"
 										/>
-									</div>
-									<div className="name-bg mgb-20">
-										<input
-											type="text"
-											placeholder="Email"
-											className="input-radius btn-h50"
-										/>
-										<div className="note-warning flex-center">
-											<span>
-												<img src="images/icon/priority_high_24px.svg" />
-											</span>
-											<div className="note-text">
-												Your email has been registered
-												with ABC. Do you want to{' '}
-												<a
-													href=""
-													title=""
-													className="text-yellow font-16 font-demi link-underline"
-													data-target="#sign-in"
-													data-toggle="modal"
-												>
-													Sign in
-												</a>{' '}
+										{isEmailAlreadyRegistered && (
+											<div className="note-warning flex-center">
+												<span>
+													<img src="images/icon/priority_high_24px.svg" />
+												</span>
+												<div className="note-text">
+													Your email has been
+													registered with ABC. Do you
+													want to
+													<a
+														href=""
+														title=""
+														className="text-yellow font-16 font-demi link-underline"
+														data-target="#sign-in"
+														data-toggle="modal"
+													>
+														{t('sign_in')}
+													</a>{' '}
+												</div>
 											</div>
-										</div>
+										)}
 									</div>
 									<div className="name-bg mgb-20">
 										<input
-											type="text"
-											placeholder="Phone number"
+											type="password"
+											placeholder={t('password')}
+											value={password}
+											onChage={(e) =>
+												setPassword(e.target.value)
+											}
 											className="input-radius btn-h50"
 										/>
 									</div>
 									<div className="name-bg mgb-20">
 										<input
 											type="password"
-											placeholder="Password"
+											placeholder={t('confirm_password')}
+											value={confirmPassword}
+											onChage={(e) =>
+												setConfirmPassword(
+													e.target.value
+												)
+											}
 											className="input-radius btn-h50"
 										/>
 									</div>
-									<div className="captcha flex-center">
-										<span>
-											<img src="images/picture/CAPTCHA.png" />
-										</span>
-										<div className="name-bg">
-											<input
-												type="text"
-												placeholder="Enter CAPCHA code"
-												className="input-radius btn-h50"
-											/>
+									{isCatptchaActive && (
+										<div className="captcha flex-center">
+											<span>
+												<img src="images/picture/CAPTCHA.png" />
+											</span>
+											<div className="name-bg">
+												<input
+													type="text"
+													placeholder="Enter CAPCHA code"
+													className="input-radius btn-h50"
+												/>
+											</div>
 										</div>
-									</div>
+									)}
 									<div className="text-center mgt-50">
 										<button
 											type="button"
@@ -96,14 +119,14 @@ const ModalAuthenticationSignUp = () => {
 											data-toggle="modal"
 											data-target="#verify-phone"
 										>
-											SIGN UP
+											{t('sign_up')}
 										</button>
 									</div>
 								</form>
 								<div className="text-center font-18">
 									<span className="font-medium text-ghi">
-										Have an account?
-									</span>{' '}
+										{t('have_an_account')}
+									</span>
 									<a
 										href=""
 										title=""
@@ -111,8 +134,8 @@ const ModalAuthenticationSignUp = () => {
 										data-target="#sign-in"
 										data-toggle="modal"
 									>
-										Sign in
-									</a>{' '}
+										{t('sign_in')}
+									</a>
 								</div>
 							</div>
 						</div>

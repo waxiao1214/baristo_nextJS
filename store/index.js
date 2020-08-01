@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { authentication } from './reducers/authentication';
+import { authentication } from './reducers/authentication.reducer';
 
 let store
 

@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@actions/*": ["store/actions/*"]
+    },
     "target": "es5",
     "lib": [
       "dom",
