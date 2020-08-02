@@ -5,6 +5,7 @@ const initialState = {
         isRegistrationModalVisible: false,
         isWhatsThisModalVisible: false,
         isLoginModalVisible: false,
+        isPhoneVerificationModalVisible: false,
         currentUser: {}
     }
 };
@@ -48,6 +49,12 @@ export function authentication(state = initialState, action) {
             return {
                 ...state,
                 currentUser: action.payload.user
+            }
+        
+        case userConstants.TOGGLE_PHONE_VERIFICATION_MODAL:
+            return {
+                ...state,
+                isPhoneVerificationModalVisible: !state.isPhoneVerificationModalVisible,
             }
 
         default:

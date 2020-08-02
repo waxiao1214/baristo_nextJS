@@ -23,5 +23,9 @@ export default {
     "input_required": "This input is required",
     "not_identical": "Not identical",
     'min_length': "Min length is",
-    "invalid_email": "Invalid email"
+    "invalid_email": "Invalid email",
+    "invalid_phone_number": "Invalid phone number",
+    "verify": "Verify",
+    "verify_phone_number": "Verify phone number",
+    "verify_phone_number_explanation": "We will send a verification code to your phone number to continue logging in."
 }
