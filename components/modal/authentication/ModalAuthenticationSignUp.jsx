@@ -5,6 +5,7 @@ import {
 	toggleWhatsThisModal,
 	toggleRegistrationModal,
 	toggleLoginModal,
+	togglePhoneVerficationModal,
 	setUserData
 } from '../../../store/actions/authentication.actions';
 import { useForm } from 'react-hook-form';
@@ -39,6 +40,11 @@ const ModalAuthenticationSignUp = () => {
 		dispatch(toggleLoginModal());
 	};
 
+	const boundTogglePhoneVerficationModal = () => {
+		dispatch(toggleRegistrationModal());
+		dispatch(togglePhoneVerficationModal());
+	}
+
 	const onSubmit = async (data) => {
 		if (!_.isEmpty(errors)) return;
 		setIsLoading(true);
@@ -52,13 +58,14 @@ const ModalAuthenticationSignUp = () => {
 				language: i18n.language,
 			});
 			
-			const userData = response.result;
-			dispatch(setUserData(userData));
+			const userData = response.data.result;
 
-		} catch (error) {
-			console.error(error);
-		} finally {
 			setIsLoading(false);
+			dispatch(setUserData(userData));
+			boundTogglePhoneVerficationModal();
+		} catch (error) {
+			setIsLoading(false);
+			console.error(error);
 		}
 	};
 

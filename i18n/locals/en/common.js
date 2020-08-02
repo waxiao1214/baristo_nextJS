@@ -25,6 +25,9 @@ export default {
     'min_length': "Min length is",
     "invalid_email": "Invalid email",
     "invalid_phone_number": "Invalid phone number",
+    "invalid_code": "Invalid code",
+    "didnt_get_code": "Didn't get the code?",
+    "send_again": "Send again",
     "verify": "Verify",
     "verify_phone_number": "Verify phone number",
     "verify_phone_number_explanation": "We will send a verification code to your phone number to continue logging in."

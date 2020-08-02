@@ -1,3 +1,15 @@
+.loader-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.4);
+}
 .loader {
   margin: 0 0 2em;
   height: 100px;
@@ -10,5 +22,5 @@
 }
 svg path,
 svg rect {
-  fill: #00a88f;
+  fill: blue;
 }

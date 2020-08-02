@@ -1,13 +1,11 @@
 import { userConstants } from '../../_constants';
 
 const initialState = {
-    authentication: {
-        isRegistrationModalVisible: false,
-        isWhatsThisModalVisible: false,
-        isLoginModalVisible: false,
-        isPhoneVerificationModalVisible: false,
-        currentUser: {}
-    }
+    isRegistrationModalVisible: false,
+    isWhatsThisModalVisible: false,
+    isLoginModalVisible: false,
+    isPhoneVerificationModalVisible: false,
+    currentUser: {}
 };
 
 export function authentication(state = initialState, action) {
