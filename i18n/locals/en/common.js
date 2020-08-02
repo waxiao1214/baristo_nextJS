@@ -11,7 +11,8 @@ export default {
     "sign_in": "Sign in",
     "or": "or",
     "remember_me": "Remember me",
-    "forgot_password": "Forgot password?",
+    "forgot_password?": "Forgot password?",
+    "forgot_password": "Forgot password",
     "do_not_have_an_account": "Do not have an account?",
     "sign_up": "Sign up",
     "have_an_account": "Have an account?",
@@ -27,8 +28,11 @@ export default {
     "invalid_phone_number": "Invalid phone number",
     "invalid_code": "Invalid code",
     "didnt_get_code": "Didn't get the code?",
+    "send": "Send",
     "send_again": "Send again",
     "verify": "Verify",
     "verify_phone_number": "Verify phone number",
-    "verify_phone_number_explanation": "We will send a verification code to your phone number to continue logging in."
+    "verify_phone_number_explanation": "We will send a verification code to your phone number to continue logging in.",
+    
+
 }
