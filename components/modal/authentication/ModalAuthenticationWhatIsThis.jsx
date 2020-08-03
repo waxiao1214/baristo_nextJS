@@ -11,8 +11,12 @@ const ModalAuthenticationWhatIsThis = () => {
 
 	return (
 		<div>
-			<div className="modal fade modal-box show" id="help-modal">
-				<div className="modal-dialog" role="document">
+			<div
+				className="modal fade modal-box show"
+				id="help-modal"
+				onClick={boundtoggleWhatsThisModal}
+			>
+				<div className="modal-dialog" role="document" onClick={e => e.stopPropagation()}>
 					<div className="modal-content">
 						<div className="modal-top">
 							<h2 className="font-32 font-demi text-center mgb-30">

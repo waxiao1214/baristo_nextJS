@@ -29,6 +29,9 @@ const ModalAuthenticationSignUp = () => {
 	const watchPassword = watch('password', '');
 	const watchEmail = watch('email', '');
 	const watchConfirmPassword = watch('confirmPassword', '');
+
+	const boundToggleRegistrationModal = () =>
+		dispatch(toggleRegistrationModal());
 	
 	const boundToggleWhatsThisModal = () => {
 		dispatch(toggleRegistrationModal());
@@ -72,8 +75,12 @@ const ModalAuthenticationSignUp = () => {
 
 	return (
 		<div>
-			<div className="modal fade modal-box show" id="sign-up">
-				<div className="modal-dialog" role="document">
+			<div
+				className="modal fade modal-box show"
+				id="sign-up"
+				onClick={boundToggleRegistrationModal}
+			>
+				<div className="modal-dialog" role="document" onClick={e => e.stopPropagation()}>
 					{isLoading && <BaseLoader />}
 					<div className="modal-content">
 						<div className="text-center pdt-30 relative">

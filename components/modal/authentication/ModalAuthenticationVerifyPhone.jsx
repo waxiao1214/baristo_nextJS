@@ -5,8 +5,12 @@ import { useForm } from 'react-hook-form';
 import axios from '../../../lib/axios';
 import useUserToken from '../../../hooks/user/useUserToken';
 import BaseLoader from '../../../components/base/BaseLoader';
+import {
+	togglePhoneVerficationModal,
+} from '../../../store/actions/authentication.actions';
 
 const ModalAuthenticationVerifyPhone = () => {
+	const dispatch = useDispatch();
 	const logo = useSelector((state) => state.root.logo);
 	const { t } = useTranslation(['common']);
 	const { register, handleSubmit, watch, errors } = useForm();
@@ -15,6 +19,9 @@ const ModalAuthenticationVerifyPhone = () => {
 	const [message, setMessage] = useState('');
 	const token = useUserToken();
 	const watchPhoneNumber = watch('phoneNumber', '');
+
+	const boundTogglePhoneVerficationModal = () =>
+		dispatch(togglePhoneVerficationModal());
 
 	const nextStep = () => {
 		setCurrentStep(1);
@@ -81,8 +88,12 @@ const ModalAuthenticationVerifyPhone = () => {
 
 	return (
 		<div>
-			<div className="modal fade modal-box show" id="verify-phone">
-				<div className="modal-dialog" role="document">
+			<div
+				className="modal fade modal-box show"
+				id="verify-phone"
+				onClick={boundTogglePhoneVerficationModal}
+			>
+				<div className="modal-dialog" role="document" onClick={e => e.stopPropagation()}>
 					{isLoading && <BaseLoader />}
 					<div className="modal-content">
 						<div className="text-center pdt-30 relative">
