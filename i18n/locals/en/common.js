@@ -33,6 +33,5 @@ export default {
     "verify": "Verify",
     "verify_phone_number": "Verify phone number",
     "verify_phone_number_explanation": "We will send a verification code to your phone number to continue logging in.",
-    
-
+    "email_or_password_is_wrong": "Email or password is wrong"
 }

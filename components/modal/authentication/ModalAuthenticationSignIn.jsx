@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { toggleLoginModal, toggleRegistrationModal } from '../../../store/actions/authentication.actions';
+import {
+	toggleLoginModal,
+	toggleRegistrationModal,
+	setUserData,
+	togglePhoneVerficationModal,
+} from '../../../store/actions/authentication.actions';
+import { useForm } from 'react-hook-form';
+import BaseLoader from '../../../components/base/BaseLoader';
+import axios from '../../../lib/axios';
 
 const ModalAuthenticationSignIn = () => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation(['common']);
+	const [isSocialMediaAuthActive, setIsSocialMediaAuthActive] = useState(
+		false
+	);
+	const [isLoading, setIsLoading] = useState(false);
+	const [message, setMessage] = useState('');
+	const { register, handleSubmit, watch, errors } = useForm();
 
 	const boundToggleLoginModal = () => dispatch(toggleLoginModal());
 
@@ -14,13 +28,62 @@ const ModalAuthenticationSignIn = () => {
 		dispatch(toggleRegistrationModal());
 	};
 
+	const boundTogglePhoneVerficationModal = () => {
+		dispatch(toggleLoginModal());
+		dispatch(togglePhoneVerficationModal());
+	};
+
+	const showErrorMessage = (message, timeout) => {
+		setMessage(message);
+
+		setTimeout(() => {
+			setMessage('');
+		}, timeout);
+	};
+
+	const onSubmit = async (data) => {
+		const { emailOrUsername, password, rememberMe } = data;
+
+		setIsLoading(true);
+
+		try {
+			const response = await axios.post('customer/login', {
+				userNameOrEmailAddress: emailOrUsername,
+				password: password,
+				twoFactorVerificationCode: '',
+				twoFactorRememberClientToken: '',
+				rememberClient: rememberMe,
+				singleSignIn: true,
+				returnUrl: 'string',
+			});
+
+			const userData = response.data.result;
+
+			setIsLoading(false);
+			dispatch(setUserData(userData));
+			if (!userData.isPhoneConfirmed) {
+				boundTogglePhoneVerficationModal();
+			} else {
+				boundToggleLoginModal();
+			}
+		} catch (error) {
+			setIsLoading(false);
+			if (!error.success) {
+				showErrorMessage(t('email_or_password_is_wrong'), 5000);
+			}
+			console.error(error);
+		}
+	};
+
 	return (
 		<div>
 			<div
 				className="modal fade modal-box modal-box-sm show"
 				id="sign-in"
+				onClick={boundToggleLoginModal}
 			>
-				<div className="modal-dialog" role="document">
+				<div onClick={e => e.stopPropagation()} className="modal-dialog" role="document">
+					{isLoading && <BaseLoader />}
 					<div className="modal-content">
 						<div className="modal-top">
 							<h2 className="title">
@@ -29,64 +92,100 @@ const ModalAuthenticationSignIn = () => {
 						</div>
 						<div className="modal-main">
 							<div className="box-signin">
-								<div className="sigin-social">
-									<a
-										href=""
-										title=""
-										className="btn-h50 flex-center-center signin-facebook"
-									>
-										Sign in with Facebook
-									</a>
-									<a
-										href=""
-										title=""
-										className="btn-h50 flex-center-center signin-ggle"
-									>
-										Sign in with Google
-									</a>
-									<a
-										href=""
-										title=""
-										className="btn-h50 flex-center-center signin-insta"
-									>
-										Sign in with Instagram
-									</a>
-								</div>
-								<div className="or">{t('or')}</div>
-								<form className="form-sign">
+								{isSocialMediaAuthActive && (
+									<div>
+										<div className="sigin-social">
+											<a
+												href=""
+												title=""
+												className="btn-h50 flex-center-center signin-facebook"
+											>
+												Sign in with Facebook
+											</a>
+											<a
+												href=""
+												title=""
+												className="btn-h50 flex-center-center signin-ggle"
+											>
+												Sign in with Google
+											</a>
+											<a
+												href=""
+												title=""
+												className="btn-h50 flex-center-center signin-insta"
+											>
+												Sign in with Instagram
+											</a>
+										</div>
+										<div className="or">{t('or')}</div>
+									</div>
+								)}
+
+								<form
+									className="form-sign"
+									onSubmit={handleSubmit(onSubmit)}
+								>
+									{message && (
+										<div className="alert alert-danger">
+											{message}
+										</div>
+									)}
 									<div className="name-bg mgb-20">
 										<input
+											name="emailOrUsername"
 											type="text"
 											placeholder="Username or email"
 											className="input-radius btn-h50"
+											ref={register({
+												required: true,
+											})}
 										/>
+										{errors.emailOrUsername?.type ===
+											'required' && (
+											<div className="invalid-input">
+												{t('input_required')}
+											</div>
+										)}
 									</div>
 									<div className="name-bg mgb-20">
 										<input
+											name="password"
 											type="password"
 											placeholder="Password"
 											className="input-radius btn-h50"
+											ref={register({
+												required: true,
+											})}
 										/>
+										{errors.password?.type ===
+											'required' && (
+											<div className="invalid-input">
+												{t('input_required')}
+											</div>
+										)}
 									</div>
 									<div className="flex-center-between">
 										<div className="remember">
 											<label>
-												<input type="checkbox" />
+												<input
+													name="rememberMe"
+													type="checkbox"
+													ref={register({
+														required: false,
+													})}
+												/>
 												<span>{t('remember_me')}</span>
 											</label>
 										</div>
-										<a
-											href=""
-											title=""
-											data-toggle="modal"
-											data-target="#forget-password"
-											className="fogot"
-										>
+										<a className="fogot">
 											{t('forgot_password')}
 										</a>
 									</div>
 									<div className="text-center mgt-30">
-										<button className="btn btn-yellow btn-h60 font-20 font-demi w230">
+										<button
+											type="submit"
+											className="btn btn-yellow btn-h60 font-20 font-demi w230"
+										>
 											{t('sign_in')}
 										</button>
 									</div>
@@ -103,21 +202,19 @@ const ModalAuthenticationSignIn = () => {
 									<span className="font-medium text-ghi">
 										{t('do_not_have_an_account')}
 									</span>
-									<a
+									<button
 										onClick={boundToggleRegistrationModal}
-										className="text-yellow link-underlinef font-demi"
+										className="btn btn-link btn-link--no-shadow text-yellow link-underlinef font-demi"
 									>
 										{t('sign_up')}
-									</a>
+									</button>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div
-				className="modal-backdrop fade show"
-			></div>
+			<div className="modal-backdrop fade show"></div>
 		</div>
 	);
 };
