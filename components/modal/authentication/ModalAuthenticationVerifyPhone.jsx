@@ -5,9 +5,8 @@ import { useForm } from 'react-hook-form';
 import axios from '../../../lib/axios';
 import useUserToken from '../../../hooks/user/useUserToken';
 import BaseLoader from '../../../components/base/BaseLoader';
-import {
-	togglePhoneVerficationModal,
-} from '../../../store/actions/authentication.actions';
+import { togglePhoneVerficationModal } from '../../../store/actions/authentication.actions';
+import { findLastKey } from 'lodash';
 
 const ModalAuthenticationVerifyPhone = () => {
 	const dispatch = useDispatch();
@@ -17,14 +16,23 @@ const ModalAuthenticationVerifyPhone = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [currentStep, setCurrentStep] = useState(0); // we have 3 steps
 	const [message, setMessage] = useState('');
+	const [phoneNumber, setPhoneNumber] = useState('');
 	const token = useUserToken();
 	const watchPhoneNumber = watch('phoneNumber', '');
+
+	const showErrorMessage = (message, timeout) => {
+		setMessage(message);
+
+		setTimeout(() => {
+			setMessage('');
+		}, timeout);
+	};
 
 	const boundTogglePhoneVerficationModal = () =>
 		dispatch(togglePhoneVerficationModal());
 
 	const nextStep = () => {
-		setCurrentStep(1);
+		setCurrentStep(currentStep + 1);
 	};
 
 	const isCodeFormatInvalid = () => {
@@ -43,11 +51,12 @@ const ModalAuthenticationVerifyPhone = () => {
 		}
 	};
 
-	const sendPhoneVerificationCode = async (data) => {
+	const sendPhoneVerificationCode = async () => {
+		setPhoneNumber(watchPhoneNumber);
 		setIsLoading(true);
 		try {
 			const response = await axios.post(
-				`customer/send-phone-verification-code?phone=${watchPhoneNumber}`,
+				`customer/send-phone-verification-code?phone=${phoneNumber}`,
 				{},
 				{
 					headers: {
@@ -56,23 +65,23 @@ const ModalAuthenticationVerifyPhone = () => {
 				}
 			);
 			// if success go to next step
-			if (response.data.success) {
+			if (response.data.success && currentStep === 0) {
 				nextStep();
 			}
-			// go to step 3
+			setIsLoading(false);
 		} catch (error) {
-			console.log(error);
-		} finally {
+			showErrorMessage(t('an_error_happened'), 5000);
 			setIsLoading(false);
 		}
 	};
 
 	const verifyPhoneNumber = async (data) => {
+		setIsLoading(true);
 		try {
 			let code = Object.values(data).join('');
 
 			const response = await axios.post(
-				`customer/verify-phone-code?phone=${watchPhoneNumber}&code=${code}`,
+				`customer/verify-phone-code?phone=${phoneNumber}&code=${code}`,
 				{},
 				{
 					headers: {
@@ -80,9 +89,21 @@ const ModalAuthenticationVerifyPhone = () => {
 					},
 				}
 			);
-			console.log(response);
+
+			if (response.data.success) {
+				// update the local storage
+				const user = localstorage.getItem('user')
+					? JSON.parse(localstorage.getItem('user'))
+					: {};
+				user.isPhoneConfirmed = true;
+				localStorage.setItem(JSON.stringify(user));
+
+				nextStep();
+				setIsLoading(false);
+			}
 		} catch (error) {
-			console.error(error);
+			showErrorMessage(t('an_error_happened'), 5000);
+			setIsLoading(false);
 		}
 	};
 
@@ -93,7 +114,11 @@ const ModalAuthenticationVerifyPhone = () => {
 				id="verify-phone"
 				onClick={boundTogglePhoneVerficationModal}
 			>
-				<div className="modal-dialog" role="document" onClick={e => e.stopPropagation()}>
+				<div
+					className="modal-dialog"
+					role="document"
+					onClick={(e) => e.stopPropagation()}
+				>
 					{isLoading && <BaseLoader />}
 					<div className="modal-content">
 						<div className="text-center pdt-30 relative">
@@ -107,6 +132,15 @@ const ModalAuthenticationVerifyPhone = () => {
 							</h2>
 						</div>
 						<div className="modal-main">
+							<div className="row px-5">
+								<div className="col-12">
+									{message && (
+										<div className="alert alert-danger col-12">
+											{message}
+										</div>
+									)}
+								</div>
+							</div>
 							{currentStep === 0 && (
 								<form
 									className="form-verity text-center"
@@ -254,8 +288,7 @@ const ModalAuthenticationVerifyPhone = () => {
 											{t('didnt_get_code')}
 										</span>
 										<a
-											href=""
-											title=""
+											onClick={sendPhoneVerificationCode}
 											className="text-yellow font-18 font-demi"
 										>
 											{t('send_again')}
@@ -273,9 +306,9 @@ const ModalAuthenticationVerifyPhone = () => {
 									</div>
 								</form>
 							)}
-							{message && (
+							{currentStep === 2 && (
 								<div className="text-center mgt-10">
-									{message}
+									{t('phone_number_verified')}
 								</div>
 							)}
 						</div>

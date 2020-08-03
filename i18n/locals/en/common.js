@@ -32,6 +32,7 @@ export default {
     "send_again": "Send again",
     "verify": "Verify",
     "verify_phone_number": "Verify phone number",
+    "phone_number_verified": "Phone number verified",
     "verify_phone_number_explanation": "We will send a verification code to your phone number to continue logging in.",
     "email_or_password_is_wrong": "Email or password is wrong",
     "password_reset_success": "Password reset email has been sent.",
