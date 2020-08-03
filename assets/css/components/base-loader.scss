@@ -11,12 +11,9 @@
   background: rgba(255, 255, 255, 0.4);
 }
 .loader {
-  margin: 0 0 2em;
-  height: 100px;
-  width: 20%;
+  min-width: 20%;
   text-align: center;
-  padding: 1em;
-  margin: 0 auto 1em;
+  margin: 0 auto 0;
   display: inline-block;
   vertical-align: top;
 }
