@@ -4,3 +4,4 @@
 @import './reset.css';
 @import './styles.css';
 @import './components/_main.scss';
+@import './utilities/_main.scss';
