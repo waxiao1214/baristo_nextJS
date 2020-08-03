@@ -42,7 +42,7 @@ const BannerAuthenticationVerifyEmail = () => {
 
 	if (_.isEmpty(currentUser)) return '';
 
-	if (currentUser.isEmailConfirmed) return '';
+	if (_.isUndefined(currentUser.isEmailConfirmed) || currentUser.isEmailConfirmed) return '';
 
 	return (
 		<div className="alert alert-danger mb-0 text-center px-3" role="alert">
