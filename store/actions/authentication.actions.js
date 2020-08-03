@@ -36,7 +36,6 @@ export const toggleForgotPasswordModal = () => {
 }
 
 export const setUserData = (user) => {
-    console.log(user, 'as')
     // store user details and jwt token in local storage to keep user logged in between page refreshes
     localStorage.setItem('user', JSON.stringify(user));
 
