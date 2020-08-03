@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import {
-    togglePhoneVerficationModal,
+    setUserData
 } from '../../store/actions/authentication.actions';
 import _ from 'lodash';
 
@@ -15,7 +15,9 @@ const useUserFetchCurrentUser = () => {
         if (!_.isEmpty(currentUser)) return;
 
         const user = localStorage.getItem('user');
+        // no user is stored in local storage
         if (!user) return;
+        dispatch(setUserData(JSON.parse(user)));
     }, []);
 }
 
