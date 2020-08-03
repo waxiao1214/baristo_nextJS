@@ -6,18 +6,17 @@ import {
 	toggleRegistrationModal,
 	setUserData,
 	togglePhoneVerficationModal,
-	toggleForgotPasswordModal
+	toggleForgotPasswordModal,
 } from '../../../store/actions/authentication.actions';
 import { useForm } from 'react-hook-form';
 import BaseLoader from '../../../components/base/BaseLoader';
 import axios from '../../../lib/axios';
+import { GoogleLogin } from 'react-google-login';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 
-const ModalAuthenticationSignIn = () => {
+const ModalAuthenticationSignIn = ({ socialAuthProviders }) => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation(['common']);
-	const [isSocialMediaAuthActive, setIsSocialMediaAuthActive] = useState(
-		false
-	);
 	const [isLoading, setIsLoading] = useState(false);
 	const [message, setMessage] = useState('');
 	const { register, handleSubmit, watch, errors } = useForm();
@@ -37,7 +36,7 @@ const ModalAuthenticationSignIn = () => {
 	const boundToggleForgotPasswordModal = () => {
 		dispatch(toggleLoginModal());
 		dispatch(toggleForgotPasswordModal());
-	}
+	};
 
 	const showErrorMessage = (message, timeout) => {
 		setMessage(message);
@@ -66,7 +65,7 @@ const ModalAuthenticationSignIn = () => {
 			const userData = response.data.result;
 
 			userData.emailOrUsername = emailOrUsername;
-			
+
 			setIsLoading(false);
 			dispatch(setUserData(userData));
 			if (!userData.isPhoneConfirmed) {
@@ -81,6 +80,88 @@ const ModalAuthenticationSignIn = () => {
 			}
 			console.error(error);
 		}
+	};
+
+	const generateSocialButtons = () => {
+		return socialAuthProviders.map((provider, index) => {
+			if (provider.name === 'Google') {
+				return (
+					<GoogleLogin
+						key={index}
+						clientId={provider.clientId}
+						buttonText={t('login')}
+						onSuccess={responseGoogleSuccess}
+						onFailure={responseGoogleFailure}
+						render={(renderProps) => (
+							<a
+								onClick={renderProps.onClick}
+								className="btn-h50 flex-center-center signin-ggle"
+							>
+								{t('sign_in')}
+							</a>
+						)}
+					/>
+				);
+			} else if (provider.name === 'Facebook') {
+				return (
+					<FacebookLogin
+						key={index}
+						appId={provider.clientId}
+						autoLoad={true}
+						fields="name,email,picture"
+						callback={responseFacebook}
+						render={(renderProps) => (
+							<a
+								onClick={renderProps.onClick}
+								className="btn-h50 flex-center-center signin-facebook"
+							>
+								{t('sign_in')}
+							</a>
+						)}
+					/>
+				);
+			}
+		});
+	};
+
+	const responseGoogleSuccess = async (data) => {
+		console.log(data);
+		const { accessToken, profileObj } = data;
+		setIsLoading(true);
+
+		try {
+			const response = await axios.post('customer/external-login', {
+				authProvider: 'Google',
+				ProviderKey: profileObj.googleId,
+				ProviderAccessCode: accessToken,
+			});
+
+			console.log(response);
+
+			const userData = response.data.result;
+
+			userData.emailOrUsername = profileObj.email; 
+
+			setIsLoading(false);
+			dispatch(setUserData(userData));
+			if (!userData.isPhoneConfirmed) {
+				boundTogglePhoneVerficationModal();
+			} else {
+				boundToggleLoginModal();
+			}
+		} catch (error) {
+			setIsLoading(false);
+			showErrorMessage(t('request_failed'), 5000);
+		}
+	};
+
+	const responseGoogleFailure = (data) => {
+		console.log('adsf', data)
+		showErrorMessage(t('google_auth_failed', 5000));
+	};
+
+	const responseFacebook = (response) => {
+		console.log('fb', response);
 	};
 
 	return (
@@ -104,35 +185,14 @@ const ModalAuthenticationSignIn = () => {
 						</div>
 						<div className="modal-main">
 							<div className="box-signin">
-								{isSocialMediaAuthActive && (
+								{socialAuthProviders.length !== 0 && (
 									<div>
 										<div className="sigin-social">
-											<a
-												href=""
-												title=""
-												className="btn-h50 flex-center-center signin-facebook"
-											>
-												Sign in with Facebook
-											</a>
-											<a
-												href=""
-												title=""
-												className="btn-h50 flex-center-center signin-ggle"
-											>
-												Sign in with Google
-											</a>
-											<a
-												href=""
-												title=""
-												className="btn-h50 flex-center-center signin-insta"
-											>
-												Sign in with Instagram
-											</a>
+											{generateSocialButtons()}
 										</div>
 										<div className="or">{t('or')}</div>
 									</div>
 								)}
-
 								<form
 									className="form-sign"
 									onSubmit={handleSubmit(onSubmit)}

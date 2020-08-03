@@ -6,33 +6,43 @@ import {
 	toggleRegistrationModal,
 	toggleLoginModal,
 	togglePhoneVerficationModal,
-	setUserData
+	setUserData,
 } from '../../../store/actions/authentication.actions';
 import { useForm } from 'react-hook-form';
 import axios from '../../../lib/axios';
 import _ from 'lodash';
 import BaseLoader from '../../../components/base/BaseLoader';
+import { GoogleLogin } from 'react-google-login';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 
-const ModalAuthenticationSignUp = () => {
+const ModalAuthenticationSignUp = ({ socialAuthProviders }) => {
 	const dispatch = useDispatch();
 	const { register, handleSubmit, watch, errors } = useForm();
 	const { t, i18n } = useTranslation(['common']);
 
 	const logo = useSelector((state) => state.root.logo);
-
 	const [isEmailAlreadyRegistered, setIsEmailAlreadyRegistered] = useState(
 		false
 	);
 	const [isCatptchaActive, setIsCatptchaActive] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [registrationMessage, setRegistrationMessage] = useState('');
 	const [message, setMessage] = useState('');
 	const watchPassword = watch('password', '');
 	const watchEmail = watch('email', '');
 	const watchConfirmPassword = watch('confirmPassword', '');
 
+	const showErrorMessage = (message, timeout) => {
+		setMessage(message);
+
+		setTimeout(() => {
+			setMessage('');
+		}, timeout);
+	};
+
 	const boundToggleRegistrationModal = () =>
 		dispatch(toggleRegistrationModal());
-	
+
 	const boundToggleWhatsThisModal = () => {
 		dispatch(toggleRegistrationModal());
 		dispatch(toggleWhatsThisModal());
@@ -46,7 +56,7 @@ const ModalAuthenticationSignUp = () => {
 	const boundTogglePhoneVerficationModal = () => {
 		dispatch(toggleRegistrationModal());
 		dispatch(togglePhoneVerficationModal());
-	}
+	};
 
 	const onSubmit = async (data) => {
 		if (!_.isEmpty(errors)) return;
@@ -61,7 +71,7 @@ const ModalAuthenticationSignUp = () => {
 				captchaResponse: '',
 				language: i18n.language,
 			});
-			
+
 			if (response.data.success) {
 				const userData = response.data.result;
 
@@ -72,11 +82,92 @@ const ModalAuthenticationSignUp = () => {
 		} catch (error) {
 			setIsLoading(false);
 			if (error.response) {
-				setMessage(error.response.data.error.message);
+				setRegistrationMessage(error.response.data.error.message);
 			}
 		}
 	};
 
+	const generateSocialButtons = () => {
+		return socialAuthProviders.map((provider, index) => {
+			if (provider.name === 'Google') {
+				return (
+					<GoogleLogin
+						key={index}
+						clientId={provider.clientId}
+						buttonText={t('login')}
+						onSuccess={responseGoogleSuccess}
+						onFailure={responseGoogleFailure}
+						render={(renderProps) => (
+							<a
+								onClick={renderProps.onClick}
+								className="btn-h50 flex-center-center signin-ggle"
+							>
+								{t('sign_up')}
+							</a>
+						)}
+					/>
+				);
+			} else if (provider.name === 'Facebook') {
+				return (
+					<FacebookLogin
+						key={index}
+						appId={provider.clientId}
+						autoLoad={true}
+						fields="name,email,picture"
+						callback={responseFacebook}
+						render={(renderProps) => (
+							<a
+								onClick={renderProps.onClick}
+								className="btn-h50 flex-center-center signin-facebook"
+							>
+								{t('sign_up')}
+							</a>
+						)}
+					/>
+				);
+			}
+		});
+	};
+
+	const responseGoogleSuccess = async (data) => {
+		console.log(data);
+		const { accessToken, profileObj } = data;
+		setIsLoading(true);
+
+		try {
+			const response = await axios.post('customer/external-login', {
+				authProvider: 'Google',
+				ProviderKey: profileObj.googleId,
+				ProviderAccessCode: accessToken,
+			});
+
+			console.log(response);
+
+			const userData = response.data.result;
+
+			userData.emailOrUsername = profileObj.email;
+
+			setIsLoading(false);
+			dispatch(setUserData(userData));
+			if (!userData.isPhoneConfirmed) {
+				boundTogglePhoneVerficationModal();
+			} else {
+				boundToggleRegistrationModal();
+			}
+		} catch (error) {
+			setIsLoading(false);
+			showErrorMessage(t('request_failed'), 5000);
+		}
+	};
+
+	const responseGoogleFailure = (data) => {
+		console.log('adsf', data);
+		showErrorMessage(t('google_auth_failed', 5000));
+	};
+
+	const responseFacebook = (response) => {
+		console.log('fb', response);
+	};
 
 	return (
 		<div>
@@ -111,6 +202,14 @@ const ModalAuthenticationSignUp = () => {
 						</div>
 						<div className="modal-main">
 							<div className="box-signin">
+								{socialAuthProviders.length !== 0 && (
+									<div>
+										<div className="sigin-social">
+											{generateSocialButtons()}
+										</div>
+										<div className="or">{t('or')}</div>
+									</div>
+								)}
 								<form
 									className="form-sign mgb-30"
 									onSubmit={handleSubmit(onSubmit)}
@@ -142,11 +241,16 @@ const ModalAuthenticationSignUp = () => {
 													<img src="images/icon/priority_high_24px.svg" />
 												</span>
 												<div className="note-text">
-													{`${message} ${t(
+													{`${registrationMessage} ${t(
 														'do_you_want_to'
 													)} `}
 													{}
-													<a onClick={boundToggleLoginModal} className="text-yellow font-16 font-demi link-underline">
+													<a
+														onClick={
+															boundToggleLoginModal
+														}
+														className="text-yellow font-16 font-demi link-underline"
+													>
 														{t('sign_in')}
 													</a>
 												</div>

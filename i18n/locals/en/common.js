@@ -44,5 +44,8 @@ export default {
     "email_not_confirmed_text": "Email is not confirmed. Please confirm it. If you have not received the email, you may revalidate again",
     "revalidate": "Revalidate",
     "revalidated_check_inbox": "Verification email has been sent again, please check your inbox",
-    "email_activated": "Email activated"
+    "email_activated": "Email activated",
+    "login": "Login",
+    "google_auth_failed": "Google auth failed",
+    "request_failed": "Request failed"
 }
