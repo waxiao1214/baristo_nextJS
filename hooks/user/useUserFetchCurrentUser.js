@@ -16,12 +16,6 @@ const useUserFetchCurrentUser = () => {
 
         const user = localStorage.getItem('user');
         if (!user) return;
-
-        const { isPhoneConfirmed } = JSON.parse(user);
-        // show phone confirm modal
-        if (!isPhoneConfirmed) {
-            dispatch(togglePhoneVerficationModal());
-        }
     }, []);
 }
 
