@@ -6,8 +6,6 @@ import queryString from 'query-string';
 import _ from 'lodash';
 import useUserFetchCurrentUser from '../hooks/user/useUserFetchCurrentUser';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-
 
 const ConfirmEmail = () => {
 	useUserFetchCurrentUser();
@@ -33,9 +31,10 @@ const ConfirmEmail = () => {
 				setMessage(t('email_activated'));
 				const user = localStorage.getItem('user');
 				// no user is stored in local storage
-				if (!user) return;
-				user.isEmailConfirmed = true;
-				dispatch(setUserData(JSON.parse(user)));
+				if (user) {
+					user.isEmailConfirmed = true;
+					dispatch(setUserData(JSON.parse(user)));
+				};
 				setTimeout(() => {
 					window.location.href = '/';
 				}, 4000);

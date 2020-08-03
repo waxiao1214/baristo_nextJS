@@ -36,8 +36,7 @@ const ModalAuthenticationForgotPassword = () => {
 				{
 					emailAddress: email,
 				}
-			);
-			const data = response.data;
+			);			
 
 			setIsLoading(false);
 			setMessage(t('password_reset_success'));
