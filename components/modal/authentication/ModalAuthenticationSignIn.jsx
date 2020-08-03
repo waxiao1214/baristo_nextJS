@@ -6,6 +6,7 @@ import {
 	toggleRegistrationModal,
 	setUserData,
 	togglePhoneVerficationModal,
+	toggleForgotPasswordModal
 } from '../../../store/actions/authentication.actions';
 import { useForm } from 'react-hook-form';
 import BaseLoader from '../../../components/base/BaseLoader';
@@ -32,6 +33,11 @@ const ModalAuthenticationSignIn = () => {
 		dispatch(toggleLoginModal());
 		dispatch(togglePhoneVerficationModal());
 	};
+
+	const boundToggleForgotPasswordModal = () => {
+		dispatch(toggleLoginModal());
+		dispatch(toggleForgotPasswordModal());
+	}
 
 	const showErrorMessage = (message, timeout) => {
 		setMessage(message);
@@ -82,7 +88,11 @@ const ModalAuthenticationSignIn = () => {
 				id="sign-in"
 				onClick={boundToggleLoginModal}
 			>
-				<div onClick={e => e.stopPropagation()} className="modal-dialog" role="document">
+				<div
+					onClick={(e) => e.stopPropagation()}
+					className="modal-dialog"
+					role="document"
+				>
 					{isLoading && <BaseLoader />}
 					<div className="modal-content">
 						<div className="modal-top">
@@ -177,7 +187,12 @@ const ModalAuthenticationSignIn = () => {
 												<span>{t('remember_me')}</span>
 											</label>
 										</div>
-										<a className="fogot">
+										<a
+											className="fogot"
+											onClick={
+												boundToggleForgotPasswordModal
+											}
+										>
 											{t('forgot_password')}
 										</a>
 									</div>

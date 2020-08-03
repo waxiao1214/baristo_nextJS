@@ -28,6 +28,13 @@ export const togglePhoneVerficationModal = () => {
     }
 }
 
+export const toggleForgotPasswordModal = () => {
+    return {
+        type: userConstants.TOGGLE_FORGOT_PASSWORD_MODAL,
+        payload: {}
+    }
+}
+
 export const setUserData = (user) => {
     console.log(user, 'as')
     // store user details and jwt token in local storage to keep user logged in between page refreshes

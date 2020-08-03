@@ -5,6 +5,7 @@ const initialState = {
     isWhatsThisModalVisible: false,
     isLoginModalVisible: false,
     isPhoneVerificationModalVisible: false,
+    isForgotPasswordModalVisible: false,
     currentUser: {}
 };
 
@@ -53,6 +54,12 @@ export function authentication(state = initialState, action) {
             return {
                 ...state,
                 isPhoneVerificationModalVisible: !state.isPhoneVerificationModalVisible,
+            }
+        
+        case userConstants.TOGGLE_FORGOT_PASSWORD_MODAL:
+            return {
+                ...state,
+                isForgotPasswordModalVisible: !state.isForgotPasswordModalVisible,
             }
 
         default:

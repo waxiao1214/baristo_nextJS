@@ -3,6 +3,7 @@ import ModalAuthenticationSignUp from '../../components/modal/authentication/Mod
 import ModalAuthenticationWhatIsThis from '../../components/modal/authentication/ModalAuthenticationWhatIsThis';
 import ModalAuthenticationSignIn from '../../components/modal/authentication/ModalAuthenticationSignIn';
 import ModalAuthenticationVerifyPhone from '../../components/modal/authentication/ModalAuthenticationVerifyPhone';
+import ModalAuthenticationForgotPassword from '../../components/modal/authentication/ModalAuthenticationForgotPassword';
 import { useSelector } from 'react-redux';
 
 const AuthenticationContainer = () => {
@@ -11,6 +12,7 @@ const AuthenticationContainer = () => {
 		isWhatsThisModalVisible,
 		isLoginModalVisible,
 		isPhoneVerificationModalVisible,
+		isForgotPasswordModalVisible,
 	} = useSelector((state) => state.authentication);
 	return (
 		<div>
@@ -19,6 +21,9 @@ const AuthenticationContainer = () => {
 			{isLoginModalVisible && <ModalAuthenticationSignIn />}
 			{isPhoneVerificationModalVisible && (
 				<ModalAuthenticationVerifyPhone />
+			)}
+			{isForgotPasswordModalVisible && (
+				<ModalAuthenticationForgotPassword />
 			)}
 		</div>
 	);
