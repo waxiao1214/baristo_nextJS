@@ -25,7 +25,7 @@ const ModalAuthenticationSignUp = () => {
 	);
 	const [isCatptchaActive, setIsCatptchaActive] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-
+	const [message, setMessage] = useState('');
 	const watchPassword = watch('password', '');
 	const watchEmail = watch('email', '');
 	const watchConfirmPassword = watch('confirmPassword', '');
@@ -52,8 +52,9 @@ const ModalAuthenticationSignUp = () => {
 		if (!_.isEmpty(errors)) return;
 		setIsLoading(true);
 
+		let response;
 		try {
-			const response = await axios.post('customer/register', {
+			response = await axios.post('customer/register', {
 				emailAddress: watchEmail,
 				password: watchPassword,
 				confirmPassword: watchConfirmPassword,
@@ -61,14 +62,18 @@ const ModalAuthenticationSignUp = () => {
 				language: i18n.language,
 			});
 			
-			const userData = response.data.result;
+			if (response.data.success) {
+				const userData = response.data.result;
 
-			setIsLoading(false);
-			dispatch(setUserData(userData));
-			boundTogglePhoneVerficationModal();
+				setIsLoading(false);
+				dispatch(setUserData(userData));
+				boundTogglePhoneVerficationModal();
+			}
 		} catch (error) {
 			setIsLoading(false);
-			console.error(error);
+			if (error.response) {
+				setMessage(error.response.data.error.message);
+			}
 		}
 	};
 
@@ -80,7 +85,11 @@ const ModalAuthenticationSignUp = () => {
 				id="sign-up"
 				onClick={boundToggleRegistrationModal}
 			>
-				<div className="modal-dialog" role="document" onClick={e => e.stopPropagation()}>
+				<div
+					className="modal-dialog"
+					role="document"
+					onClick={(e) => e.stopPropagation()}
+				>
 					{isLoading && <BaseLoader />}
 					<div className="modal-content">
 						<div className="text-center pdt-30 relative">
@@ -127,24 +136,19 @@ const ModalAuthenticationSignUp = () => {
 												{t('invalid_email')}
 											</div>
 										)}
-										{isEmailAlreadyRegistered && (
+										{message.length !== 0 && (
 											<div className="note-warning flex-center">
 												<span>
 													<img src="images/icon/priority_high_24px.svg" />
 												</span>
 												<div className="note-text">
-													Your email has been
-													registered with ABC. Do you
-													want to
-													<a
-														href=""
-														title=""
-														className="text-yellow font-16 font-demi link-underline"
-														data-target="#sign-in"
-														data-toggle="modal"
-													>
+													{`${message} ${t(
+														'do_you_want_to'
+													)} `}
+													{}
+													<a onClick={boundToggleLoginModal} className="text-yellow font-16 font-demi link-underline">
 														{t('sign_in')}
-													</a>{' '}
+													</a>
 												</div>
 											</div>
 										)}

@@ -40,6 +40,7 @@ export default {
     "reset_password": "Reset password",
     "password_reset_success": "Password reset email has been sent.",
     "an_error_happened": "An error happened",
+    "do_you_want_to": "Do you want to",
     "email_not_confirmed_text": "Email is not confirmed. Please confirm it. If you have not received the email, you may revalidate again",
     "revalidate": "Revalidate",
     "revalidated_check_inbox": "Verification email has been sent again, please check your inbox",
