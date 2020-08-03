@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import i18n from '../i18n/i18n'
+import useUserFetchCurrentUser from '../hooks/user/useUserFetchCurrentUser'
 import TheHeader from '../components/header/TheHeader'
 import TheFooter from '../components/footer/TheFooter'
 import PageSectionIndexChefsChoices from '../components/pageSection/index/PageSectionIndexChefsChoices'
@@ -114,6 +115,7 @@ const getSettings = async () => {
 }
 
 export default function Index(props) {
+  useUserFetchCurrentUser();
   const dispatch = useDispatch();
   const { branches } = useSelector((state) => state.root.settings);
   const [currentBranch, setCurrentBranch] = useState({});
