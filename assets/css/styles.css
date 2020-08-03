@@ -1,6 +1,14 @@
 @import '/.reset.css';
 @import './fonts.css';
 
+a {
+	cursor: pointer;
+}
+
+.alert {
+	position: relative;
+}
+
 #back-to-top {
 	background-color: #080040;
 	border-radius: 50%;
@@ -589,6 +597,9 @@
 .footer-article a {
 	font-weight: 600;
 	margin-right: 30px;
+}
+.header-wrapper {
+	position: relative;
 }
 .copyright {
 	background: url('../images/icon/copyright.svg') no-repeat center left;

@@ -36,5 +36,8 @@ export default {
     "verify_phone_number_explanation": "We will send a verification code to your phone number to continue logging in.",
     "email_or_password_is_wrong": "Email or password is wrong",
     "password_reset_success": "Password reset email has been sent.",
-    "an_error_happened": "An error happened"
+    "an_error_happened": "An error happened",
+    "email_not_confirmed_text": "Email is not confirmed. Please confirm it. If you have not received the email, you may revalidate again",
+    "revalidate": "Revalidate",
+    "revalidated_check_inbox": "Verification email has been sent again, please check your inbox"
 }

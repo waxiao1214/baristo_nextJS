@@ -5,7 +5,7 @@ import BaseSocialLink from '../base/BaseSocialLink';
 
 const HeaderTop = () => {
     const { languages, tenantDetails } = useSelector((state) => state.root.settings);
-    const { t, i18n } = useTranslation();
+    const { i18n } = useTranslation();
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
     const [socialLinks, setSocialLinks] = useState([])
 

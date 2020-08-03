@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import i18n from '../i18n/i18n'
+import DefaultLayout from '../layouts/DefaultLayout'
 import useUserFetchCurrentUser from '../hooks/user/useUserFetchCurrentUser'
 import TheHeader from '../components/header/TheHeader'
 import TheFooter from '../components/footer/TheFooter'
@@ -12,7 +13,7 @@ import PageSectionIndexOurResource from '../components/pageSection/index/PageSec
 import PageSectionIndexOurChef from '../components/pageSection/index/PageSectionIndexOurChef'
 import PageSectionIndexOurLocation from '../components/pageSection/index/PageSectionIndexOurLocation'
 import PageSectionIndexHero from '../components/pageSection/index/PageSectionIndexHero'
-import AuthenticationContainer from '../containers/authentication/AuthenticationContainer';
+import AuthenticationContainer from '../containers/authentication/AuthenticationContainer'
 import axios from '../lib/axios'
 
 const getSpecialCruises = async () => {
@@ -178,7 +179,7 @@ export default function Index(props) {
   }, [currentBranch]);
 
   return (
-    <div>
+    <DefaultLayout>
       <TheHeader />
       {contentWidgets.CAROUSEL &&
         <PageSectionIndexHero />
@@ -205,6 +206,6 @@ export default function Index(props) {
       }
       <TheFooter />
       <AuthenticationContainer />
-    </div>
+    </DefaultLayout>
   )
 }

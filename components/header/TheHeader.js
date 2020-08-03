@@ -3,7 +3,7 @@ import HeaderTop from './HeaderTop';
 
 const TheHeader = () => {
     return (
-        <div>
+        <div className="header-wrapper">
             <HeaderTop />
             <HeaderBottom />
         </div>

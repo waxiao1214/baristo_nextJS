@@ -65,6 +65,8 @@ const ModalAuthenticationSignIn = () => {
 
 			const userData = response.data.result;
 
+			userData.emailOrUsername = emailOrUsername;
+			
 			setIsLoading(false);
 			dispatch(setUserData(userData));
 			if (!userData.isPhoneConfirmed) {
