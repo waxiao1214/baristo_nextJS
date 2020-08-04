@@ -1,16 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore, { Pagination } from 'swiper';
-
-SwiperCore.use([Pagination]);
 
 const ProductCard = ({ product }) => {
 	const { t } = useTranslation(['common']);
 	const { currency } = useSelector((state) => state.root.settings);
 	const { mealPrices } = product;
-	const mainMeal = mealPrices[0];
+	const [mainMeal, setMainMeal] = useState(mealPrices[0]);
 
 	/**
 	 * Check if the discount is still
@@ -30,6 +26,35 @@ const ProductCard = ({ product }) => {
 
 		return true;
 	};
+
+	useEffect(() => {
+		setMainMeal(mealPrices[0]);
+		// set the meal price
+		// it should be the cheapest one with the highest discount value
+		let cheapestMeal = mealPrices[0];
+		mealPrices.forEach((mealPrice) => {
+			if (cheapestMeal.price > mealPrice.price) {
+				cheapestMeal = mealPrice;
+			}
+		});
+
+		let highestDiscount = cheapestMeal.mealSettings[0];
+		cheapestMeal.mealSettings.forEach((mealSetting) => {
+			console.log(mealSetting);
+			if (!mealSetting.discount) return;
+			if (!mealSetting.discount) return;
+			if (!highestDiscount.discount) {
+				highestDiscount = mealSetting;
+				return;
+			}
+			if (highestDiscount.discount < mealSetting.discount) {
+				highestDiscount.discount = mealSetting.discount;
+			}
+		});
+
+		cheapestMeal.mealSettings = [highestDiscount];
+		setMainMeal(cheapestMeal);
+	}, [mealPrices]);
 
 	return (
 		<div className="product-item">
@@ -64,47 +89,29 @@ const ProductCard = ({ product }) => {
 					</a>
 				</h3>
 				<div className="desc font-18 mgb-20">{product.description}</div>
-				<Swiper
-					spaceBetween={0}
-					slidesPerView={1}
-					pagination={{ clickable: true }}
-					autoHeight={true}
-				>
-					{mealPrices.map((mealPrice, index) => {
-						return (
-							<SwiperSlide className="pb-5" key={index}>
-								<div key={mealPrice.id}>
-									<div className="product-price-size">
-										<div className="product-price text-yellow font-28 font-demi">{`${currency} ${mealPrice.price}`}</div>
-										<span>{mealPrice.size}</span>
-									</div>
-									{mealPrice.mealSettings[0].applyDiscount &&
-										isDiscountStillInRange(
-											mealPrice.mealSettings[0].from,
-											mealPrice.mealSettings[0].to
-										) && (
-											<div className="product-sale mgt-10">
-												<span className="discount inflex-center-center btn-gray btn-h46 btn-bgLeft">
-													{t('discount')}{' '}
-													{
-														mealPrice
-															.mealSettings[0]
-															.discount
-													}
-													{mealPrice.mealSettings[0]
-														.discountType ===
-													'Fixed'
-														? currency
-														: '%'}
-												</span>
-											</div>
-										)}
-								</div>
-							</SwiperSlide>
-						);
-					})}
-				</Swiper>
-				<div className="d-flex justify-content-end mgt-6">
+				<div key={mainMeal.id}>
+					<div className="product-price-size">
+						<div className="product-price text-yellow font-28 font-demi">{`${currency} ${mainMeal.price}`}</div>
+						<span>{mainMeal.size}</span>
+					</div>
+					{mainMeal.mealSettings[0].applyDiscount &&
+						isDiscountStillInRange(
+							mainMeal.mealSettings[0].from,
+							mainMeal.mealSettings[0].to
+						) && (
+							<div className="product-sale mgt-10">
+								<span className="discount inflex-center-center btn-gray btn-h46 btn-bgLeft">
+									{t('discount')}{' '}
+									{mainMeal.mealSettings[0].discount}
+									{mainMeal.mealSettings[0].discountType ===
+									'Fixed'
+										? currency
+										: '%'}
+								</span>
+							</div>
+						)}
+				</div>
+				<div className="d-flex justify-content-end mgt-10">
 					<a className="btn-h46 inflex-center-center btn-gray more">
 						{t('more')}
 					</a>
