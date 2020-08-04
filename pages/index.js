@@ -15,6 +15,7 @@ import PageSectionIndexOurLocation from '../components/pageSection/index/PageSec
 import PageSectionIndexHero from '../components/pageSection/index/PageSectionIndexHero'
 import AuthenticationContainer from '../containers/authentication/AuthenticationContainer'
 import axios from '../lib/axios'
+import _ from 'lodash';
 
 const getSpecialCruises = async () => {
   try {
@@ -177,6 +178,18 @@ export default function Index(props) {
     });
     
   }, [currentBranch]);
+
+  // set axios auth headers 
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    // no user in the local storage
+    if (user === null) return Promise.reject(error);
+
+    const userData = JSON.parse(user);
+    if (_.isNil(userData.accessToken)) return;
+
+    axios.defaults.headers.common['Authorization'] = `Bearer ${userData.accessToken}`;
+  }, []);
 
   return (
     <DefaultLayout>

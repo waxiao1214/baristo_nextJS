@@ -57,12 +57,7 @@ const ModalAuthenticationVerifyPhone = () => {
 		try {
 			const response = await axios.post(
 				`customer/send-phone-verification-code?phone=${data.phoneNumber}`,
-				{},
-				{
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				}
+				{}
 			);
 			// if success go to next step
 			if (response.data.success && currentStep === 0) {

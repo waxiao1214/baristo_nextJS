@@ -44,7 +44,7 @@ const AuthenticationContainer = () => {
 					socialAuthProviders={socialAuthProviders}
 				/>
 			)}
-			{isPhoneVerificationModalVisible && (
+			{!isPhoneVerificationModalVisible && (
 				<ModalAuthenticationVerifyPhone />
 			)}
 			{isForgotPasswordModalVisible && (
