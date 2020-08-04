@@ -57,7 +57,7 @@ const ConfirmEmail = () => {
 
 		// get url query
 		const { c } = queryString.parse(location.search, {
-			decode: false,
+			decode: true,
 		});
 
 		if (_.isNil(c)) {

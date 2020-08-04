@@ -12,13 +12,14 @@ const ResetPassword = () => {
 
 	const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState('');
-    const [token, setToken] = useState('');
+	const [token, setToken] = useState('');
+	const [isSuccess, setIsSuccess] = useState(false);
     const watchPassword = watch('password', '');
     
     useEffect(() => {
 		// get url query
 		const { c } = queryString.parse(location.search, {
-			decode: false,
+			decode: true,
 		});
 
 		if (_.isNil(c)) {
@@ -38,16 +39,21 @@ const ResetPassword = () => {
 			});
 			
 			setIsLoading(false);
-            setMessage(t('password_reset_success_reset'));
+			setMessage('');
+			setIsSuccess(true);
             setTimeout(() => {
                 window.location.href = '/';
             }, 5000);
 		} catch (error) {
             setIsLoading(false);
-            setMessage(t('an_error_happened'));
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 5000);
+			if (error.response) {
+				setMessage(error.response.data.error.message);
+			} else {
+				setMessage(t('an_error_happened'));
+				setTimeout(() => {
+					window.location.href = '/';
+				}, 5000);
+			}
 		}
     };
 
@@ -64,7 +70,12 @@ const ResetPassword = () => {
 						</div>
 						<div className="modal-main">
 							<div className="box-signin">
-								{message.length === 0 && (
+								{message && (
+									<div className="alert alert-danger">
+										{message}
+									</div>
+								)}
+								{!isSuccess && (
 									<form
 										className="form-sign mgb-30"
 										onSubmit={handleSubmit(onSubmit)}
@@ -136,9 +147,9 @@ const ResetPassword = () => {
 										</div>
 									</form>
 								)}
-								{message.length !== 0 && (
+								{isSuccess && (
 									<div className="text-center py-10 desc font-20 mgb-20">
-										<p>{message}</p>
+										<p>{t('password_changed')}</p>
 									</div>
 								)}
 							</div>
