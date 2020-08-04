@@ -1,6 +1,7 @@
 export default {
     "available": "Available",
     "change_the_branch": "Change the branch",
+    "contact_us": "Contact us",
     "not_available": "Not available",
     "more": "More",
     "delivery_now": "Deliver now",
@@ -13,6 +14,7 @@ export default {
     "remember_me": "Remember me",
     "forgot_password?": "Forgot password?",
     "forgot_password": "Forgot password",
+    "password_changed": "Password changed",
     "do_not_have_an_account": "Do not have an account?",
     "sign_up": "Sign up",
     "have_an_account": "Have an account?",

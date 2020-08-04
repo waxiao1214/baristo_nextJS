@@ -453,6 +453,13 @@ a {
 	padding-bottom: 30px !important;
 	padding-top: 30px !important;
 }
+.location-map {
+	height: 30rem;
+	margin-bottom: 3rem;
+}
+.icon-pin {
+	height: 2rem;
+}
 .location-image {
 	padding-bottom: 60px;
 }
