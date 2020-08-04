@@ -2,6 +2,7 @@ import { Provider } from 'react-redux'
 import { useStore } from '../store'
 import '../assets/css/_main.css'
 import 'swiper/swiper.scss'
+import 'swiper/components/pagination/pagination.scss'
 import '../i18n/i18n'
 
 export default function App({ Component, pageProps }) {

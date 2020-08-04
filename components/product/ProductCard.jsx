@@ -1,6 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Pagination } from 'swiper';
+
+SwiperCore.use([Pagination]);
 
 const ProductCard = ({ product }) => {
 	const { t } = useTranslation(['common']);
@@ -60,41 +64,52 @@ const ProductCard = ({ product }) => {
 					</a>
 				</h3>
 				<div className="desc font-18 mgb-20">{product.description}</div>
-
-				{mealPrices.map((mealPrice, index) => {
-					return (
-						<div
-							className={
-								index !== 0 ? 'product-size-variation' : ''
-							}
-							key={mealPrice.id}
-						>
-							<div className="product-price-size">
-								<div className="product-price text-yellow font-28 font-demi">{`${currency} ${mealPrice.price}`}</div>
-								<span>{mealPrice.size}</span>
-							</div>
-							{mealPrice.mealSettings[0].applyDiscount &&
-								isDiscountStillInRange(
-									mealPrice.mealSettings[0].from,
-									mealPrice.mealSettings[0].to
-								) && (
-									<div className="product-sale mgt-10">
-										<span className="discount inflex-center-center btn-gray btn-h46 btn-bgLeft">
-											{t('discount')}{' '}
-											{mealPrice.mealSettings[0].discount}
-											{mealPrice.mealSettings[0]
-												.discountType === 'Fixed'
-												? currency
-												: '%'}
-										</span>
-										<a className="btn-h46 inflex-center-center btn-gray more">
-											{t('more')}
-										</a>
+				<Swiper
+					spaceBetween={0}
+					slidesPerView={1}
+					pagination={{ clickable: true }}
+				>
+					{mealPrices.map((mealPrice, index) => {
+						return (
+							<SwiperSlide className="pb-5" key={index}>
+								<div
+									key={mealPrice.id}
+								>
+									<div className="product-price-size">
+										<div className="product-price text-yellow font-28 font-demi">{`${currency} ${mealPrice.price}`}</div>
+										<span>{mealPrice.size}</span>
 									</div>
-								)}
-						</div>
-					);
-				})}
+									{mealPrice.mealSettings[0].applyDiscount &&
+										isDiscountStillInRange(
+											mealPrice.mealSettings[0].from,
+											mealPrice.mealSettings[0].to
+										) && (
+											<div className="product-sale mgt-10">
+												<span className="discount inflex-center-center btn-gray btn-h46 btn-bgLeft">
+													{t('discount')}{' '}
+													{
+														mealPrice
+															.mealSettings[0]
+															.discount
+													}
+													{mealPrice.mealSettings[0]
+														.discountType ===
+													'Fixed'
+														? currency
+														: '%'}
+												</span>
+											</div>
+										)}
+								</div>
+							</SwiperSlide>
+						);
+					})}
+				</Swiper>
+				<div className="d-flex justify-content-end mgt-6">
+					<a className="btn-h46 inflex-center-center btn-gray more">
+						{t('more')}
+					</a>
+				</div>
 			</div>
 		</div>
 	);

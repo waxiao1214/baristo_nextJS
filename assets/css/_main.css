@@ -5,3 +5,6 @@
 @import './styles.css';
 @import './components/_main.scss';
 @import './utilities/_main.scss';
+/* @import '../../node_modules/swiper/swiper-vars.scss';
+@import '../../node_modules/swiper/swiper.scss';
+@import '../../node_modules/swiper/components/pagination/pagination.scss'; */
