@@ -68,13 +68,12 @@ const ProductCard = ({ product }) => {
 					spaceBetween={0}
 					slidesPerView={1}
 					pagination={{ clickable: true }}
+					autoHeight={true}
 				>
 					{mealPrices.map((mealPrice, index) => {
 						return (
 							<SwiperSlide className="pb-5" key={index}>
-								<div
-									key={mealPrice.id}
-								>
+								<div key={mealPrice.id}>
 									<div className="product-price-size">
 										<div className="product-price text-yellow font-28 font-demi">{`${currency} ${mealPrice.price}`}</div>
 										<span>{mealPrice.size}</span>
