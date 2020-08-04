@@ -51,12 +51,12 @@ const ModalAuthenticationVerifyPhone = () => {
 		}
 	};
 
-	const sendPhoneVerificationCode = async () => {
-		setPhoneNumber(watchPhoneNumber);
+	const sendPhoneVerificationCode = async (data) => {
+		setPhoneNumber(data.phoneNumber);
 		setIsLoading(true);
 		try {
 			const response = await axios.post(
-				`customer/send-phone-verification-code?phone=${phoneNumber}`,
+				`customer/send-phone-verification-code?phone=${data.phoneNumber}`,
 				{},
 				{
 					headers: {
