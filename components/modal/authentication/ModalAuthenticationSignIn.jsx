@@ -107,7 +107,7 @@ const ModalAuthenticationSignIn = ({ socialAuthProviders }) => {
 					<FacebookLogin
 						key={index}
 						appId={provider.clientId}
-						autoLoad={true}
+						autoLoad={false}
 						fields="name,email,picture"
 						callback={responseFacebook}
 						render={(renderProps) => (

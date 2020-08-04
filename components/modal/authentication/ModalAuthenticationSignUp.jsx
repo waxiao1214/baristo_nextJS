@@ -58,7 +58,7 @@ const ModalAuthenticationSignUp = ({ socialAuthProviders }) => {
 		dispatch(togglePhoneVerficationModal());
 	};
 
-	const onSubmit = async (data) => {
+	const onSubmit = async () => {
 		if (!_.isEmpty(errors)) return;
 		setIsLoading(true);
 
@@ -112,7 +112,7 @@ const ModalAuthenticationSignUp = ({ socialAuthProviders }) => {
 					<FacebookLogin
 						key={index}
 						appId={provider.clientId}
-						autoLoad={true}
+						autoLoad={false}
 						fields="name,email,picture"
 						callback={responseFacebook}
 						render={(renderProps) => (
@@ -235,7 +235,7 @@ const ModalAuthenticationSignUp = ({ socialAuthProviders }) => {
 												{t('invalid_email')}
 											</div>
 										)}
-										{message.length !== 0 && (
+										{registrationMessage.length !== 0 && (
 											<div className="note-warning flex-center">
 												<span>
 													<img src="images/icon/priority_high_24px.svg" />

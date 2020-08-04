@@ -92,16 +92,17 @@ const ModalAuthenticationVerifyPhone = () => {
 
 			if (response.data.success) {
 				// update the local storage
-				const user = localstorage.getItem('user')
-					? JSON.parse(localstorage.getItem('user'))
+				const user = localStorage.getItem('user')
+					? JSON.parse(localStorage.getItem('user'))
 					: {};
 				user.isPhoneConfirmed = true;
-				localStorage.setItem(JSON.stringify(user));
+				localStorage.setItem('user', JSON.stringify(user));
 
 				nextStep();
 				setIsLoading(false);
 			}
 		} catch (error) {
+			console.log(error);
 			showErrorMessage(t('an_error_happened'), 5000);
 			setIsLoading(false);
 		}
@@ -307,8 +308,8 @@ const ModalAuthenticationVerifyPhone = () => {
 								</form>
 							)}
 							{currentStep === 2 && (
-								<div className="text-center mgt-10">
-									{t('phone_number_verified')}
+								<div className="text-center py-10 desc font-20 mgb-20">
+									<p>{t('phone_number_verified')}</p>
 								</div>
 							)}
 						</div>

@@ -9,6 +9,10 @@ a {
 	position: relative;
 }
 
+.user-abs {
+	display: flex;
+}
+
 #back-to-top {
 	background-color: #080040;
 	border-radius: 50%;

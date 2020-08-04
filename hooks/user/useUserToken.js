@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
  *
  * @param {String} token
  */
-function useUserToken(links) {
-    const { accessToken } = useSelector(state => state.authentication.currentUser)
+function useUserToken() {
+    const { accessToken } = useSelector(state => state.authentication.currentUser);
 
     return accessToken;
 }

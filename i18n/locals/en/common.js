@@ -47,5 +47,6 @@ export default {
     "email_activated": "Email activated",
     "login": "Login",
     "google_auth_failed": "Google auth failed",
-    "request_failed": "Request failed"
+    "request_failed": "Request failed",
+    "account": "Account"
 }
