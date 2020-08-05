@@ -183,7 +183,7 @@ export default function Index(props) {
   useEffect(() => {
     const user = localStorage.getItem('user');
     // no user in the local storage
-    if (user === null) return Promise.reject(error);
+    if (user === null) return;
 
     const userData = JSON.parse(user);
     if (_.isNil(userData.accessToken)) return;
