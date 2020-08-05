@@ -23,6 +23,7 @@ export default {
     "have_an_account": "Have an account?",
     "confirm_password": "Confirm password",
     "no_result": "No result",
+    "deal_of_the_day": "Deal of the day",
     "password": "Password",
     "email": "Email",
     "what_is_this": "What is this",

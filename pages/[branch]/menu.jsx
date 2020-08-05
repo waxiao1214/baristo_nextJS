@@ -2,9 +2,29 @@ import DefaultLayout from '../../layouts/DefaultLayout';
 import TheHeader from '../../components/header/TheHeader';
 import TheFooter from '../../components/footer/TheFooter';
 import PageSectionMenuShowcaseSection from '../../components/pageSection/menu/PageSectionMenuShowcaseSection';
+import PageSectionMenuDealOfToday from '../../components/pageSection/menu/PageSectionMenuDealOfToday';
 import usePageOnLoad from '../../hooks/page/usePageOnLoad';
 import axios from '../../lib/axios';
 import i18n from '../../i18n/i18n';
+
+/**
+ * Get popular meals
+ *
+ * @param {String|Number} branchId
+ * @return {Array} array of products
+ */
+const getPopularMeals = async (branchId) => {
+	try {
+		const url = `customer/web/meals-service/popular-meals?Sorting=Id&MaxResultCount=2&SkipCount=0&branchId=${branchId}&isDelivery=true&culture=${i18n.language}`;
+		const response = await axios.get(url);
+
+		return response.data.result.items;
+	} catch (error) {
+		console.error(error);
+
+		return [];
+	}
+};
 
 /**
  * Get discounted meals
@@ -57,6 +77,7 @@ export async function getServerSideProps(context) {
 			settings,
 			currentBranch,
 			discountedMeals,
+			popularMeals
 		},
 	};
 }
@@ -70,6 +91,7 @@ export default function Gallery(props) {
 			<PageSectionMenuShowcaseSection
 				discountedMeals={props.discountedMeals}
 			/>
+			<PageSectionMenuDealOfToday products={props.popularMeals}/>
 			<TheFooter />
 		</DefaultLayout>
 	);
