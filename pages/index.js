@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import usePageOnLoad from '../hooks/page/usePageOnLoad';
 import i18n from '../i18n/i18n'
 import DefaultLayout from '../layouts/DefaultLayout'
 import useUserFetchCurrentUser from '../hooks/user/useUserFetchCurrentUser'
@@ -25,7 +25,6 @@ const getSpecialCruises = async () => {
     return response.data.result;
   } catch (error) {
     console.error(error);
-
     return [];
   }
 }
@@ -82,26 +81,6 @@ const getChefStory = async () => {
   }
 }
 
-export async function getServerSideProps(context) {
-  const specialCruises = await getSpecialCruises();
-  const chefChoices = await getChefChoices();
-  const appResources = await getAppResources();
-  const subBanner = await getSubBanner();
-  const chefStory = await getChefStory();
-  const settings = await getSettings();
-
-  return {
-    props: {
-      specialCruises,
-      chefChoices,
-      appResources,
-      subBanner,
-      chefStory,
-      settings
-    }, // will be passed to the page component as props
-  }
-}
-
 const getSettings = async () => {
   try {
     const url = `/settings?mediaTypeFilters=LOGO&mediaTypeFilters=FAVI_ICON&mediaTypeFilters=MOBILE_PROFILE_IMAGE&mediaTypeFilters=MOBILE_START_SCREEN&mediaTypeFilters=MOBILE_WELCOME_SCREEN`
@@ -116,34 +95,40 @@ const getSettings = async () => {
   }
 }
 
+export async function getServerSideProps(context) {
+  const settings = await getSettings();
+
+  // get current branch 
+  const { branches } = settings;
+  const currentBranch = branches.filter(branch => branch.primaryBranch)[0];
+
+  const specialCruises = await getSpecialCruises();
+  const chefChoices = await getChefChoices();
+  const appResources = await getAppResources();
+  const subBanner = await getSubBanner();
+  const chefStory = await getChefStory();
+
+  return {
+    props: {
+      specialCruises,
+      chefChoices,
+      appResources,
+      subBanner,
+      chefStory,
+      settings,
+      currentBranch
+    },
+  }
+}
+
 export default function Index(props) {
   useUserFetchCurrentUser();
-  const dispatch = useDispatch();
-  const { branches } = useSelector((state) => state.root.settings);
-  const [currentBranch, setCurrentBranch] = useState({});
+  usePageOnLoad(props);
+  const { currentBranch } = props;
   const [contentWidgets, setContentWidgets] = useState({});
   const [isDeliveryAvailabilitySectionVisible, setIsDeliveryAvailabilitySectionVisible] = useState(true);
 
-  dispatch({
-    type: 'ADD_SETTINGS',
-    payload: {
-      settings: props.settings
-    }
-  });
-
-  useEffect(() => {
-    if (!branches) return;
-
-    setCurrentBranch(branches.filter(branch => branch.primaryBranch)[0]);
-  }, [branches]);
-
-  dispatch({
-    type: 'SET_CURRENT_BRANCH',
-    payload: {
-      branch: currentBranch
-    }
-  });
-
+  // set which section to show and hide
   useEffect(() => {
     if (!currentBranch.contentWidgets) return;
 
@@ -156,40 +141,13 @@ export default function Index(props) {
     setContentWidgets(contentWidgets);
   }, [currentBranch]);
 
+  // set if delivery availability section is visible
   useEffect(() => {
     if (!currentBranch.contentWidgets) return;
 
     const { deliveryOption } = currentBranch.deliverySetting;
     setIsDeliveryAvailabilitySectionVisible(deliveryOption === 'DeliveryOnly' || deliveryOption === 'DeliveryAndPickup');
   }, [currentBranch]);
-
-  useEffect(() => {
-    if (!currentBranch.contentWidgets) return;
-
-    let logo;
-
-    logo = currentBranch.applicationMedia.filter(media => media.type === 'LOGO')[0].blobLink;
-
-    dispatch({
-      type: 'SET_LOGO',
-      payload: {
-        logo
-      }
-    });
-    
-  }, [currentBranch]);
-
-  // set axios auth headers 
-  useEffect(() => {
-    const user = localStorage.getItem('user');
-    // no user in the local storage
-    if (user === null) return;
-
-    const userData = JSON.parse(user);
-    if (_.isNil(userData.accessToken)) return;
-
-    axios.defaults.headers.common['Authorization'] = `Bearer ${userData.accessToken}`;
-  }, []);
 
   return (
     <DefaultLayout>
