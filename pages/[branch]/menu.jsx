@@ -7,25 +7,6 @@ import axios from '../../lib/axios';
 import i18n from '../../i18n/i18n';
 
 /**
- * Get popular meals
- *
- * @param {String|Number} branchId
- * @return {Array} array of products
- */
-const getPopularMeals = async (branchId) => {
-	try {
-		const url = `customer/web/meals-service/popular-meals?Sorting=Id&MaxResultCount=2&SkipCount=0&branchId=${branchId}&isDelivery=true&culture=${i18n.language}`;
-		const response = await axios.get(url);
-
-        return response.data.result.items;
-	} catch (error) {
-		console.error(error);
-
-		return [];
-	}
-};
-
-/**
  * Get discounted meals
  *
  * @param {String|Number} branchId
@@ -75,7 +56,6 @@ export async function getServerSideProps(context) {
 		props: {
 			settings,
 			currentBranch,
-			popularMeals,
 			discountedMeals,
 		},
 	};
@@ -88,7 +68,6 @@ export default function Gallery(props) {
 		<DefaultLayout>
 			<TheHeader />
 			<PageSectionMenuShowcaseSection
-				popularMeals={props.popularMeals}
 				discountedMeals={props.discountedMeals}
 			/>
 			<TheFooter />
