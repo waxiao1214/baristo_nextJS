@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import useBaseToggleLoader from '../../../hooks/base/useBaseToggleLoader';
+import queryString from 'query-string';
 import ProductChefItemCardV2 from '../../product/ProductChefItemCardV2';
 import axios from '../../../lib/axios';
+import BaseLoader from '../../base/BaseLoader';
 
 const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 	const { t, i18n } = useTranslation(['common']);
-	const { isLoading, toggleLoader } = useBaseToggleLoader();
+
+	// loader
+	const [isLoading, setIsLoading] = useState(false);
+
 	const currentBranch = useSelector((state) => state.root.currentBranch);
 	const availableTabs = [
 		{
@@ -24,21 +28,48 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 	const [categoriesToShow, setCategoriesToShow] = useState([]);
 	const [mealsToShow, setMealsToShow] = useState([]);
 
+	// pagination
+	const [count, setCount] = useState(10); // count for each page
+	const [totalCount, setTotalCount] = useState(0);
+	const [currentPage, setCurrentPage] = useState(0);
+	const [totalPages, setTotalPages] = useState(0);
+
+	/**
+	 * Genreate query string
+	 *
+	 * @return {String}
+	 */
+	const generateQuery = () => {
+		const stringified = queryString.stringify({
+			Sorting: 'Id',
+			MaxResultCount: count,
+			SkipCount: currentPage * count,
+			branchId: currentBranch.id,
+			all: false,
+			categoryId: currentActiveCategory.id,
+			culture: i18n.language,
+		});
+
+		return stringified;
+	};
+
 	/**
 	 * Get meals
 	 *
 	 * @return {Array} array of products
 	 */
 	const getMeals = async () => {
+		setIsLoading(true);
 		try {
-			const url = `customer/web/meals-service/category-meals?Sorting=Id&MaxResultCount=10&SkipCount=0&branchId=${currentBranch.id}&isDelivery=true&culture=${i18n.language}`;
+			const query = generateQuery();
+			const url = `customer/web/meals-service/category-meals?${query}`;
 			const response = await axios.get(url);
 
 			setMealsToShow(response.data.result.items);
 		} catch (error) {
 			console.error(error);
-
-			return [];
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -48,19 +79,22 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 	 * @return {Array} array of products
 	 */
 	const getCombos = async () => {
+		setIsLoading(true);
 		try {
-			const url = `customer/web/meals-service/category-combo?Sorting=Id&MaxResultCount=10&SkipCount=0&categoryId=1&branchId=${currentBranch.id}&isDelivery=true&culture=${i18n.language}`;
+			const query = generateQuery();
+			const url = `customer/web/meals-service/category-combo?${query}`;
 			const response = await axios.get(url);
 
 			setMealsToShow(response.data.result.items);
 		} catch (error) {
 			console.error(error);
-
-			return [];
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
 	useEffect(() => {
+		setMealsToShow([]);
 		if (currentActiveTab === 'meal_list') {
 			setCategoriesToShow(mealCategories);
 			setCurrentActiveCategory(mealCategories[0]);
@@ -71,6 +105,15 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 			getCombos();
 		}
 	}, [currentActiveTab]);
+
+	useEffect(() => {
+		setMealsToShow([]);
+		if (currentActiveTab === 'meal_list') {
+			getMeals();
+		} else if (currentActiveTab === 'combo') {
+			getCombos();
+		}
+	}, [currentActiveCategory]);
 
 	return (
 		<section className="menu-list pd-100">
@@ -123,20 +166,24 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 					</ul>
 				</div>
 				<div className="container">
-					<div className="tab-content">
-						<div
-							role="tabpanel"
-							className="tab-pane fade in show active"
-							id="tab-1"
-						>
-							<div className="row">
+					<div className="tab-content tab-content--relative">
+						{isLoading && <BaseLoader />}
+						<div className="fade in show active">
+							<div className="row tab-pane--h-md">
 								{mealsToShow.map((meal) => {
 									return (
 										<div className="col-md-4" key={meal.id}>
-                                            <ProductChefItemCardV2 product={meal}/>
+											<ProductChefItemCardV2
+												product={meal}
+											/>
 										</div>
 									);
 								})}
+								{mealsToShow.length === 0 && !isLoading && (
+									<div className="text-center py-10 desc font-20 mgb-20">
+										<p>{t('no_result')}</p>
+									</div>
+								)}
 							</div>
 							<div className="pagi">
 								<ul className="flex-center-center">

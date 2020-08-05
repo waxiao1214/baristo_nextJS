@@ -24,9 +24,11 @@ const ProductChefItemCardV2 = ({ product }) => {
 				</h3>
 				<p className="desc text-gray font-18">{product.description}</p>
 			</div>
-            <div className="d-flex flex-column align-items-center">
-                <div className="d-flex justify-content-center align-items-center my-4">
-					{product.mealPrices.length > 1 && <span className="mr-3 font-16">{t('from')}</span>}
+			<div className="d-flex flex-column align-items-center">
+				<div className="d-flex justify-content-center align-items-center my-4">
+					{product.mealPrices.length > 1 && (
+						<span className="mr-3 font-16">{t('from')}</span>
+					)}
 					<div className="product-price text-yellow font-28 font-demi">{`${currency} ${mainMeal.price}`}</div>
 				</div>
 				{mainMeal.mealSettings[0].applyDiscount &&
@@ -35,13 +37,13 @@ const ProductChefItemCardV2 = ({ product }) => {
 						mainMeal.mealSettings[0].to
 					) && (
 						<div className="product-sale mgt-10">
-							<span className="discount inflex-center-center btn-gray btn-h46 btn-bgLeft">
-								{t('discount')}
+							<span className="discount discount--white inflex-center-center btn-gray btn-h46 btn-bgLeft">
+								{`${t('discount')} `}
 								{mainMeal.mealSettings[0].discount}
 								{mainMeal.mealSettings[0].discountType ===
 								'Fixed'
-									? currency
-									: '%'}
+									? `${currency}`
+									: ' %'}
 							</span>
 						</div>
 					)}

@@ -4,13 +4,12 @@ const useBaseToggleLoader = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const toggleLoader = () => {
-        setIsLoading(isLoading);
+        console.log('toggle', isLoading);
+        setIsLoading(!isLoading);
     }
 
-    return {
-        isLoading,
-        toggleLoader
-    }
+    return [isLoading,
+        toggleLoader]
 }
 
 export default useBaseToggleLoader;
