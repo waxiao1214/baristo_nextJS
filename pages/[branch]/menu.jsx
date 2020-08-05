@@ -1,6 +1,7 @@
 import DefaultLayout from '../../layouts/DefaultLayout';
-import TheHeader from '../../components/header/TheHeader'
-import TheFooter from '../../components/footer/TheFooter'
+import TheHeader from '../../components/header/TheHeader';
+import TheFooter from '../../components/footer/TheFooter';
+import PageSectionMenuShowcaseSection from '../../components/pageSection/menu/PageSectionMenuShowcaseSection';
 import usePageOnLoad from '../../hooks/page/usePageOnLoad';
 import axios from '../../lib/axios';
 
@@ -39,6 +40,7 @@ export default function Gallery(props) {
     return (
         <DefaultLayout>
             <TheHeader />
+            <PageSectionMenuShowcaseSection />
             <TheFooter />
         </DefaultLayout>
     )

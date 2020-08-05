@@ -258,6 +258,9 @@ a {
 .desc {
 	line-height: 1.5;
 }
+.menu-showcase-section {
+	margin-top: 8rem;
+}
 .delivery {
 	background-color: rgba(8, 0, 64, 0.3);
 	top: 0;
