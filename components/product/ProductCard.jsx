@@ -89,7 +89,7 @@ const ProductCard = ({ product }) => {
 					</a>
 				</h3>
 				<div className="desc font-18 mgb-20">{product.description}</div>
-				<div key={mainMeal.id}>
+				<div>
 					<div className="product-price-size">
 						<div className="product-price text-yellow font-28 font-demi">{`${currency} ${mainMeal.price}`}</div>
 						<span>{mainMeal.size}</span>
