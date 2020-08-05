@@ -17,9 +17,9 @@ import AuthenticationContainer from '../containers/authentication/Authentication
 import axios from '../lib/axios'
 import _ from 'lodash';
 
-const getSpecialCruises = async () => {
+const getSpecialCruises = async (branchId) => {
   try {
-    const url = `customer/web/home-service/special-cruise?branchId=1&culture=${i18n.language}&deliveryType=Delivery`
+    const url = `customer/web/home-service/special-cruise?branchId=${branchId}&culture=${i18n.language}&deliveryType=Delivery`
     const response = await axios.get(url);
 
     return response.data.result;
@@ -29,22 +29,9 @@ const getSpecialCruises = async () => {
   }
 }
 
-const getChefChoices = async () => {
+const getChefChoices = async (branchId) => {
   try {
-    const url = `customer/web/home-service/chef-choice?branchId=1&culture=${i18n.language}`
-    const response = await axios.get(url);
-
-    return response.data.result;
-  } catch (error) {
-    console.error(error);
-
-    return [];
-  }
-}
-
-const getAppResources = async () => {
-  try {
-    const url = `customer/web/home-service/app-resources?branchId=1`
+    const url = `customer/web/home-service/chef-choice?branchId=${branchId}&culture=${i18n.language}`
     const response = await axios.get(url);
 
     return response.data.result;
@@ -55,9 +42,9 @@ const getAppResources = async () => {
   }
 }
 
-const getSubBanner = async () => {
+const getAppResources = async (branchId) => {
   try {
-    const url = `customer/web/home-service/sub-banner?branchId=1`
+    const url = `customer/web/home-service/app-resources?branchId=${branchId}`
     const response = await axios.get(url);
 
     return response.data.result;
@@ -68,9 +55,22 @@ const getSubBanner = async () => {
   }
 }
 
-const getChefStory = async () => {
+const getSubBanner = async (branchId) => {
   try {
-    const url = `customer/web/home-service/chef-story?branchId=1&culture=${i18n.language}`
+    const url = `customer/web/home-service/sub-banner?branchId=${branchId}`
+    const response = await axios.get(url);
+
+    return response.data.result;
+  } catch (error) {
+    console.error(error);
+
+    return [];
+  }
+}
+
+const getChefStory = async (branchId) => {
+  try {
+    const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${i18n.language}`
     const response = await axios.get(url);
 
     return response.data.result;
@@ -86,7 +86,6 @@ const getSettings = async () => {
     const url = `/settings?mediaTypeFilters=LOGO&mediaTypeFilters=FAVI_ICON&mediaTypeFilters=MOBILE_PROFILE_IMAGE&mediaTypeFilters=MOBILE_START_SCREEN&mediaTypeFilters=MOBILE_WELCOME_SCREEN`
     const response = await axios.get(url);
 
-    console.log('adding settings');
     return response.data.result;
   } catch (error) {
     console.error(error);
@@ -102,11 +101,11 @@ export async function getServerSideProps(context) {
   const { branches } = settings;
   const currentBranch = branches.filter(branch => branch.primaryBranch)[0];
 
-  const specialCruises = await getSpecialCruises();
-  const chefChoices = await getChefChoices();
-  const appResources = await getAppResources();
-  const subBanner = await getSubBanner();
-  const chefStory = await getChefStory();
+  const specialCruises = await getSpecialCruises(currentBranch.id);
+  const chefChoices = await getChefChoices(currentBranch.id);
+  const appResources = await getAppResources(currentBranch.id);
+  const subBanner = await getSubBanner(currentBranch.id);
+  const chefStory = await getChefStory(currentBranch.id);
 
   return {
     props: {
