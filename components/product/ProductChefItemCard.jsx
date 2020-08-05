@@ -15,7 +15,7 @@ const ProductChefItemCard = ({ chefChoice }) => {
                 </p>
             </div>
             <div className="text-center order-abs">
-                <button className="btn btn-yellow btn-h60 font-18 font-demi" data-toggle="modal" data-target="#product-detail">ORDER NOW</button>
+                <button className="btn btn-yellow btn-h60 font-18 font-demi">ORDER NOW</button>
             </div>
         </div>
     )
