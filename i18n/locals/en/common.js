@@ -22,6 +22,7 @@ export default {
     "sign_up": "Sign up",
     "have_an_account": "Have an account?",
     "confirm_password": "Confirm password",
+    "no_result": "No result",
     "password": "Password",
     "email": "Email",
     "what_is_this": "What is this",

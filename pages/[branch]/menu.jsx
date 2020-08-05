@@ -4,44 +4,94 @@ import TheFooter from '../../components/footer/TheFooter';
 import PageSectionMenuShowcaseSection from '../../components/pageSection/menu/PageSectionMenuShowcaseSection';
 import usePageOnLoad from '../../hooks/page/usePageOnLoad';
 import axios from '../../lib/axios';
+import i18n from '../../i18n/i18n';
+
+/**
+ * Get popular meals
+ *
+ * @param {String|Number} branchId
+ * @return {Array} array of products
+ */
+const getPopularMeals = async (branchId) => {
+	try {
+		const url = `customer/web/meals-service/popular-meals?Sorting=Id&MaxResultCount=2&SkipCount=0&branchId=${branchId}&isDelivery=true&culture=${i18n.language}`;
+		const response = await axios.get(url);
+
+        return response.data.result.items;
+	} catch (error) {
+		console.error(error);
+
+		return [];
+	}
+};
+
+/**
+ * Get discounted meals
+ *
+ * @param {String|Number} branchId
+ * @return {Array} array of products
+ */
+const getDiscountedMeals = async (branchId) => {
+	try {
+		const url = `customer/web/meals-service/discounted-meals?Sorting=Id&MaxResultCount=3&SkipCount=0&branchId=${branchId}&culture=${i18n.language}`;
+		const response = await axios.get(url);
+
+        return response.data.result.items;
+	} catch (error) {
+		console.error(error);
+
+		return [];
+	}
+};
 
 const getSettings = async () => {
-    try {
-        const url = `/settings?mediaTypeFilters=LOGO&mediaTypeFilters=FAVI_ICON&mediaTypeFilters=MOBILE_PROFILE_IMAGE&mediaTypeFilters=MOBILE_START_SCREEN&mediaTypeFilters=MOBILE_WELCOME_SCREEN`
-        const response = await axios.get(url);
+	try {
+		const url = `/settings?mediaTypeFilters=LOGO&mediaTypeFilters=FAVI_ICON&mediaTypeFilters=MOBILE_PROFILE_IMAGE&mediaTypeFilters=MOBILE_START_SCREEN&mediaTypeFilters=MOBILE_WELCOME_SCREEN`;
+		const response = await axios.get(url);
 
-        return response.data.result;
-    } catch (error) {
-        console.error(error);
+		return response.data.result;
+	} catch (error) {
+		console.error(error);
 
-        return [];
-    }
-}
+		return [];
+	}
+};
 
 export async function getServerSideProps(context) {
-    const branchId = context.params.branch;
-    const settings = await getSettings();
+	const branchId = context.params.branch;
+	const settings = await getSettings();
 
-    // get current branch 
-    const { branches } = settings;
-    const currentBranch = branches.filter(branch => branch.id.toString() === branchId)[0];
+	// get current branch
+	const { branches } = settings;
+	const currentBranch = branches.filter(
+		(branch) => branch.id.toString() === branchId
+	)[0];
 
-    return {
-        props: {
-            settings,
-            currentBranch
-        },
-    }
+	// get sections data
+	const popularMeals = await getPopularMeals(currentBranch.id);
+	const discountedMeals = await getDiscountedMeals(currentBranch.id);
+
+	return {
+		props: {
+			settings,
+			currentBranch,
+			popularMeals,
+			discountedMeals,
+		},
+	};
 }
 
 export default function Gallery(props) {
-    usePageOnLoad(props);
+	usePageOnLoad(props);
 
-    return (
-        <DefaultLayout>
-            <TheHeader />
-            <PageSectionMenuShowcaseSection />
-            <TheFooter />
-        </DefaultLayout>
-    )
+	return (
+		<DefaultLayout>
+			<TheHeader />
+			<PageSectionMenuShowcaseSection
+				popularMeals={props.popularMeals}
+				discountedMeals={props.discountedMeals}
+			/>
+			<TheFooter />
+		</DefaultLayout>
+	);
 }
