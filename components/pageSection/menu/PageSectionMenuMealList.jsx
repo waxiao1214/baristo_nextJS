@@ -97,6 +97,7 @@ const PageSectionMenuMealList = ({
 			}
 		} else if (currentActiveCategories.length !== 0) {
 			queryObject.categoryId = currentActiveCategories;
+			queryObject.all = false;
 		}
 
 		const stringified = queryString.stringify(queryObject);
@@ -179,8 +180,10 @@ const PageSectionMenuMealList = ({
 	};
 
 	useEffect(() => {
-		setMealsToShow([]);
 		const { category } = router.query;
+
+		setMealsToShow([]);
+		setCurrentActiveCategories([]);
 
 		// user is searching
 		if (isSearching && currentActiveTab === 'meal_list') {
@@ -193,15 +196,13 @@ const PageSectionMenuMealList = ({
 
 		// combo tab
 		if (currentActiveTab === 'combo') {
-			setCategoriesToShow(comboCategories);
-			setCurrentActiveCategories([comboCategories[0].id]);
+			setCategoriesToShow(comboCategories);;
 			return;
 		}
 
 		// meal list tab
 		if (currentActiveTab === 'meal_list') {
 			setCategoriesToShow(mealCategories);
-			setCurrentActiveCategories([mealCategories[0].id]);
 			return;
 		}
 	}, [currentActiveTab]);
