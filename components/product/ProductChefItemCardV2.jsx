@@ -15,7 +15,7 @@ const ProductChefItemCardV2 = ({ product }) => {
 		<div className="chef-item relative">
 			<div className="ch-image">
 				<div>
-					<img src={product.imagePath} />
+					<img src={product.thumbnail} />
 				</div>
 			</div>
 			<div className="ch-text text-center">
@@ -31,7 +31,7 @@ const ProductChefItemCardV2 = ({ product }) => {
 					)}
 					<div className="product-price text-yellow font-28 font-demi">{`${currency} ${mainMeal.price}`}</div>
 				</div>
-				{mainMeal.mealSettings[0].applyDiscount &&
+				{mainMeal.mealSettings[0]?.applyDiscount &&
 					isDiscountStillInRange(
 						mainMeal.mealSettings[0].from,
 						mainMeal.mealSettings[0].to
