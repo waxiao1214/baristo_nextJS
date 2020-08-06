@@ -75,7 +75,7 @@ const ModalFilterSearch = ({ isActive, close, search }) => {
 		search({
 			priceFrom,
 			priceTo,
-			selectedCategories,
+			category: selectedCategories,
 		});
 	};
 

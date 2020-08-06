@@ -9,11 +9,13 @@ import {
 import useUserIsLoggedIn from '../../hooks/user/useUserIsLoggedIn';
 import { useTranslation } from 'react-i18next';
 import queryString from 'query-string';
+import { useRouter } from 'next/router';
 
 const HeaderBottom = () => {
+	const router = useRouter();
 	const dispatch = useDispatch();
 	const logo = useSelector((state) => state.root.logo);
-    const { branchName } = useSelector((state) => state.root.currentBranch);
+    const { branchName, id: branchId } = useSelector((state) => state.root.currentBranch);
     const { t } = useTranslation(['common']);
 	const [isFilterModalActive, setIsFilterModalActive] = useState(false);
 	const [isBranchModalActive, setIsBranchModalActive] = useState(false);
@@ -32,7 +34,12 @@ const HeaderBottom = () => {
 
 	const handleFilterSearch = (data) => {
 		setIsFilterModalActive(false);
-		console.log(data);
+
+		data.searchText = searchText;
+
+		const query = queryString.stringify(data);
+
+		router.push(`/${branchId}/menu?${query}`);
 	}
 
 	return (
