@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import queryString from 'query-string';
+import ReactPaginate from 'react-paginate';
 import ProductChefItemCardV2 from '../../product/ProductChefItemCardV2';
 import axios from '../../../lib/axios';
 import BaseLoader from '../../base/BaseLoader';
@@ -29,7 +30,7 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 	const [mealsToShow, setMealsToShow] = useState([]);
 
 	// pagination
-	const [count, setCount] = useState(10); // count for each page
+	const [count, setCount] = useState(1); // count for each page
 	const [totalCount, setTotalCount] = useState(0);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
@@ -66,6 +67,7 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 			const response = await axios.get(url);
 
 			setMealsToShow(response.data.result.items);
+			setTotalCount(response.data.result.totalCount);
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -86,12 +88,22 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 			const response = await axios.get(url);
 
 			setMealsToShow(response.data.result.items);
+			setTotalCount(response.data.result.totalCount);
 		} catch (error) {
 			console.error(error);
 		} finally {
 			setIsLoading(false);
 		}
 	};
+
+	/**
+	 * Handle pagination page change
+	 * 
+	 * @param {Number} page 
+	 */
+	const onPageChange = (page) => {
+		setCurrentPage(page);
+	}
 
 	useEffect(() => {
 		setMealsToShow([]);
@@ -113,7 +125,15 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 		} else if (currentActiveTab === 'combo') {
 			getCombos();
 		}
-	}, [currentActiveCategory]);
+	}, [currentActiveCategory, currentPage]);
+
+	useEffect(() => {
+		if (totalCount === 0 || totalCount <= count) {
+			setTotalPages(1);
+		} else {
+			setTotalPages(totalCount / count);
+		}
+	}, [totalCount]);
 
 	return (
 		<section className="menu-list pd-100">
@@ -187,56 +207,22 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 							</div>
 							<div className="pagi">
 								<ul className="flex-center-center">
-									<li className="active">
-										<a href="" title="">
-											<i className="ti-angle-double-left"></i>{' '}
-										</a>{' '}
-									</li>
-									<li className="active">
-										<a href="" title="">
-											<i className="ti-angle-left"></i>{' '}
-										</a>{' '}
-									</li>
-									<li className="current">
-										<a href="" title="">
-											1
-										</a>{' '}
-									</li>
-									<li className="">
-										<a href="" title="">
-											2
-										</a>{' '}
-									</li>
-									<li className="">
-										<a href="" title="">
-											3
-										</a>{' '}
-									</li>
-									<li className="">
-										<a href="" title="">
-											4
-										</a>{' '}
-									</li>
-									<li className="">
-										<a href="" title="">
-											5
-										</a>{' '}
-									</li>
-									<li className="">
-										<a href="" title="">
-											...
-										</a>{' '}
-									</li>
-									<li className="active">
-										<a href="" title="">
-											<i className="ti-angle-right"></i>{' '}
-										</a>{' '}
-									</li>
-									<li className="active">
-										<a href="" title="">
-											<i className="ti-angle-double-right"></i>{' '}
-										</a>{' '}
-									</li>
+									<ReactPaginate
+										pageCount={totalPages}
+										pageRangeDisplayed={2}
+										marginPagesDisplayed={1}
+										previousLabel={
+											<i className="ti-angle-left"></i>
+										}
+										nextLabel={
+											<i className="ti-angle-right"></i>
+										}
+										nextClassName={'active'}
+										previousClassName={'active'}
+										activeClassName={'current'}
+										containerClassName={'d-flex'}
+										onPageChange={(page) => onPageChange(page.selected)}
+									/>
 								</ul>
 							</div>
 						</div>
