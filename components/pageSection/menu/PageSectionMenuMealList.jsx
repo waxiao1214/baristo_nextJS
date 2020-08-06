@@ -30,7 +30,7 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 	const [mealsToShow, setMealsToShow] = useState([]);
 
 	// pagination
-	const [count, setCount] = useState(1); // count for each page
+	const [count, setCount] = useState(12); // count for each page
 	const [totalCount, setTotalCount] = useState(0);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
