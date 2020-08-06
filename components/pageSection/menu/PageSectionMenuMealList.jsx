@@ -111,8 +111,6 @@ const PageSectionMenuMealList = ({
 	 * @return {Array} array of products
 	 */
 	const getMeals = async () => {
-		console.log('search', isSearching);
-
 		setIsLoading(true);
 		try {
 			const query = generateQuery();
