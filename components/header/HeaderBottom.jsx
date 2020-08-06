@@ -8,6 +8,7 @@ import {
 } from '../../store/actions/authentication.actions';
 import useUserIsLoggedIn from '../../hooks/user/useUserIsLoggedIn';
 import { useTranslation } from 'react-i18next';
+import queryString from 'query-string';
 
 const HeaderBottom = () => {
 	const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const HeaderBottom = () => {
     const { t } = useTranslation(['common']);
 	const [isFilterModalActive, setIsFilterModalActive] = useState(false);
 	const [isBranchModalActive, setIsBranchModalActive] = useState(false);
+	const [searchText, setSearchText] = useState('');
 
 	const isUserLoggedIn = useUserIsLoggedIn();
 
@@ -24,11 +26,21 @@ const HeaderBottom = () => {
 
 	const boundToggleLoginModal = () => dispatch(toggleLoginModal());
 
+	const handleSearchTextChange = (e) => {
+		setSearchText(e.target.value);
+	};
+
+	const handleFilterSearch = (data) => {
+		setIsFilterModalActive(false);
+		console.log(data);
+	}
+
 	return (
 		<section className="header-bottom">
 			<ModalFilterSearch
 				isActive={isFilterModalActive}
 				close={() => setIsFilterModalActive(false)}
+				search={(data) => handleFilterSearch(data)}
 			/>
 			<ModalChangeBranch
 				isActive={isBranchModalActive}
@@ -72,6 +84,8 @@ const HeaderBottom = () => {
 											<input
 												type="text"
 												placeholder="Searching..."
+												value={searchText}
+												onChange={(e) => handleSearchTextChange(e)}
 											/>
 										</form>
 										<button

@@ -1,5 +1,6 @@
 export default {
     "available": "Available",
+    "apply": "Apply",    
     "change_the_branch": "Change the branch",
     "contact_us": "Contact us",
     "not_available": "Not available",
@@ -9,6 +10,9 @@ export default {
     "discover": "Discover",
     "order_now": "Order now",
     "from": "From",
+    "to": "To",
+    "category": "Category",
+    "price_from_should_be_less_than_price_to": "Price from should be less than price to",
     "more": "More",
     "delivery_now": "Deliver now",
     "pick_up": "Pick up",

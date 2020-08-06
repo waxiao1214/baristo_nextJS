@@ -643,6 +643,8 @@ a {
 .modal-box .modal-content {
 	border: none;
 	border-radius: 4px;
+	max-height: 90vh;
+	overflow-y: auto;
 }
 .modal-top .title {
 	margin: 20px 0 30px;
