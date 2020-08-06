@@ -25,7 +25,7 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 	const [currentActiveTab, setCurrentActiveTab] = useState(
 		availableTabs[0].name
 	);
-	const [currentActiveCategory, setCurrentActiveCategory] = useState({});
+	const [currentActiveCategories, setCurrentActiveCategories] = useState([]);
 	const [categoriesToShow, setCategoriesToShow] = useState([]);
 	const [mealsToShow, setMealsToShow] = useState([]);
 
@@ -34,6 +34,35 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 	const [totalCount, setTotalCount] = useState(0);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
+
+	/**
+	 * Check if a category is active
+	 * @param {Number} id ;
+	 * @return {Boolean}
+	 */
+	const isCategoryActive = (id) => {
+		return currentActiveCategories.includes(id);
+	};
+
+	/**
+	 * Handle category click
+	 *
+	 * @param {Object} category
+	 * @return {Void}
+	 */
+	const handleCategoryClick = ({ id }) => {
+		let categories = [];
+
+		if (currentActiveCategories.includes(id)) {
+			categories = currentActiveCategories.filter(
+				(categoryId) => categoryId !== id
+			);
+		} else {
+			categories = currentActiveCategories.concat([id]);
+		}
+
+		setCurrentActiveCategories(categories);
+	};
 
 	/**
 	 * Genreate query string
@@ -47,7 +76,7 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 			SkipCount: currentPage * count,
 			branchId: currentBranch.id,
 			all: false,
-			categoryId: currentActiveCategory.id,
+			categoryId: currentActiveCategories,
 			culture: i18n.language,
 		});
 
@@ -98,22 +127,22 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 
 	/**
 	 * Handle pagination page change
-	 * 
-	 * @param {Number} page 
+	 *
+	 * @param {Number} page
 	 */
 	const onPageChange = (page) => {
 		setCurrentPage(page);
-	}
+	};
 
 	useEffect(() => {
 		setMealsToShow([]);
 		if (currentActiveTab === 'meal_list') {
 			setCategoriesToShow(mealCategories);
-			setCurrentActiveCategory(mealCategories[0]);
+			setCurrentActiveCategories([mealCategories[0].id]);
 			getMeals();
 		} else if (currentActiveTab === 'combo') {
 			setCategoriesToShow(comboCategories);
-			setCurrentActiveCategory(comboCategories[0]);
+			setCurrentActiveCategories([comboCategories[0].id]);
 			getCombos();
 		}
 	}, [currentActiveTab]);
@@ -125,7 +154,7 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 		} else if (currentActiveTab === 'combo') {
 			getCombos();
 		}
-	}, [currentActiveCategory, currentPage]);
+	}, [currentActiveCategories, currentPage]);
 
 	useEffect(() => {
 		if (totalCount === 0 || totalCount <= count) {
@@ -169,13 +198,12 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 								<li className="nav-item" key={index}>
 									<h2
 										className={`title nav-link text-left ${
-											category.category ===
-											currentActiveCategory.category
+											isCategoryActive(category.id)
 												? 'active'
 												: ''
 										}`}
 										onClick={() =>
-											setCurrentActiveCategory(category)
+											handleCategoryClick(category)
 										}
 									>
 										<span>{category.category}</span>
@@ -221,7 +249,9 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 										previousClassName={'active'}
 										activeClassName={'current'}
 										containerClassName={'d-flex'}
-										onPageChange={(page) => onPageChange(page.selected)}
+										onPageChange={(page) =>
+											onPageChange(page.selected)
+										}
 									/>
 								</ul>
 							</div>
