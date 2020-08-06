@@ -64,6 +64,8 @@ const ModalFilterSearch = ({ isActive, close, search }) => {
 	};
 
 	const handleSubmit = () => {
+		const searchObject = { category: selectedCategories };
+
 		// validate the price
 		if (priceFrom > priceTo) {
 			setErrorMessage(t('price_from_should_be_less_than_price_to'));
@@ -72,11 +74,12 @@ const ModalFilterSearch = ({ isActive, close, search }) => {
 			}, 5000);
 		}
 
-		search({
-			priceFrom,
-			priceTo,
-			category: selectedCategories,
-		});
+		if (priceFrom !== priceTo) {
+			searchObject.priceFrom = priceFrom;
+			searchObject.priceTo = priceTo;
+		}
+
+		search(searchObject);
 	};
 
 	useEffect(() => {

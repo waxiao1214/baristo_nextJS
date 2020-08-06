@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import DefaultLayout from '../../layouts/DefaultLayout';
 import TheHeader from '../../components/header/TheHeader';
 import TheFooter from '../../components/footer/TheFooter';
@@ -7,6 +8,8 @@ import PageSectionMenuMealList from '../../components/pageSection/menu/PageSecti
 import usePageOnLoad from '../../hooks/page/usePageOnLoad';
 import axios from '../../lib/axios';
 import i18n from '../../i18n/i18n';
+import { useRouter } from 'next/router';
+import _ from 'lodash';
 
 /**
  * Get popular meals
@@ -129,18 +132,35 @@ export async function getServerSideProps(context) {
 
 export default function Gallery(props) {
 	usePageOnLoad(props);
+	const router = useRouter();
+	const { category, searchText, priceFrom, priceTo } = router.query;
+	let initialIsSearching = false
+	if (
+		!_.isEmpty(category) ||
+		!_.isNil(searchText) ||
+		!_.isNil(priceFrom) ||
+		!_.isNil(priceTo)
+	) {
+		initialIsSearching = true;
+	}
+	// search
+	const [isSearching, setIsSearching] = useState(initialIsSearching);
+
 
 	return (
 		<DefaultLayout>
 			<TheHeader />
-			<PageSectionMenuShowcaseSection
-				discountedMeals={props.discountedMeals}
-			/>
-			<PageSectionMenuDealOfToday products={props.popularMeals} />
-			<PageSectionMenuMealList
-				mealCategories={props.mealCategories}
-				comboCategories={props.comboCategories}
-			/>
+			<div className={isSearching ? 'd-flex flex-column-reverse align-items-stretch pt-5 mt-5' : ''}>
+				<PageSectionMenuShowcaseSection
+					discountedMeals={props.discountedMeals}
+				/>
+				<PageSectionMenuDealOfToday products={props.popularMeals} />
+				<PageSectionMenuMealList
+					mealCategories={props.mealCategories}
+					comboCategories={props.comboCategories}
+					isSearching={isSearching}
+				/>
+			</div>
 			<TheFooter />
 		</DefaultLayout>
 	);

@@ -6,9 +6,16 @@ import ReactPaginate from 'react-paginate';
 import ProductChefItemCardV2 from '../../product/ProductChefItemCardV2';
 import axios from '../../../lib/axios';
 import BaseLoader from '../../base/BaseLoader';
+import { useRouter } from 'next/router';
+import _ from 'lodash';
 
-const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
+const PageSectionMenuMealList = ({
+	mealCategories,
+	comboCategories,
+	isSearching,
+}) => {
 	const { t, i18n } = useTranslation(['common']);
+	const router = useRouter();
 
 	// loader
 	const [isLoading, setIsLoading] = useState(false);
@@ -70,15 +77,29 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 	 * @return {String}
 	 */
 	const generateQuery = () => {
-		const stringified = queryString.stringify({
+		const { priceFrom, priceTo } = router.query;
+
+		const queryObject = {
 			Sorting: 'Id',
 			MaxResultCount: count,
 			SkipCount: currentPage * count,
 			branchId: currentBranch.id,
-			all: false,
-			categoryId: currentActiveCategories,
 			culture: i18n.language,
-		});
+		};
+
+		if (isSearching) {
+			queryObject.category = currentActiveCategories;
+			if (!_.isNil(priceFrom)) {
+				queryObject.priceFrom = priceFrom;
+			}
+			if (!_.isNil(priceTo)) {
+				queryObject.priceFrom = priceTo;
+			}
+		} else if (currentActiveCategories.length !== 0) {
+			queryObject.categoryId = currentActiveCategories;
+		}
+
+		const stringified = queryString.stringify(queryObject);
 
 		return stringified;
 	};
@@ -89,6 +110,8 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 	 * @return {Array} array of products
 	 */
 	const getMeals = async () => {
+		console.log('search', isSearching);
+
 		setIsLoading(true);
 		try {
 			const query = generateQuery();
@@ -107,13 +130,34 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 	/**
 	 * Get combos
 	 *
-	 * @return {Array} array of products
+	 * @return {Void}
 	 */
 	const getCombos = async () => {
 		setIsLoading(true);
 		try {
 			const query = generateQuery();
 			const url = `customer/web/meals-service/category-combo?${query}`;
+			const response = await axios.get(url);
+
+			setMealsToShow(response.data.result.items);
+			setTotalCount(response.data.result.totalCount);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	/**
+	 * Search meals
+	 *
+	 * @return {Void}
+	 */
+	const searchMeals = async () => {
+		setIsLoading(true);
+		try {
+			const query = generateQuery();
+			const url = `customer/web/meals-service/search?${query}`;
 			const response = await axios.get(url);
 
 			setMealsToShow(response.data.result.items);
@@ -136,23 +180,49 @@ const PageSectionMenuMealList = ({ mealCategories, comboCategories }) => {
 
 	useEffect(() => {
 		setMealsToShow([]);
+		const { category } = router.query;
+
+		// user is searching
+		if (isSearching && currentActiveTab === 'meal_list') {
+			const categories = _.isEmpty(category) ? [] : _.toArray(category);
+
+			setCategoriesToShow(mealCategories);
+			setCurrentActiveCategories(categories);
+			return;
+		}
+
+		// combo tab
+		if (currentActiveTab === 'combo') {
+			setCategoriesToShow(comboCategories);
+			setCurrentActiveCategories([comboCategories[0].id]);
+			return;
+		}
+
+		// meal list tab
 		if (currentActiveTab === 'meal_list') {
 			setCategoriesToShow(mealCategories);
 			setCurrentActiveCategories([mealCategories[0].id]);
-			getMeals();
-		} else if (currentActiveTab === 'combo') {
-			setCategoriesToShow(comboCategories);
-			setCurrentActiveCategories([comboCategories[0].id]);
-			getCombos();
+			return;
 		}
 	}, [currentActiveTab]);
 
 	useEffect(() => {
 		setMealsToShow([]);
+
+		// user is searching
+		if (isSearching && currentActiveTab === 'meal_list') {
+			searchMeals();
+			return;
+		}
+
 		if (currentActiveTab === 'meal_list') {
 			getMeals();
-		} else if (currentActiveTab === 'combo') {
+			return;
+		}
+
+		if (currentActiveTab === 'combo') {
 			getCombos();
+			return;
 		}
 	}, [currentActiveCategories, currentPage]);
 
