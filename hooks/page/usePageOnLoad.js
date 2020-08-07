@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from '../../lib/axios';
+import _ from 'lodash';
 
 const usePageOnLoad = ({ settings, currentBranch }) => {
     const dispatch = useDispatch();
@@ -21,6 +22,8 @@ const usePageOnLoad = ({ settings, currentBranch }) => {
 
     useEffect(() => {
         if (!currentBranch.contentWidgets) return;
+
+        if (_.isEmpty(currentBranch.applicationMedia)) return;
 
         let logo;
 
