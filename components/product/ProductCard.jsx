@@ -40,7 +40,6 @@ const ProductCard = ({ product }) => {
 
 		let highestDiscount = cheapestMeal.mealSettings[0];
 		cheapestMeal.mealSettings.forEach((mealSetting) => {
-			console.log(mealSetting);
 			if (!mealSetting.discount) return;
 			if (!mealSetting.discount) return;
 			if (!highestDiscount.discount) {
@@ -94,7 +93,7 @@ const ProductCard = ({ product }) => {
 						<div className="product-price text-yellow font-28 font-demi">{`${currency} ${mainMeal.price}`}</div>
 						<span>{mainMeal.size}</span>
 					</div>
-					{mainMeal.mealSettings[0].applyDiscount &&
+					{mainMeal.mealSettings[0]?.applyDiscount &&
 						isDiscountStillInRange(
 							mainMeal.mealSettings[0].from,
 							mainMeal.mealSettings[0].to
