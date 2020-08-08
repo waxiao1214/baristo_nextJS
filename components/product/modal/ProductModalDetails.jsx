@@ -1,7 +1,7 @@
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import BaseLoader from '../base/BaseLoader';
+import BaseLoader from '../../base/BaseLoader';
 
 const ProductModalDetails = ({
 	close,
