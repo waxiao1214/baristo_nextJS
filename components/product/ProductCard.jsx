@@ -63,14 +63,14 @@ const ProductCard = ({ product, openMoreDetails }) => {
 				</a>
 				{mainMeal.menuPriceOption === 'Delivery' && (
 					<div className="delivery absolute flex-center-center hide-abs">
-						<button className="btn btn-h46 btn-yellow btn-bgLeft">
+						<button type="button" className="btn btn-h46 btn-yellow btn-bgLeft">
 							{t('delivery_now')}
 						</button>
 					</div>
 				)}
 				{mainMeal.menuPriceOption === 'PickUp' && (
 					<div className="absolute flex-center-center hide-abs">
-						<button className="btn btn-h46 btn-yellow">
+						<button type="button" className="btn btn-h46 btn-yellow">
 							{t('pick_up')}
 						</button>
 					</div>

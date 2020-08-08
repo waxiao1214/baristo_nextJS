@@ -1,22 +1,34 @@
 import cartConstants from '../../_constants/cart.constants';
 
 const initialState = {
-    isMealDetailsModalActive: false,
-    isCustomizeModalActive: false
+    isProductDetailsActive: false,
+    isProductDetailsLoaderActive: false,
+    isCustomizeProductModalActive: false,
+    productDetails: {},
 };
 
 export default function cart(state = initialState, action) {
     switch (action.type) {
-        case cartConstants.TOGGLE_CUSTOMIZE_MEAL_MODAL:
+        case cartConstants.TOGGLE_CUSTOMIZE_PRODUCT_MODAL:
             return {
-                loggingIn: true,
-                isCustomizeModalActive: !state.isCustomizeModalActive
+                ...state,
+                isCustomizeProductModalActive: !state.isCustomizeProductModalActive
             };
-        case cartConstants.TOGGLE_MEAL_DETAILS_MODAL:
+        case cartConstants.TOGGLE_PRODUCT_DETAILS_MODAL:
             return {
-                loggedIn: true,
-                isMealDetailsModalActive: !state.isMealDetailsModalActive
+                ...state,
+                isProductDetailsActive: !state.isProductDetailsActive
             };
+        case cartConstants.TOGGLE_PRODUCT_DETAILS_MODAL_LOADER:
+            return {
+                ...state,
+                isProductDetailsLoaderActive: !state.isProductDetailsLoaderActive
+            }
+        case cartConstants.SET_PRODUCT_DETAILS:
+            return {
+                ...state,
+                productDetails: action.payload.productDetails
+            }
 
         default:
             return state

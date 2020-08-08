@@ -68,5 +68,6 @@ export default {
     "request_failed": "Request failed",
     "account": "Account",
     "prepare": "Prepare",
-    "minutes": "Minutes"
+    "minutes": "Minutes",
+    "build_your_meal": "Build your meal"
 }
