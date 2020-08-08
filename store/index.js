@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { authentication } from './reducers/authentication.reducer';
+import authentication from './reducers/authentication.reducer';
+import cart from './reducers/cart.reducer';
 
 let store
 
@@ -41,7 +42,8 @@ const reducer = (state = initialState, action) => {
 
 const rootReducer = combineReducers({
   root: reducer,
-  authentication: authentication
+  authentication,
+  cart
 });
 
 function initStore(preloadedState = initialState) {

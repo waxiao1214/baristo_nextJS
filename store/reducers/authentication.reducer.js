@@ -1,4 +1,4 @@
-import { userConstants } from '../../_constants';
+import userConstants from '../../_constants/user.constants';
 
 const initialState = {
     isRegistrationModalVisible: false,
@@ -9,7 +9,7 @@ const initialState = {
     currentUser: {}
 };
 
-export function authentication(state = initialState, action) {
+export default function authentication(state = initialState, action) {
     switch (action.type) {
         case userConstants.LOGIN_REQUEST:
             return {
