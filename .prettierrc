@@ -1,0 +1,21 @@
+{
+  "singleQuote": true,
+  "editor.formatOnSave": true,
+  "proseWrap": "always",
+  "tabWidth": 2,
+  "requireConfig": false,
+  "useTabs": false,
+  "trailingComma": "all",
+  "semi": true,
+  "arrowParens": "always",
+  "vue/max-attributes-per-line": [
+    2,
+    {
+      "singleline": 1,
+      "multiline": {
+        "max": 1,
+        "allowFirstLine": false
+      }
+    }
+  ]
+}
