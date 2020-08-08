@@ -8,6 +8,7 @@ const ProductsContainer = ({ products }) => {
 
 	const openProductSlider = (id, index) => {
 		console.log(id, index);
+		setIsProductSliderActive(true);
 	}
 
 	if (!_.isArray(products)) return '';
