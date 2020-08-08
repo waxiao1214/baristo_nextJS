@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, openMoreDetails }) => {
 	const { t } = useTranslation(['common']);
 	const { currency } = useSelector((state) => state.root.settings);
 	const { mealPrices } = product;
@@ -111,7 +111,10 @@ const ProductCard = ({ product }) => {
 						)}
 				</div>
 				<div className="d-flex justify-content-end mgt-10">
-					<a className="btn-h46 inflex-center-center btn-gray more">
+					<a
+						onClick={openMoreDetails}
+						className="btn-h46 inflex-center-center btn-gray more"
+					>
 						{t('more')}
 					</a>
 				</div>

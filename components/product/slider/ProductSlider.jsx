@@ -1,4 +1,7 @@
-const ProductSlider = ({ close }) => {
+const ProductSlider = ({ close, isActive }) => {
+
+	if (!isActive) return '';
+
 	return (
 		<div>
 			<div className="modal fade full-box show" id="product-detail">
