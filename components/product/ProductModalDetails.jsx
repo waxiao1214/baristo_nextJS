@@ -1,5 +1,6 @@
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import BaseLoader from '../base/BaseLoader';
 
 const ProductModalDetails = ({
@@ -9,7 +10,7 @@ const ProductModalDetails = ({
 	productDetails,
 }) => {
 	const { t } = useTranslation(['common']);
-
+	const { currency } = useSelector((state) => state.root.settings);
 	if (!isActive) return '';
 
 	return (
@@ -26,7 +27,7 @@ const ProductModalDetails = ({
 								<i className="ti-close" />
 							</button>
 							<div className="detail-slider">
-								{isLoading && BaseLoader}
+								{isLoading && <BaseLoader />}
 								{!isLoading && (
 									<div className="item">
 										<div className="detail-wrapper flex">
@@ -63,11 +64,23 @@ const ProductModalDetails = ({
 																<li>
 																	<span>
 																		<img
-																			src="images/icon/icon-cutler.svg"
-																			alt=""
+																			src={
+																				productDetails
+																					.category
+																					.imagePath
+																			}
+																			alt={
+																				productDetails
+																					.category
+																					.category
+																			}
 																		/>
 																	</span>
-																	Fast Food
+																	{
+																		productDetails
+																			.category
+																			.category
+																	}
 																</li>
 																<li>
 																	<span>
@@ -111,11 +124,25 @@ const ProductModalDetails = ({
 														<div className="row">
 															<div className="col-md-7">
 																<div className="old-price">
-																	<span>
-																		$ 118.00
+																	<span
+																		style={{
+																			whiteSpace:
+																				'nowrap',
+																		}}
+																	>
+																		{`${currency}`}{' '}
+																		118.00
 																	</span>
-																	<div className="discount inflex-center-center btn-gray btn-h46 btn-bgLeft">
-																		Discount 30%
+																	<div
+																		className="discount inflex-center-center btn-gray btn-h46 btn-bgLeft"
+																		style={{
+																			whiteSpace:
+																				'nowrap',
+																		}}
+																	>
+																		{`${t(
+																			'discount'
+																		)} 30%`}
 																	</div>
 																</div>
 																<div className="new-price">
@@ -127,7 +154,9 @@ const ProductModalDetails = ({
 																	type="button"
 																	className="btn btn-yellow btn-h60 font-18 font-demi w230 btn-order"
 																>
-																	ORDER NOW
+																	{t(
+																		'order_now'
+																	)}
 																</button>
 															</div>
 														</div>
