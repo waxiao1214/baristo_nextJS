@@ -1897,6 +1897,9 @@ body.modal-open-2 {
 	font-size: 56px;
 	font-weight: bold;
 }
+.detail-slider {
+	min-height: 20rem;
+}
 .detail-slider .slick-arrow {
 	color: #ffffff;
 	font-size: 18px;

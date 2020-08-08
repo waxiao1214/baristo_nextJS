@@ -10,7 +10,6 @@
 		"plugin:react-hooks/recommended",
 		"airbnb",
 		"prettier",
-		"prettier/@typescript-eslint",
 		"prettier/react"
 	],
 	"env": {
@@ -34,7 +33,7 @@
 	"rules": {
         "react/react-in-jsx-scope": "off",
 		"react/prop-types": 0,
-		"react/destructuring-assignment": "never"
+		"react/destructuring-assignment": 0
 	},
 	"plugins": []
 }

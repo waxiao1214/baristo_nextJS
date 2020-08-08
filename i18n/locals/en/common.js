@@ -3,6 +3,7 @@ export default {
     "apply": "Apply",    
     "change_the_branch": "Change the branch",
     "contact_us": "Contact us",
+    "components": "Components",
     "not_available": "Not available",
     "discover": "Discover",
     "meal_list": "Meal List",
@@ -65,5 +66,7 @@ export default {
     "login": "Login",
     "google_auth_failed": "Google auth failed",
     "request_failed": "Request failed",
-    "account": "Account"
+    "account": "Account",
+    "prepare": "Prepare",
+    "minutes": "Minutes"
 }
