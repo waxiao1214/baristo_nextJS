@@ -80,5 +80,6 @@ export default {
     "confirm": "Confirm",
     "move_current_meal_or_stay": "Move current meal to cart and add another meal?",
     "move": "Move",
-    "keep_customizing": "Keep customizing"
+    "keep_customizing": "Keep customizing",
+    "meal": "Meal"
 }

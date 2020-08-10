@@ -1,14 +1,16 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import queryString from 'query-string';
 import { isNil } from 'lodash';
 import axios from '../../../lib/axios';
 import BaseLoader from '../../base/BaseLoader';
 import ToppingCard from '../topping/ToppingCard';
+import { toggleConfirmProductModal } from '../../../store/actions/cart.actions';
 
 const ProductModalCustomizeMeal = ({ isActive, productDetails, close }) => {
+  const dispatch = useDispatch();
   const { t, i18n } = useTranslation(['common']);
   const { currency } = useSelector((state) => state.root.settings);
   const { selectedPrice } = useSelector((state) => state.cart);
@@ -19,6 +21,8 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close }) => {
   const [selectedToppings, setSelectedToppings] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
+
+  const boundToggleConfirmProductModal = () => dispatch(toggleConfirmProductModal());
 
   const isToppingSelected = ({ id }) => {
     return selectedToppings.includes(id);
@@ -142,8 +146,9 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close }) => {
               <button
                 type="button"
                 className="btn btn-white btn-h50 font-20 font-demi"
+                onClick={boundToggleConfirmProductModal}
               >
-                <i className="ti-plus mgr-15" /> MEAL
+                <i className="ti-plus mgr-15" /> {t('meal')}
               </button>
             </div>
           </div>
