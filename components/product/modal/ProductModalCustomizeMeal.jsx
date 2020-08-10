@@ -5,16 +5,37 @@ import { useState, useEffect } from 'react';
 import queryString from 'query-string';
 import axios from '../../../lib/axios';
 import BaseLoader from '../../base/BaseLoader';
+import ToppingCard from '../topping/ToppingCard';
 
-const ProductModalCustomizeMeal = ({ isActive, productDetails }) => {
+const ProductModalCustomizeMeal = ({ isActive, productDetails, close }) => {
   const { t, i18n } = useTranslation(['common']);
   const { currency } = useSelector((state) => state.root.settings);
   const { id: branchId } = useSelector((state) => state.root.currentBranch);
 
   // eslint-disable-next-line no-unused-vars
   const [toppings, setToppings] = useState([]);
+  const [selectedToppings, setSelectedToppings] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
+
+  const isToppingSelected = ({ id }) => {
+    return toppings.includes(id);
+  }
+
+  const handleToppingClick = ({ id }) => {
+    // eslint-disable-next-line no-underscore-dangle
+    let _toppings = [];
+
+    if (toppings.includes(id)) {
+      _toppings = toppings.filter(
+        (categoryId) => categoryId !== id
+      );
+    } else {
+      _toppings = toppings.concat([id]);
+    }
+
+    setToppings(_toppings);
+  }
 
   /**
    * Generate query object
@@ -40,10 +61,10 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails }) => {
     const query = generateQueryObject();
     try {
       const response = await axios.get(
-        `customer/web/meals-service/meal-topping?${query}`,
+        `customer/web/meals-service/meal-toppings?${query}`,
       );
 
-      console.log(response.data.result);
+      setToppings(response.data.result[0]?.choiceItems ?? [])
     } catch (error) {
       console.error(error);
     } finally {
@@ -67,7 +88,7 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails }) => {
             <h2 className="title">
               <span>{t('build_your_meal')}</span>
             </h2>
-            <button type="button" className="close close-customize">
+            <button type="button" className="close close-customize" onClick={close}>
               <i className="ti-close" />
             </button>
           </div>
@@ -83,6 +104,7 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails }) => {
                       <img
                         src={productDetails.category.imagePath}
                         alt={productDetails.category.category}
+                        style={{ height: '1.5rem' }}
                       />
                     </span>
                     {productDetails.category.category}
@@ -126,16 +148,18 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails }) => {
               </div>
               <div className="col-md-6">
                 <div className="total-promotion">
-                  <p className="font-24 font-medium mgb-10">Optional</p>
+                  <p className="font-24 font-medium mgb-10">{t('optional')}</p>
                   <div className="font-24 mgb-30">
-                    x2 Cheese, Crab, Grimp, no tomato sauce, Sausage...
+                    {selectedToppings.map((topping, index) => {
+                      return <span>{`${topping} ${index === selectedToppings.length - 1? '' : ', '}`}</span>
+                    })}
                   </div>
                   <button
                     type="button"
                     className="btn btn-block btn-yellow btn-h80 font-24 font-weight-bold"
                   >
                     <span className="mgr-15">CHECK OUT</span>
-                    <i className="ti-arrow-right" />{' '}
+                    <i className="ti-arrow-right" />
                   </button>
                 </div>
               </div>
@@ -148,12 +172,15 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails }) => {
             </h2>
             {!isLoading && toppings.length !== 0 && (
               <div className="row">
-                <div className="col-md-6 col-6" />
+                {toppings.map((topping) => {
+                  return <div className="col-md-6 col-6" >
+                    <ToppingCard key={topping.id} topping={topping} onClick={() => handleToppingClick(topping)} isSelected={isToppingSelected(topping)} /></div>
+                })}
               </div>
             )}
             {!isLoading && toppings.length === 0 && (
               <div className="row">
-                <div className="text-center py-10 desc font-20 mgb-20">
+                <div className="text-center px-3 py-10 desc font-20 mgb-20">
                   <p>{t('no_result')}</p>
                 </div>
               </div>

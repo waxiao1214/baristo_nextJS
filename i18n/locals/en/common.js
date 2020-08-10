@@ -1,6 +1,9 @@
 export default {
     "available": "Available",
     "apply": "Apply",    
+    "add": "Add",
+    "remove": "Remove",
+    "optional": "Optional",
     "change_the_branch": "Change the branch",
     "contact_us": "Contact us",
     "components": "Components",
