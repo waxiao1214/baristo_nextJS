@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { isNil } from 'lodash';
+import { isNil, isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import BaseLoader from '../../base/BaseLoader';
 import BaseDiscountPill from '../../base/BaseDiscountPill';
+import { setDeliveryType } from '../../../store/actions/cart.actions';
 
 const MealPrice = ({ price, onClick, isSelected }) => {
   const { currency } = useSelector((state) => state.root.settings);
@@ -31,6 +32,24 @@ const MealPrice = ({ price, onClick, isSelected }) => {
   </div>)
 }
 
+const DeliveryTypeSwitch = ({ deliveryType, onChange }) => {
+  const types = ['Delivery', 'PickUp'];
+
+  return (
+    <div className="row">
+      <div className="col-md-12">
+        {types.map((type) => {
+          return (
+            <button style={{ opacity: deliveryType === type ? 1 : 0.5 }} onClick={() => onChange(type)} type="button" key={type} className="px-4 mr-3 btn btn-primary inflex-center-center btn-gray btn-h46">
+              {type}
+            </button>)
+        })
+        }
+      </div>
+    </div>
+  )
+}
+
 const ProductModalDetails = ({
   close,
   isActive,
@@ -38,9 +57,13 @@ const ProductModalDetails = ({
   productDetails,
   order,
 }) => {
+  const dispatch = useDispatch();
   const { t } = useTranslation(['common']);
   const { currency } = useSelector((state) => state.root.settings);
+  const { deliveryType } = useSelector((state) => state.cart);
   const { mealPrices } = productDetails;
+
+  const boundSetDeliveryType = (type) => dispatch(setDeliveryType(type));
 
   const [selectedPrice, setSelectedPrice] = useState({});
   const selectPrice = (id) => {
@@ -49,6 +72,8 @@ const ProductModalDetails = ({
   }
 
   useEffect(() => {
+    if (isNil(mealPrices) || isEmpty(mealPrices)) return;
+
     setSelectedPrice(mealPrices[0]);
   }, [])
 
@@ -123,14 +148,19 @@ const ProductModalDetails = ({
                             )}
                           </div>
                           <div className="group-price">
+                            <div className="row">
+                              <DeliveryTypeSwitch deliveryType={deliveryType} onChange={(type) => boundSetDeliveryType(type)} />
+                            </div>
                             <div className="row pt-4">
                               {mealPrices.map(price => {
+                                if (price.menuPriceOption !== deliveryType) return '';
+
                                 return <MealPrice key={price.id} price={price} onClick={() => selectPrice(price.id)} isSelected={selectedPrice.id === price.id} />
                               })}
                             </div>
                             <div className="row">
                               <div className="col-md-6">
-                                <div className="new-price">{`${currency} ${selectedPrice.price}` }</div>
+                                <div className="new-price">{`${currency} ${selectedPrice.price}`}</div>
                               </div>
                               <div className="col-md-6 flex-end-end">
                                 <button

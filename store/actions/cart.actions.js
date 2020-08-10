@@ -58,6 +58,7 @@ export const setCurrentActiveProductIndex = (index) => {
 }
 
 export const setDeliveryType = (type) => {
+    console.log(type);
     if (type !== 'Delivery' && type !== 'PickUp') {
         return {
             type: cartConstants.SET_DELIVERY_TYPE,
