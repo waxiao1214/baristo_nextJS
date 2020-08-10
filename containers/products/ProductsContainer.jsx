@@ -8,17 +8,18 @@ import {
   setCurrentActiveProductIndex
 } from '../../store/actions/cart.actions';
 import ProductCard from '../../components/product/ProductCard';
+import ProductChefItemCardV2 from '../../components/product/ProductChefItemCardV2';
 
 
-const ProductsContainer = ({ products }) => {
+const ProductsContainer = ({ products, productCardType }) => {
   const dispatch = useDispatch();
-  
+
   const boundSetProductsBatch = (productsBatch) =>
     dispatch(setProductsBatch(productsBatch));
-  
+
   const boundSetCurrentActiveProductId = (id) =>
     dispatch(setCurrentActiveProductId(id));
-  
+
   const boundSetCurrentActiveProductIndex = (index) =>
     dispatch(setCurrentActiveProductIndex(index));
 
@@ -38,10 +39,17 @@ const ProductsContainer = ({ products }) => {
       <div className="row">
         {products.map((product, index) => (
           <div className="col-md-4" key={product.id}>
-            <ProductCard
-              openMoreDetails={() => openMoreDetailsModal(product.id, index)}
-              product={product}
-            />
+            {productCardType === 'v2' ?
+              <ProductChefItemCardV2
+                openMoreDetails={() => openMoreDetailsModal(product.id, index)}
+                product={product}
+              />
+              :
+              <ProductCard
+                openMoreDetails={() => openMoreDetailsModal(product.id, index)}
+                product={product}
+              />
+            }
           </div>
         ))}
       </div>

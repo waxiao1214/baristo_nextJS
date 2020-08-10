@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import useProductPriceAndDiscountValueToShow from '../../hooks/product/useProductPriceAndDiscountValueToShow';
 
-const ProductChefItemCardV2 = ({ product }) => {
+const ProductChefItemCardV2 = ({ product, openMoreDetails }) => {
 	const { t } = useTranslation(['common']);
 	const { currency } = useSelector((state) => state.root.settings);
 	const {
@@ -49,7 +49,7 @@ const ProductChefItemCardV2 = ({ product }) => {
 					)}
 			</div>
 			<div className="text-center order-abs">
-				<button className="btn btn-yellow btn-h60 font-18 font-demi text-uppercase">
+				<button onClick={openMoreDetails} type="button" className="btn btn-yellow btn-h60 font-18 font-demi text-uppercase">
 					{t('order_now')}
 				</button>
 			</div>

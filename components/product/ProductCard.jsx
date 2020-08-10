@@ -103,7 +103,7 @@ const ProductCard = ({ product, openMoreDetails }) => {
 									{t('discount')}{' '}
 									{mainMeal.mealSettings[0].discount}
 									{mainMeal.mealSettings[0].discountType ===
-									'Fixed'
+										'Fixed'
 										? currency
 										: '%'}
 								</span>

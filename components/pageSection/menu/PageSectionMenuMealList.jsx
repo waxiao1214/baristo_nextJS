@@ -3,11 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import queryString from 'query-string';
 import ReactPaginate from 'react-paginate';
+import { useRouter } from 'next/router';
+import _ from 'lodash';
 import ProductChefItemCardV2 from '../../product/ProductChefItemCardV2';
 import axios from '../../../lib/axios';
 import BaseLoader from '../../base/BaseLoader';
-import { useRouter } from 'next/router';
-import _ from 'lodash';
+import ProductContainer from '../../../containers/products/ProductsContainer';
 
 const PageSectionMenuMealList = ({
 	mealCategories,
@@ -201,7 +202,7 @@ const PageSectionMenuMealList = ({
 		// meal list tab
 		if (currentActiveTab === 'meal_list') {
 			setCategoriesToShow(mealCategories);
-			return;
+
 		}
 	}, [currentActiveTab]);
 
@@ -221,7 +222,7 @@ const PageSectionMenuMealList = ({
 
 		if (currentActiveTab === 'combo') {
 			getCombos();
-			return;
+
 		}
 	}, [currentActiveCategories, currentPage]);
 
@@ -249,7 +250,7 @@ const PageSectionMenuMealList = ({
 										currentActiveTab === name
 											? 'active'
 											: ''
-									}`}
+										}`}
 								>
 									<span>{t(name)}</span>
 								</h2>
@@ -270,7 +271,7 @@ const PageSectionMenuMealList = ({
 											isCategoryActive(category.id)
 												? 'active'
 												: ''
-										}`}
+											}`}
 										onClick={() =>
 											handleCategoryClick(category)
 										}
@@ -287,21 +288,13 @@ const PageSectionMenuMealList = ({
 						{isLoading && <BaseLoader />}
 						<div className="fade in show active">
 							<div className="row tab-pane--h-md">
-								{mealsToShow.map((meal) => {
-									return (
-										<div className="col-md-4" key={meal.id}>
-											<ProductChefItemCardV2
-												product={meal}
-											/>
-										</div>
-									);
-								})}
-								{mealsToShow.length === 0 && !isLoading && (
-									<div className="text-center py-10 desc font-20 mgb-20">
-										<p>{t('no_result')}</p>
-									</div>
-								)}
+								<ProductContainer products={mealsToShow} productCardType="v2" />
 							</div>
+							{mealsToShow.length === 0 && !isLoading && (
+								<div className="row text-center py-10 desc font-20 mgb-20">
+									<p>{t('no_result')}</p>
+								</div>
+							)}
 							<div className="pagi">
 								<ul className="flex-center-center">
 									<ReactPaginate
@@ -309,15 +302,15 @@ const PageSectionMenuMealList = ({
 										pageRangeDisplayed={2}
 										marginPagesDisplayed={1}
 										previousLabel={
-											<i className="ti-angle-left"></i>
+											<i className="ti-angle-left" />
 										}
 										nextLabel={
-											<i className="ti-angle-right"></i>
+											<i className="ti-angle-right" />
 										}
-										nextClassName={'active'}
-										previousClassName={'active'}
-										activeClassName={'current'}
-										containerClassName={'d-flex'}
+										nextClassName="active"
+										previousClassName="active"
+										activeClassName="current"
+										containerClassName="d-flex"
 										onPageChange={(page) =>
 											onPageChange(page.selected)
 										}
