@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { isNil, isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +12,7 @@ const MealPrice = ({ price, onClick, isSelected }) => {
   const { currency } = useSelector((state) => state.root.settings);
 
   // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-  return (<div onClick={onClick} className="col-md-12 d-flex justify-content-between align-items-center mb-3" style={{ cursor: 'pointer', opacity: isSelected ? 1 : 0.5 }}>
+  return (<div onClick={onClick} className="col-md-12 d-flex justify-content-between align-items-center mb-3" style={{ cursor: 'pointer', opacity: isSelected ? 1 : 0.4 }}>
     <span
       className="font-weight-bold"
       style={{
@@ -25,7 +26,7 @@ const MealPrice = ({ price, onClick, isSelected }) => {
       {price.mealSettings.map(settings => {
         if (!settings.applyDiscount) return '';
 
-        return <BaseDiscountPill discount={settings} />
+        return <BaseDiscountPill key={settings.id} discount={settings} />
       })
       }
     </div>
@@ -70,12 +71,31 @@ const ProductModalDetails = ({
     if (selectedPrice.id === id) return;
     setSelectedPrice(mealPrices.filter(price => price.id === id)[0]);
   }
+  const calcFinalPrice = (price) => {
+    if (price.mealSettings.length === 0) return price.price;
+
+    const mealSettings = price.mealSettings[0];
+
+    if (!mealSettings.applyDiscount) return price.price;
+
+    if (mealSettings.discountType === 'Fixed') return price.price - mealSettings.discount;
+
+    if (mealSettings.discountType === 'Percentage') return price.price - (mealSettings.discount * price.price / 100);
+
+    return price.price;
+  }
 
   useEffect(() => {
     if (isNil(mealPrices) || isEmpty(mealPrices)) return;
 
     setSelectedPrice(mealPrices[0]);
   }, [])
+
+  useEffect(() => {
+    if (isNil(mealPrices) || isEmpty(mealPrices)) return;
+
+    setSelectedPrice(mealPrices.filter(price => price.menuPriceOption === deliveryType)[0]);
+  }, [deliveryType, mealPrices])
 
   if (!isActive) return '';
   if (isNil(productDetails)) return '';
@@ -115,6 +135,7 @@ const ProductModalDetails = ({
                                 <li>
                                   <span>
                                     <img
+                                      style={{height: '1.5rem'}}
                                       src={productDetails.category.imagePath}
                                       alt={productDetails.category.category}
                                     />
@@ -151,16 +172,16 @@ const ProductModalDetails = ({
                             <div className="row">
                               <DeliveryTypeSwitch deliveryType={deliveryType} onChange={(type) => boundSetDeliveryType(type)} />
                             </div>
-                            <div className="row pt-4">
-                              {mealPrices.map(price => {
+                            <div className="row py-4">
+                              {mealPrices.map((price, index) => {
                                 if (price.menuPriceOption !== deliveryType) return '';
 
-                                return <MealPrice key={price.id} price={price} onClick={() => selectPrice(price.id)} isSelected={selectedPrice.id === price.id} />
+                                return <MealPrice key={index} price={price} onClick={() => selectPrice(price.id)} isSelected={selectedPrice.id === price.id} />
                               })}
                             </div>
                             <div className="row">
                               <div className="col-md-6">
-                                <div className="new-price">{`${currency} ${selectedPrice.price}`}</div>
+                                <div className="new-price">{`${currency} ${calcFinalPrice(selectedPrice)}`}</div>
                               </div>
                               <div className="col-md-6 flex-end-end">
                                 <button
