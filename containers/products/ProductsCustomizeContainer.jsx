@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import queryString from 'query-string';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
-import { useRouter } from 'next/router'
+import { isNil } from 'lodash';
 import ProductModalDetails from '../../components/product/modal/ProductModalDetails';
 import ProductModalCustomizeMeal from '../../components/product/modal/ProductModalCustomizeMeal';
 import ProductModalConfirmMeal from '../../components/product/modal/ProductModalConfirmMeal';
@@ -16,7 +16,6 @@ import {
 import axios from '../../lib/axios';
 
 const ProductsModalsContainer = ({ productType }) => {
-  const router = useRouter();
   const dispatch = useDispatch();
   const { i18n } = useTranslation(['common']);
   const { id: branchId } = useSelector((state) => state.root.currentBranch);
@@ -96,11 +95,17 @@ const ProductsModalsContainer = ({ productType }) => {
 
   // on id or index change fetch the details again
   useEffect(() => {
-    if (currentActiveProductId === 0) return;
+    let id = currentActiveProductId;
+    const { productId } = queryString.parse(window.location.hash);
+    if (!isNil(productId) && id === 0) {
+      // eslint-disable-next-line radix
+      id = parseInt(productId);
+    } else if (id === 0) {
+      return;
+    }
 
-    const separator = (window.location.href.indexOf("?") === -1) ? "?" : "&";
-    window.location.href = `${window.location.href + separator}productId=${currentActiveProductId}`;
-    fetchProductDetails(currentActiveProductId);
+    window.location = `#productId=${id}`;
+    fetchProductDetails(id);
   }, [currentActiveProductId, currentActiveProductIndex]);
 
   return (
