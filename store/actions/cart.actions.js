@@ -21,6 +21,13 @@ export const toggleCustomizeProductModal = () => {
     }
 }
 
+export const toggleConfirmProductModal = () => {
+    return {
+        type: cartConstants.TOGGLE_CONFIRM_PRODUCT_MODAL,
+        payload: {}
+    }
+}
+
 export const setProductDetails = (productDetails) => {
     return {
         type: cartConstants.SET_PRODUCT_DETAILS,

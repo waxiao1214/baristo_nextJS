@@ -4,6 +4,7 @@ const initialState = {
     isProductDetailsActive: false,
     isProductDetailsLoaderActive: false,
     isCustomizeProductModalActive: false,
+    isConfirmProductModalActive: false,
     productDetails: {},
     productsBatch: [],
     currentActiveProductId: 0,
@@ -29,6 +30,11 @@ export default function cart(state = initialState, action) {
             return {
                 ...state,
                 isProductDetailsLoaderActive: !state.isProductDetailsLoaderActive
+            }
+        case cartConstants.TOGGLE_CONFIRM_PRODUCT_MODAL:
+            return {
+                ...state,
+                isConfirmProductModalActive: !state.isConfirmProductModalActive
             }
         case cartConstants.SET_PRODUCT_DETAILS:
             return {
