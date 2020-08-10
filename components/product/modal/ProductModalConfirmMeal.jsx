@@ -5,7 +5,7 @@ const ProductModalConfirmMeal = ({ isActive, close }) => {
 
   if (!isActive) return '';
 
-  return (<div className="modal fade modal-box" id="confirm-meal">
+  return (<div className="modal fade modal-box show" id="confirm-meal">
     <div className="modal-dialog" role="document">
       <div className="modal-content">
         <div className="modal-top">
