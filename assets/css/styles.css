@@ -2037,6 +2037,7 @@ body.modal-open-2 {
   display: flex;
 }
 .customize-main {
+  width: 100%;
   background: #fff;
   height: 100%;
   max-width: 1045px;
