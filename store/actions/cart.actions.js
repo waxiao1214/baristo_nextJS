@@ -57,6 +57,15 @@ export const setCurrentActiveProductIndex = (index) => {
     }
 }
 
+export const setSelectedPrice = (selectedPrice) => {
+    return {
+        type: cartConstants.SET_SELECTED_PRICE,
+        payload: {
+            selectedPrice
+        }
+    }
+}
+
 export const setDeliveryType = (type) => {
     console.log(type);
     if (type !== 'Delivery' && type !== 'PickUp') {

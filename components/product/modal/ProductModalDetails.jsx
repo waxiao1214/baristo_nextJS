@@ -3,10 +3,10 @@
 import { isNil, isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import BaseLoader from '../../base/BaseLoader';
 import BaseDiscountPill from '../../base/BaseDiscountPill';
-import { setDeliveryType } from '../../../store/actions/cart.actions';
+import { setDeliveryType, setSelectedPrice } from '../../../store/actions/cart.actions';
 
 const MealPrice = ({ price, onClick, isSelected }) => {
   const { currency } = useSelector((state) => state.root.settings);
@@ -61,17 +61,20 @@ const ProductModalDetails = ({
   const dispatch = useDispatch();
   const { t } = useTranslation(['common']);
   const { currency } = useSelector((state) => state.root.settings);
-  const { deliveryType } = useSelector((state) => state.cart);
+  const { deliveryType, selectedPrice } = useSelector((state) => state.cart);
   const { mealPrices } = productDetails;
 
   const boundSetDeliveryType = (type) => dispatch(setDeliveryType(type));
+  const boundSetSelectedPrice = (price) => dispatch(setSelectedPrice(price));
 
-  const [selectedPrice, setSelectedPrice] = useState({});
   const selectPrice = (id) => {
     if (selectedPrice.id === id) return;
-    setSelectedPrice(mealPrices.filter(price => price.id === id)[0]);
+
+    boundSetSelectedPrice(mealPrices.filter(price => price.id === id)[0]);
   }
   const calcFinalPrice = (price) => {
+    if (isNil(price)) return 0;
+    
     if (price.mealSettings.length === 0) return price.price;
 
     const mealSettings = price.mealSettings[0];
@@ -88,13 +91,13 @@ const ProductModalDetails = ({
   useEffect(() => {
     if (isNil(mealPrices) || isEmpty(mealPrices)) return;
 
-    setSelectedPrice(mealPrices[0]);
-  }, [])
+    boundSetSelectedPrice(mealPrices[0]);
+  }, []);
 
   useEffect(() => {
     if (isNil(mealPrices) || isEmpty(mealPrices)) return;
 
-    setSelectedPrice(mealPrices.filter(price => price.menuPriceOption === deliveryType)[0]);
+    boundSetSelectedPrice(mealPrices.filter(price => price.menuPriceOption === deliveryType)[0]);
   }, [deliveryType, mealPrices])
 
   if (!isActive) return '';

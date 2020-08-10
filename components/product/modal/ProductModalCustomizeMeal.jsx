@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import queryString from 'query-string';
+import { isNil } from 'lodash';
 import axios from '../../../lib/axios';
 import BaseLoader from '../../base/BaseLoader';
 import ToppingCard from '../topping/ToppingCard';
@@ -10,6 +11,7 @@ import ToppingCard from '../topping/ToppingCard';
 const ProductModalCustomizeMeal = ({ isActive, productDetails, close }) => {
   const { t, i18n } = useTranslation(['common']);
   const { currency } = useSelector((state) => state.root.settings);
+  const { selectedPrice } = useSelector((state) => state.cart);
   const { id: branchId } = useSelector((state) => state.root.currentBranch);
 
   // eslint-disable-next-line no-unused-vars
@@ -19,22 +21,38 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const isToppingSelected = ({ id }) => {
-    return toppings.includes(id);
+    return selectedToppings.includes(id);
   }
 
   const handleToppingClick = ({ id }) => {
     // eslint-disable-next-line no-underscore-dangle
     let _toppings = [];
 
-    if (toppings.includes(id)) {
-      _toppings = toppings.filter(
-        (categoryId) => categoryId !== id
+    if (selectedToppings.includes(id)) {
+      _toppings = selectedToppings.filter(
+        (toppingId) => toppingId !== id
       );
     } else {
-      _toppings = toppings.concat([id]);
+      _toppings = selectedToppings.concat([id]);
     }
 
-    setToppings(_toppings);
+    setSelectedToppings(_toppings);
+  }
+
+  const calcFinalPrice = (price) => {
+    if (isNil(price)) return 0;
+
+    if (price.mealSettings.length === 0) return price.price;
+
+    const mealSettings = price.mealSettings[0];
+
+    if (!mealSettings.applyDiscount) return price.price;
+
+    if (mealSettings.discountType === 'Fixed') return price.price - mealSettings.discount;
+
+    if (mealSettings.discountType === 'Percentage') return price.price - (mealSettings.discount * price.price / 100);
+
+    return price.price;
   }
 
   /**
@@ -134,14 +152,27 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close }) => {
               <div className="col-md-6">
                 <div className="total-menu">
                   <div className="flex-center-between mgb-10">
-                    <span className="font-24 text-ghi">Order Total</span>
+                    <span className="font-24 text-ghi">{t('order_total')}</span>
                     <span className="font-weight-bold font-36 text-green">
-                      {`${currency} 76.00`}
+                      {`${currency} ${selectedPrice.price}`}
                     </span>
                   </div>
+                  {/* discount  */}
+                  {selectedPrice.mealSettings[0]?.discount &&
+                    <div className="flex-center-between mgb-10">
+                      <span className="font-24 text-ghi">{t('discount')}</span>
+                      <span className="font-weight-bold font-36 text-green">
+                        {selectedPrice.mealSettings[0]?.discountType ===
+                          'Fixed'
+                        ? `${currency} `
+                        : '% '}
+                      {selectedPrice.mealSettings[0]?.discount}
+                      </span>
+                    </div>
+                  }
                   <div className="flex-center-end">
                     <span className="font-weight-bold font-56 text-yellow">
-                      76.00
+                      {calcFinalPrice(selectedPrice)}
                     </span>
                   </div>
                 </div>
@@ -150,15 +181,22 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close }) => {
                 <div className="total-promotion">
                   <p className="font-24 font-medium mgb-10">{t('optional')}</p>
                   <div className="font-24 mgb-30">
-                    {selectedToppings.map((topping, index) => {
-                      return <span>{`${topping} ${index === selectedToppings.length - 1? '' : ', '}`}</span>
+                    {toppings.map((topping, index) => {
+                      if (!selectedToppings.includes(topping.id)) return '';
+
+                      return <span key={topping.id}>{`${topping.choiceItem} ${index === selectedToppings.length - 1 ? '' : ', '}`}</span>
                     })}
+                    {selectedToppings.length === 0 &&
+                      <div className="text-center py-10 desc font-20 mgb-20">
+                        <p>{t('no_toppings_selected')}</p>
+                      </div>
+                    }
                   </div>
                   <button
                     type="button"
                     className="btn btn-block btn-yellow btn-h80 font-24 font-weight-bold"
                   >
-                    <span className="mgr-15">CHECK OUT</span>
+                    <span className="mgr-15">{t('check_out')}</span>
                     <i className="ti-arrow-right" />
                   </button>
                 </div>
@@ -173,8 +211,8 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close }) => {
             {!isLoading && toppings.length !== 0 && (
               <div className="row">
                 {toppings.map((topping) => {
-                  return <div className="col-md-6 col-6" >
-                    <ToppingCard key={topping.id} topping={topping} onClick={() => handleToppingClick(topping)} isSelected={isToppingSelected(topping)} /></div>
+                  return <div key={topping.id} className="col-md-6 col-6" >
+                    <ToppingCard topping={topping} onClick={() => handleToppingClick(topping)} isSelected={isToppingSelected(topping)} /></div>
                 })}
               </div>
             )}
