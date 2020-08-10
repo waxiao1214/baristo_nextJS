@@ -5,11 +5,13 @@ import { useEffect } from 'react';
 import _ from 'lodash';
 import ProductModalDetails from '../../components/product/modal/ProductModalDetails';
 import ProductModalCustomizeMeal from '../../components/product/modal/ProductModalCustomizeMeal';
+import ProductModalConfirmMeal from '../../components/product/modal/ProductModalConfirmMeal';
 import {
   setProductDetails,
   toggleProductDetailsModal,
   toggleProductDetailsModalLoader,
   toggleCustomizeProductModal,
+  toggleConfirmProductModal
 } from '../../store/actions/cart.actions';
 import axios from '../../lib/axios';
 
@@ -23,6 +25,7 @@ const ProductsModalsContainer = () => {
     isProductDetailsActive,
     isCustomizeProductModalActive,
     isProductDetailsLoaderActive,
+    isConfirmProductModalActive,
     productDetails,
   } = useSelector((state) => state.cart);
 
@@ -37,6 +40,8 @@ const ProductsModalsContainer = () => {
 
   const boundToggleProductDetailsModalLoader = () =>
     dispatch(toggleProductDetailsModalLoader());
+  
+  const boundToggleConfirmProductModal = () => dispatch(toggleConfirmProductModal());
 
   const handleOrder = () => {
     boundToggleProductDetailsModal();
@@ -94,6 +99,11 @@ const ProductsModalsContainer = () => {
         productDetails={productDetails}
         close={boundToggleProductDetailsModal}
         order={() => handleOrder()}
+      />
+      <ProductModalConfirmMeal
+        isActive={isConfirmProductModalActive}
+        close={boundToggleConfirmProductModal}
+        add={() => {}}
       />
       <ProductModalCustomizeMeal
         isActive={isCustomizeProductModalActive}
