@@ -66,8 +66,16 @@ export const setSelectedPrice = (selectedPrice) => {
     }
 }
 
+export const setSelectedToppings = (selectedToppings) => {
+    return {
+        type: cartConstants.SET_SELECTED_TOPPINGS,
+        payload: {
+            selectedToppings
+        }
+    }
+}
+
 export const setDeliveryType = (type) => {
-    console.log(type);
     if (type !== 'Delivery' && type !== 'PickUp') {
         return {
             type: cartConstants.SET_DELIVERY_TYPE,
