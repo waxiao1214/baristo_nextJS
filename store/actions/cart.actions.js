@@ -57,3 +57,21 @@ export const setCurrentActiveProductIndex = (index) => {
     }
 }
 
+export const setDeliveryType = (type) => {
+    if (type !== 'Delivery' && type !== 'PickUp') {
+        return {
+            type: cartConstants.SET_DELIVERY_TYPE,
+            payload: {
+                type: 'Delivery'
+            }
+        }
+    }
+
+    return {
+        type: cartConstants.SET_DELIVERY_TYPE,
+        payload: {
+            type
+        }
+    }
+}
+

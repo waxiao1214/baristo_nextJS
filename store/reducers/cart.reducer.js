@@ -7,7 +7,8 @@ const initialState = {
     productDetails: {},
     productsBatch: [],
     currentActiveProductId: 0,
-    currentActiveProductIndex: 0
+    currentActiveProductIndex: 0,
+    deliveryType: 'Delivery', // Delivery or PickUp
 };
 
 export default function cart(state = initialState, action) {
@@ -46,6 +47,11 @@ export default function cart(state = initialState, action) {
             return {
                 ...state,
                 currentActiveProductId: action.payload.id
+            }
+        case cartConstants.SET_DELIVERY_TYPE:
+            return {
+                ...state,
+                deliveryType: action.payload.type
             }
 
         default:
