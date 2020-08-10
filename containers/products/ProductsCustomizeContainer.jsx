@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import queryString from 'query-string';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
-import _ from 'lodash';
+import { useRouter } from 'next/router'
 import ProductModalDetails from '../../components/product/modal/ProductModalDetails';
 import ProductModalCustomizeMeal from '../../components/product/modal/ProductModalCustomizeMeal';
 import ProductModalConfirmMeal from '../../components/product/modal/ProductModalConfirmMeal';
@@ -15,7 +15,8 @@ import {
 } from '../../store/actions/cart.actions';
 import axios from '../../lib/axios';
 
-const ProductsModalsContainer = () => {
+const ProductsModalsContainer = ({ productType }) => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { i18n } = useTranslation(['common']);
   const { id: branchId } = useSelector((state) => state.root.currentBranch);
@@ -40,7 +41,7 @@ const ProductsModalsContainer = () => {
 
   const boundToggleProductDetailsModalLoader = () =>
     dispatch(toggleProductDetailsModalLoader());
-  
+
   const boundToggleConfirmProductModal = () => dispatch(toggleConfirmProductModal());
 
   const handleOrder = () => {
@@ -55,6 +56,13 @@ const ProductsModalsContainer = () => {
    * @return {String}
    */
   const generateQueryObject = (id) => {
+    if (productType === 'combo') {
+      return queryString.stringify({
+        comboId: id,
+        culture: i18n.language,
+        branchId,
+      });
+    }
     return queryString.stringify({
       mealId: id,
       culture: i18n.language,
@@ -72,8 +80,10 @@ const ProductsModalsContainer = () => {
     boundToggleProductDetailsModal();
     const query = generateQueryObject(id);
     try {
+      const url = productType === 'combo' ? 'combo-details' : 'meal-details';
+
       const response = await axios.get(
-        `customer/web/meals-service/meal-details?${query}`,
+        `customer/web/meals-service/${url}?${query}`,
       );
 
       boundSetProductDetails(response.data.result);
@@ -87,7 +97,9 @@ const ProductsModalsContainer = () => {
   // on id or index change fetch the details again
   useEffect(() => {
     if (currentActiveProductId === 0) return;
-    console.log('adf')
+
+    const separator = (window.location.href.indexOf("?") === -1) ? "?" : "&";
+    window.location.href = `${window.location.href + separator}productId=${currentActiveProductId}`;
     fetchProductDetails(currentActiveProductId);
   }, [currentActiveProductId, currentActiveProductIndex]);
 
@@ -103,9 +115,10 @@ const ProductsModalsContainer = () => {
       <ProductModalConfirmMeal
         isActive={isConfirmProductModalActive}
         close={boundToggleConfirmProductModal}
-        add={() => {}}
+        add={() => { }}
       />
       <ProductModalCustomizeMeal
+        productType={productType}
         isActive={isCustomizeProductModalActive}
         productDetails={productDetails}
         close={boundToggleCustomizeProductModal}

@@ -9,7 +9,7 @@ import BaseLoader from '../../base/BaseLoader';
 import ToppingCard from '../topping/ToppingCard';
 import { toggleConfirmProductModal } from '../../../store/actions/cart.actions';
 
-const ProductModalCustomizeMeal = ({ isActive, productDetails, close }) => {
+const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productType }) => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation(['common']);
   const { currency } = useSelector((state) => state.root.settings);
@@ -65,6 +65,13 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close }) => {
    * @return {String}
    */
   const generateQueryObject = () => {
+    if (productType === 'combo') {
+      return queryString.stringify({
+        comboId: productDetails.id,
+        culture: i18n.language,
+        branchId,
+      });
+    }
     return queryString.stringify({
       mealId: productDetails.id,
       culture: i18n.language,
@@ -82,8 +89,10 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close }) => {
     setToppings([]);
     const query = generateQueryObject();
     try {
+      const url = productType === 'combo' ? 'combo-toppings' : 'meal-toppings';
+      
       const response = await axios.get(
-        `customer/web/meals-service/meal-toppings?${query}`,
+        `customer/web/meals-service/${url}?${query}`,
       );
 
       setToppings(response.data.result[0]?.choiceItems ?? [])

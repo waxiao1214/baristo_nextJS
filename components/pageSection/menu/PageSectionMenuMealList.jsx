@@ -288,7 +288,7 @@ const PageSectionMenuMealList = ({
 						{isLoading && <BaseLoader />}
 						<div className="fade in show active">
 							<div className="row tab-pane--h-md">
-								<ProductContainer products={mealsToShow} productCardType="v2" />
+								<ProductContainer productType={currentActiveTab} products={mealsToShow} productCardType="v2" />
 							</div>
 							{mealsToShow.length === 0 && !isLoading && (
 								<div className="row text-center py-10 desc font-20 mgb-20">

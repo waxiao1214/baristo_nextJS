@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
+import { isNil } from 'lodash';
 
 const useProductPriceAndDiscountValueToShow = (product) => {
     const { mealPrices } = product;
-    const [mainMeal, setMainMeal] = useState(mealPrices[0]);
+    const [mainMeal, setMainMeal] = useState({});
+
+    if (isNil(mealPrices)) return {
+        isDiscountStillInRange: false,
+        mainMeal: {}
+    }
 
 	/**
 	 * Check if the discount is still

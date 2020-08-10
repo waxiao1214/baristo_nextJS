@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { isEmpty } from 'lodash';
 import useProductPriceAndDiscountValueToShow from '../../hooks/product/useProductPriceAndDiscountValueToShow';
 
 const ProductChefItemCardV2 = ({ product, openMoreDetails }) => {
@@ -15,7 +16,7 @@ const ProductChefItemCardV2 = ({ product, openMoreDetails }) => {
 		<div className="chef-item relative">
 			<div className="ch-image">
 				<div>
-					<img src={product.thumbnail} />
+					<img src={product.thumbnail} alt={product.title}/>
 				</div>
 			</div>
 			<div className="ch-text text-center">
@@ -26,22 +27,24 @@ const ProductChefItemCardV2 = ({ product, openMoreDetails }) => {
 			</div>
 			<div className="d-flex flex-column align-items-center">
 				<div className="d-flex justify-content-center align-items-center my-4">
-					{product.mealPrices.length > 1 && (
+					{product?.mealPrices?.length > 1 && (
 						<span className="mr-3 font-16">{t('from')}</span>
 					)}
-					<div className="product-price text-yellow font-28 font-demi">{`${currency} ${mainMeal.price}`}</div>
+					{!isEmpty(mainMeal) &&
+						<div className="product-price text-yellow font-28 font-demi">{`${currency} ${mainMeal.price}`}</div>
+					}
 				</div>
-				{mainMeal.mealSettings[0]?.applyDiscount &&
+				{mainMeal?.mealSettings && mainMeal?.mealSettings[0]?.applyDiscount &&
 					isDiscountStillInRange(
-						mainMeal.mealSettings[0].from,
-						mainMeal.mealSettings[0].to
+						mainMeal?.mealSettings[0]?.from,
+						mainMeal?.mealSettings[0]?.to
 					) && (
 						<div className="product-sale mgt-10">
 							<span className="discount discount--white inflex-center-center btn-gray btn-h46 btn-bgLeft">
 								{`${t('discount')} `}
-								{mainMeal.mealSettings[0].discount}
-								{mainMeal.mealSettings[0].discountType ===
-								'Fixed'
+								{mainMeal?.mealSettings[0]?.discount}
+								{mainMeal?.mealSettings[0]?.discountType ===
+									'Fixed'
 									? `${currency}`
 									: ' %'}
 							</span>

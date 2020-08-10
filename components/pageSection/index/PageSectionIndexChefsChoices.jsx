@@ -1,4 +1,5 @@
-import ProductChefItemCard from '../../product/ProductChefItemCard'
+// import ProductChefItemCard from '../../product/ProductChefItemCard';
+import ProductsContainer from '../../../containers/products/ProductsContainer';
 
 const PageSectionIndexChefsChoices = ({ chefChoices }) => {
     return (<section className="chef-choice pd-100">
@@ -16,15 +17,7 @@ const PageSectionIndexChefsChoices = ({ chefChoices }) => {
                         <p className="chef-comment">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut turpis lacinia.</p>
                     </div>
                 </div>
-                {
-                    chefChoices.map(chefChoice => {
-                        return (
-                            <div className="col-md-4" key={chefChoice.id}>
-                                <ProductChefItemCard chefChoice={chefChoice}/>
-                            </div>
-                        )
-                    })
-                }
+                <ProductsContainer products={chefChoices} productCardType="v2"/>
             </div>
         </div>
     </section>)
