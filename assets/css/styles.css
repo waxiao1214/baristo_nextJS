@@ -1822,6 +1822,7 @@ body.modal-open-2 {
 .product-gallery {
 	flex: 0 0 45%;
 	max-width: 45%;
+	min-height: 550px;
 }
 .product-details {
 	position: relative;

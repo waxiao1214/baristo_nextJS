@@ -1,7 +1,35 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 import BaseLoader from '../../base/BaseLoader';
+import BaseDiscountPill from '../../base/BaseDiscountPill';
+
+const MealPrice = ({ price, onClick, isSelected }) => {
+  const { currency } = useSelector((state) => state.root.settings);
+
+  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+  return (<div onClick={onClick} className="col-md-12 d-flex justify-content-between align-items-center mb-3" style={{ cursor: 'pointer', opacity: isSelected ? 1 : 0.5 }}>
+    <span
+      className="font-weight-bold"
+      style={{
+        whiteSpace: 'nowrap',
+        fontSize: '1.25rem'
+      }}
+    >
+      {`${currency} ${price.price} - ${price.size}`}
+    </span>
+    <div>
+      {price.mealSettings.map(settings => {
+        if (!settings.applyDiscount) return '';
+
+        return <BaseDiscountPill discount={settings} />
+      })
+      }
+    </div>
+  </div>)
+}
 
 const ProductModalDetails = ({
   close,
@@ -12,6 +40,17 @@ const ProductModalDetails = ({
 }) => {
   const { t } = useTranslation(['common']);
   const { currency } = useSelector((state) => state.root.settings);
+  const { mealPrices } = productDetails;
+
+  const [selectedPrice, setSelectedPrice] = useState({});
+  const selectPrice = (id) => {
+    if (selectedPrice.id === id) return;
+    setSelectedPrice(mealPrices.filter(price => price.id === id)[0]);
+  }
+
+  useEffect(() => {
+    setSelectedPrice(mealPrices[0]);
+  }, [])
 
   if (!isActive) return '';
   if (isNil(productDetails)) return '';
@@ -30,7 +69,7 @@ const ProductModalDetails = ({
                 {!isLoading && (
                   <div className="item">
                     <div className="detail-wrapper flex">
-                      <div className="product-gallery">
+                      <div className="product-gallery d-flex justify-content-center align-items-center">
                         <img
                           src={productDetails.thumbnail}
                           alt={productDetails.thumbnail}
@@ -66,7 +105,7 @@ const ProductModalDetails = ({
                                   </span>
                                   {`${t('prepare')} ${
                                     productDetails.preparationDuration
-                                  } ${t('minutes')}`}
+                                    } ${t('minutes')}`}
                                 </li>
                               </ul>
                             </div>
@@ -84,28 +123,16 @@ const ProductModalDetails = ({
                             )}
                           </div>
                           <div className="group-price">
+                            <div className="row pt-4">
+                              {mealPrices.map(price => {
+                                return <MealPrice key={price.id} price={price} onClick={() => selectPrice(price.id)} isSelected={selectedPrice.id === price.id} />
+                              })}
+                            </div>
                             <div className="row">
-                              <div className="col-md-7">
-                                <div className="old-price">
-                                  <span
-                                    style={{
-                                      whiteSpace: 'nowrap',
-                                    }}
-                                  >
-                                    {`${currency}`} 118.00
-                                  </span>
-                                  <div
-                                    className="discount inflex-center-center btn-gray btn-h46 btn-bgLeft"
-                                    style={{
-                                      whiteSpace: 'nowrap',
-                                    }}
-                                  >
-                                    {`${t('discount')} 30%`}
-                                  </div>
-                                </div>
-                                <div className="new-price">$ 76.00</div>
+                              <div className="col-md-6">
+                                <div className="new-price">{`${currency} ${selectedPrice.price}` }</div>
                               </div>
-                              <div className="col-md-5 flex-end-end">
+                              <div className="col-md-6 flex-end-end">
                                 <button
                                   type="button"
                                   className="btn btn-yellow btn-h60 font-18 font-demi w230 btn-order"
@@ -127,7 +154,7 @@ const ProductModalDetails = ({
         </div>
       </div>
       <div className="modal-backdrop fade show" />
-    </div>
+    </div >
   );
 };
 
