@@ -5,6 +5,9 @@ const initialState = {
     isProductDetailsLoaderActive: false,
     isCustomizeProductModalActive: false,
     productDetails: {},
+    productsBatch: [],
+    currentActiveProductId: 0,
+    currentActiveProductIndex: 0
 };
 
 export default function cart(state = initialState, action) {
@@ -28,6 +31,21 @@ export default function cart(state = initialState, action) {
             return {
                 ...state,
                 productDetails: action.payload.productDetails
+            }
+        case cartConstants.SET_PRODUCTS_BATCH:
+            return {
+                ...state,
+                productsBatch: action.payload.productsBatch
+            }
+        case cartConstants.SET_CURRENT_ACTIVE_PRODUCT_INDEX:
+            return {
+                ...state,
+                currentActiveProductIndex: action.payload.index
+            }
+        case cartConstants.SET_CURRENT_ACTIVE_PRODUCT_ID:
+            return {
+                ...state,
+                currentActiveProductId: action.payload.id
             }
 
         default:

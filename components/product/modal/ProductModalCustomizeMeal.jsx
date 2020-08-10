@@ -1,8 +1,61 @@
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import queryString from 'query-string';
+import axios from '../../../lib/axios';
+import BaseLoader from '../../base/BaseLoader';
 
-const ProductModalCustomizeMeal = ({ isActive }) => {
-  const { t } = useTranslation(['common']);
+const ProductModalCustomizeMeal = ({ isActive, productDetails }) => {
+  const { t, i18n } = useTranslation(['common']);
+  const { currency } = useSelector((state) => state.root.settings);
+  const { id: branchId } = useSelector((state) => state.root.currentBranch);
+
+  // eslint-disable-next-line no-unused-vars
+  const [toppings, setToppings] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const [isLoading, setIsLoading] = useState(false);
+
+  /**
+   * Generate query object
+   *
+   * @return {String}
+   */
+  const generateQueryObject = () => {
+    return queryString.stringify({
+      mealId: productDetails.id,
+      culture: i18n.language,
+      branchId,
+    });
+  };
+
+  /**
+   * Fetch product details
+   *
+   * @param {Array} ids
+   */
+  const getMealToppings = async () => {
+    setIsLoading(true);
+    setToppings([]);
+    const query = generateQueryObject();
+    try {
+      const response = await axios.get(
+        `customer/web/meals-service/meal-topping?${query}`,
+      );
+
+      console.log(response.data.result);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isActive) return;
+
+    getMealToppings();
+  }, [productDetails, isActive]);
 
   if (!isActive) return '';
 
@@ -14,31 +67,33 @@ const ProductModalCustomizeMeal = ({ isActive }) => {
             <h2 className="title">
               <span>{t('build_your_meal')}</span>
             </h2>
-            <button
-              type="button"
-              className="close close-customize"
-            >
+            <button type="button" className="close close-customize">
               <i className="ti-close" />
             </button>
           </div>
           <div className="flex-between">
             <div className="flex-left">
               <h3 className="font-weight-bold font-48 mgb-10">
-                Healthy Pizza of Seafood
+                {productDetails.title}
               </h3>
               <div className="product-index">
                 <ul className="flex-center">
                   <li>
                     <span>
-                      <img src="images/icon/icon-cutler.svg" alt="" title="" />
+                      <img
+                        src={productDetails.category.imagePath}
+                        alt={productDetails.category.category}
+                      />
                     </span>
-                    Fast Food
+                    {productDetails.category.category}
                   </li>
                   <li>
                     <span>
                       <img src="images/icon/icon-dish.svg" alt="" title="" />
                     </span>
-                    Prepare: 13 minutes
+                    {`${t('prepare')} ${productDetails.preparationDuration} ${t(
+                      'minutes',
+                    )}`}
                   </li>
                 </ul>
               </div>
@@ -47,8 +102,6 @@ const ProductModalCustomizeMeal = ({ isActive }) => {
               <button
                 type="button"
                 className="btn btn-white btn-h50 font-20 font-demi"
-                data-toggle="modal"
-                data-target="#confirm-meal"
               >
                 <i className="ti-plus mgr-15" /> MEAL
               </button>
@@ -61,24 +114,12 @@ const ProductModalCustomizeMeal = ({ isActive }) => {
                   <div className="flex-center-between mgb-10">
                     <span className="font-24 text-ghi">Order Total</span>
                     <span className="font-weight-bold font-36 text-green">
-                      $ 76.00
-                    </span>
-                  </div>
-                  <div className="flex-center-between mgb-10">
-                    <span className="font-24 text-ghi">Coupon</span>
-                    <span className="font-weight-bold font-36 text-green">
-                      - $10
-                    </span>
-                  </div>
-                  <div className="flex-center-between mgb-10">
-                    <span className="font-24 text-ghi">Loyalty Point</span>
-                    <span className="font-weight-bold font-36 text-green">
-                      - $10
+                      {`${currency} 76.00`}
                     </span>
                   </div>
                   <div className="flex-center-end">
                     <span className="font-weight-bold font-56 text-yellow">
-                      $ 76.00
+                      76.00
                     </span>
                   </div>
                 </div>
@@ -87,10 +128,7 @@ const ProductModalCustomizeMeal = ({ isActive }) => {
                 <div className="total-promotion">
                   <p className="font-24 font-medium mgb-10">Optional</p>
                   <div className="font-24 mgb-30">
-                    x2 Cheese, Crab, Grimp, no tomato sauce, Sausage...{' '}
-                    <a href="" title="" className="view">
-                      (view)
-                    </a>
+                    x2 Cheese, Crab, Grimp, no tomato sauce, Sausage...
                   </div>
                   <button
                     type="button"
@@ -104,40 +142,22 @@ const ProductModalCustomizeMeal = ({ isActive }) => {
             </div>
           </div>
           <div className="optional mgt-50">
+            {isLoading && <BaseLoader />}
             <h2 className="title text-left font-36 mgb-40">
-              <span>Optional Topping</span>
+              <span>{t('optional_topping')}</span>
             </h2>
-            <div className="row">
-              <div className="col-md-6 col-6">
-                <div className="optional-item">
-                  <div className="row">
-                    <div className="col-md-5">
-                      <div className="optional-image">
-                        <img
-                          src="images/picture/optional-1.png"
-                          alt=""
-                          title=""
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-7">
-                      <div className="optional-info">
-                        <h4 className="font-24 font-medium">x2 Cheese</h4>
-                        <div className="font-weight-bold font-32 text-yellow">
-                          $10
-                        </div>
-                        <button
-                          type="button"
-                          className="btn-remove-op btn-optional font-18 font-demi mgt-30"
-                        >
-                          REMOVE
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+            {!isLoading && toppings.length !== 0 && (
+              <div className="row">
+                <div className="col-md-6 col-6" />
+              </div>
+            )}
+            {!isLoading && toppings.length === 0 && (
+              <div className="row">
+                <div className="text-center py-10 desc font-20 mgb-20">
+                  <p>{t('no_result')}</p>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

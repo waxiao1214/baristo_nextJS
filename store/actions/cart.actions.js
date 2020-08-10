@@ -29,3 +29,31 @@ export const setProductDetails = (productDetails) => {
         }
     }
 }
+
+export const setProductsBatch = (productsBatch) => {
+    return {
+        type: cartConstants.SET_PRODUCTS_BATCH,
+        payload: {
+            productsBatch
+        }
+    }
+}
+
+export const setCurrentActiveProductId = (id) => {
+    return {
+        type: cartConstants.SET_CURRENT_ACTIVE_PRODUCT_ID,
+        payload: {
+            id
+        }
+    }
+}
+
+export const setCurrentActiveProductIndex = (index) => {
+    return {
+        type: cartConstants.SET_CURRENT_ACTIVE_PRODUCT_INDEX,
+        payload: {
+            index
+        }
+    }
+}
+

@@ -2077,6 +2077,10 @@ body.modal-open-2 {
 .btn-add-op:hover {
 	background: #6b6c7e;
 }
+.optional {
+	position: relative;
+	min-height: 10rem;
+}
 .optional-item {
 	margin-bottom: 40px;
 }

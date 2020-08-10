@@ -69,5 +69,6 @@ export default {
     "account": "Account",
     "prepare": "Prepare",
     "minutes": "Minutes",
-    "build_your_meal": "Build your meal"
+    "build_your_meal": "Build your meal",
+    "optional_topping": "Optional Topping"
 }

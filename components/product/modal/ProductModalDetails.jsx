@@ -11,9 +11,10 @@ const ProductModalDetails = ({
   order,
 }) => {
   const { t } = useTranslation(['common']);
-  const { currency } = useSelector((state) => state.root.settings);;
+  const { currency } = useSelector((state) => state.root.settings);
 
   if (!isActive) return '';
+  if (isNil(productDetails)) return '';
 
   return (
     <div>
