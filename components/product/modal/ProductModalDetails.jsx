@@ -183,7 +183,7 @@ const ProductModalDetails = ({
                               <div className="col-md-6">
                                 <div className="new-price">{`${currency} ${calcFinalPrice(selectedPrice)}`}</div>
                               </div>
-                              <div className="col-md-6 flex-end-end">
+                              <div className="col-md-6 d-flex justify-content-end">
                                 <button
                                   type="button"
                                   className="btn btn-yellow btn-h60 font-18 font-demi w230 btn-order"
