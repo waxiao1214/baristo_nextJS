@@ -76,5 +76,9 @@ export default {
     "prepare": "Prepare",
     "minutes": "Minutes",
     "build_your_meal": "Build your meal",
-    "optional_topping": "Optional Topping"
+    "optional_topping": "Optional Topping",
+    "confirm": "Confirm",
+    "move_current_meal_or_stay": "Move current meal to cart and add another meal?",
+    "move": "Move",
+    "keep_customizing": "Keep customizing"
 }
