@@ -13,7 +13,7 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation(['common']);
   const { currency } = useSelector((state) => state.root.settings);
-  const { selectedPrice } = useSelector((state) => state.cart);
+  const { selectedPrice, selectedProductChoices } = useSelector((state) => state.cart);
   const { id: branchId } = useSelector((state) => state.root.currentBranch);
 
   // eslint-disable-next-line no-unused-vars
@@ -73,7 +73,7 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
     const query = generateQueryObject();
     try {
       const url = productType === 'combo' ? 'combo-toppings' : 'meal-toppings';
-      
+
       const response = await axios.get(
         `customer/web/meals-service/${url}?${query}`,
       );
@@ -162,9 +162,9 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
                       <span className="font-weight-bold font-36 text-green">
                         {selectedPrice.mealSettings[0]?.discountType ===
                           'Fixed'
-                        ? `${currency} `
-                        : '% '}
-                      {selectedPrice.mealSettings[0]?.discount}
+                          ? `${currency} `
+                          : '% '}
+                        {selectedPrice.mealSettings[0]?.discount}
                       </span>
                     </div>
                   }
@@ -179,12 +179,10 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
                 <div className="total-promotion">
                   <p className="font-24 font-medium mgb-10">{t('optional')}</p>
                   <div className="font-24 mgb-30">
-                    {toppings.map((topping, index) => {
-                      if (!selectedToppings.includes(topping.id)) return '';
-
-                      return <span key={topping.id}>{`${topping.choiceItem} ${index === selectedToppings.length - 1 ? '' : ', '}`}</span>
+                    {selectedProductChoices.map((selectedChoice, index) => {
+                      return <span key={selectedChoice.id}>{`X${selectedChoice.quantity} ${selectedChoice.choiceItem} ${index === selectedProductChoices.length - 1 ? '' : ', '}`}</span>
                     })}
-                    {selectedToppings.length === 0 &&
+                    {selectedProductChoices.length === 0 &&
                       <div className="text-center py-10 desc font-20 mgb-20">
                         <p>{t('no_toppings_selected')}</p>
                       </div>
@@ -203,21 +201,18 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
           </div>
           <div className="optional mgt-50">
             {isLoading && <BaseLoader />}
-            <h2 className="title text-left font-36 mgb-40">
-              <span>{t('optional_topping')}</span>
-            </h2>
-            {!isLoading && choiceGroups.length !== 0 && 
-                choiceGroups.map(choiceGroup => {
-                  return <ChoicesSection choiceGroup={choiceGroup}/>
+            {!isLoading && choiceGroups.length !== 0 &&
+              choiceGroups.map(choiceGroup => {
+                return (
+                  <div>
+                    <h2 className="title text-left font-36 mgb-40">
+                      <span>{choiceGroup.choiceGroup}</span>
+                    </h2>
+                    <ChoicesSection choiceGroup={choiceGroup} />
+                  </div>
+                )
               })
             }
-            {!isLoading && choiceGroups.length === 0 && (
-              <div className="row">
-                <div className="text-center px-3 py-10 desc font-20 mgb-20">
-                  <p>{t('no_result')}</p>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
