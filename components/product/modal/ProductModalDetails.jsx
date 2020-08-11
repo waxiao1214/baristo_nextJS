@@ -63,7 +63,8 @@ const ProductModalDetails = ({
   const { currency } = useSelector((state) => state.root.settings);
   const { deliveryType, selectedPrice } = useSelector((state) => state.cart);
   const { mealPrices } = productDetails;
-
+  const { loyaltyPointsBase } = useSelector((state) => state.root.settings);
+  
   const boundSetDeliveryType = (type) => dispatch(setDeliveryType(type));
   const boundSetSelectedPrice = (price) => dispatch(setSelectedPrice(price));
 
@@ -156,6 +157,11 @@ const ProductModalDetails = ({
                                     productDetails.preparationDuration
                                     } ${t('minutes')}`}
                                 </li>
+                                {loyaltyPointsBase === 'POINTSBASE-ITEM' &&
+                                  <li>
+                                    {`${t('loyalty_points')}`}
+                                  </li>
+                                }
                               </ul>
                             </div>
                             {!isNil(productDetails.ingredients) && (
