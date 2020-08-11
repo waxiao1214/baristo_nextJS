@@ -96,12 +96,12 @@ const ChoicesSection = ({ choiceGroup }) => {
         }
       })
     })
-    if (minSelection > totalSelected) {
+    if (minSelection > totalSelected && minSelection !== 0) {
       isValid = false;
       showErrorMessage(`${t('select_at_least')} ${minSelection}`);
       return isValid;
     }
-    if (maxSelection < totalSelected) {
+    if (maxSelection < totalSelected && maxSelection !== 0) {
       isValid = false;
       showErrorMessage(`${t('select_at_max')} ${maxSelection}`);
       return isValid;

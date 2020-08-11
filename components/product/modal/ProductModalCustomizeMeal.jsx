@@ -45,7 +45,7 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
   const calcSelectedChoicesPrice = (choices) => {
     let total = 0;
     choices.forEach(choice => {
-      total += choice.price;
+      total += choice.price * choice.quantity;
     });
     return total;
   }
@@ -178,15 +178,15 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
                       <span className="font-weight-bold font-36 text-green">
                         {selectedPrice.mealSettings[0]?.discountType ===
                           'Fixed'
-                          ? `${currency} `
-                          : '% '}
+                          ? `-${currency} `
+                          : '-% '}
                         {selectedPrice.mealSettings[0]?.discount}
                       </span>
                     </div>
                   }
                   <div className="flex-center-end">
                     <span className="font-weight-bold font-56 text-yellow">
-                      {calcFinalPrice(selectedPrice)}
+                      {calcFinalPrice(selectedPrice) + calcSelectedChoicesPrice(selectedProductChoices)}
                     </span>
                   </div>
                 </div>
