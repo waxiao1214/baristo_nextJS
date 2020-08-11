@@ -19,6 +19,7 @@ export default {
     "select_at_least": "Select at least",
     "select_at_max": "Select at max",
     "choices_total": "Choices total",
+    "loyalty_points": "Loyalty points",
     "order_now": "Order now",
     "from": "From",
     "to": "To",

@@ -15,11 +15,10 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
   const { currency } = useSelector((state) => state.root.settings);
   const { selectedPrice, selectedProductChoices } = useSelector((state) => state.cart);
   const { id: branchId } = useSelector((state) => state.root.currentBranch);
+  const { loyaltyPointsBase } = useSelector((state) => state.root.settings);
 
   // eslint-disable-next-line no-unused-vars
   const [choiceGroups, setChoiceGroups] = useState([]);
-  const [toppings, setToppings] = useState([]);
-  const [selectedToppings, setSelectedToppings] = useState([]);
   const [isValidChoices, setIsValidChoices] = useState(true);
   // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
@@ -77,7 +76,6 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
    */
   const getMealToppings = async () => {
     setIsLoading(true);
-    setToppings([]);
     const query = generateQueryObject();
     try {
       const url = productType === 'combo' ? 'combo-toppings' : 'meal-toppings';
@@ -86,7 +84,6 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
         `customer/web/meals-service/${url}?${query}`,
       );
 
-      setToppings(response.data.result[0]?.choiceItems ?? []);
       setChoiceGroups(response.data.result);
     } catch (error) {
       console.error(error);
@@ -140,6 +137,11 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
                       'minutes',
                     )}`}
                   </li>
+                  {loyaltyPointsBase === 'POINTSBASE-ITEM' &&
+                    <li>
+                      {`${t('loyalty_points')}`}
+                    </li>
+                  }
                 </ul>
               </div>
             </div>
