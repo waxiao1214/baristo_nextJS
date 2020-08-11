@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-const ToppingCard = ({ topping, isSelected, onClick }) => {
+const ToppingCard = ({ topping, isSelected, onAdd, onRemove }) => {
   const { t } = useTranslation(['common']);
   const { currency } = useSelector((state) => state.root.settings);
-  
+
   return (
     <div className="optional-item">
       <div className="row">
@@ -24,10 +24,18 @@ const ToppingCard = ({ topping, isSelected, onClick }) => {
             {isSelected ? <button
               type="button"
               className="btn-remove-op btn-optional font-18 font-demi mgt-30"
-              onClick={() => onClick(topping.id)}
+              onClick={() => onRemove(topping.id)}
             >
               {t('remove')}
-            </button> : <button onClick={() => onClick(topping.id)} type="button" className="btn-add-op btn-optional font-18 font-demi mgt-30">{t('add')}</button>}
+            </button> :
+              <button
+                onClick={() => onAdd(topping.id)}
+                type="button"
+                className="btn-add-op btn-optional font-18 font-demi mgt-30"
+              >
+                {t('add')}
+              </button>
+            }
           </div>
         </div>
       </div>

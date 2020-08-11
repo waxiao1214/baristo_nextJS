@@ -6,7 +6,7 @@ import queryString from 'query-string';
 import { isNil } from 'lodash';
 import axios from '../../../lib/axios';
 import BaseLoader from '../../base/BaseLoader';
-import ToppingCard from '../topping/ToppingCard';
+import ChoicesSection from '../topping/ChoicesSection';
 import { toggleConfirmProductModal } from '../../../store/actions/cart.actions';
 
 const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productType }) => {
@@ -17,31 +17,14 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
   const { id: branchId } = useSelector((state) => state.root.currentBranch);
 
   // eslint-disable-next-line no-unused-vars
+  const [choiceGroups, setChoiceGroups] = useState([]);
   const [toppings, setToppings] = useState([]);
   const [selectedToppings, setSelectedToppings] = useState([]);
+  const [isValidChoices, setIsValidChoices] = useState(true);
   // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
 
   const boundToggleConfirmProductModal = () => dispatch(toggleConfirmProductModal());
-
-  const isToppingSelected = ({ id }) => {
-    return selectedToppings.includes(id);
-  }
-
-  const handleToppingClick = ({ id }) => {
-    // eslint-disable-next-line no-underscore-dangle
-    let _toppings = [];
-
-    if (selectedToppings.includes(id)) {
-      _toppings = selectedToppings.filter(
-        (toppingId) => toppingId !== id
-      );
-    } else {
-      _toppings = selectedToppings.concat([id]);
-    }
-
-    setSelectedToppings(_toppings);
-  }
 
   const calcFinalPrice = (price) => {
     if (isNil(price)) return 0;
@@ -95,7 +78,8 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
         `customer/web/meals-service/${url}?${query}`,
       );
 
-      setToppings(response.data.result[0]?.choiceItems ?? [])
+      setToppings(response.data.result[0]?.choiceItems ?? []);
+      setChoiceGroups(response.data.result);
     } catch (error) {
       console.error(error);
     } finally {
@@ -222,15 +206,12 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
             <h2 className="title text-left font-36 mgb-40">
               <span>{t('optional_topping')}</span>
             </h2>
-            {!isLoading && toppings.length !== 0 && (
-              <div className="row">
-                {toppings.map((topping) => {
-                  return <div key={topping.id} className="col-md-6 col-6" >
-                    <ToppingCard topping={topping} onClick={() => handleToppingClick(topping)} isSelected={isToppingSelected(topping)} /></div>
-                })}
-              </div>
-            )}
-            {!isLoading && toppings.length === 0 && (
+            {!isLoading && choiceGroups.length !== 0 && 
+                choiceGroups.map(choiceGroup => {
+                  return <ChoicesSection choiceGroup={choiceGroup}/>
+              })
+            }
+            {!isLoading && choiceGroups.length === 0 && (
               <div className="row">
                 <div className="text-center px-3 py-10 desc font-20 mgb-20">
                   <p>{t('no_result')}</p>
