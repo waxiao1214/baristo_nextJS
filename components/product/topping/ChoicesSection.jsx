@@ -2,13 +2,14 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import _ from 'lodash';
 import { setSelectedToppings } from '../../../store/actions/cart.actions';
 import ToppingCard from './ToppingCard';
 
 const ChoicesSection = ({ choiceGroup }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation(['common']);
-  const { id: groupId, choiceItems, customerMustSelectChoice, minSelection, maxSelection } = choiceGroup;
+  const { id: groupId, choiceItems, customerMustSelectChoice, minSelection, maxSelection, inMeal } = choiceGroup;
   const { selectedProductChoices } = useSelector(state => state.cart);
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -32,16 +33,42 @@ const ChoicesSection = ({ choiceGroup }) => {
   }
 
   const handleAddClick = (choice) => {
+    const _choice = _.clone(choice);
     const alreadyAdded = isChoiceAdded(choice);
     if (!alreadyAdded) {
-      choice.quantity = 1;
-      choice.choiceGroupId = groupId;
-      boundSetSelectedToppings(selectedProductChoices.concat([choice]));
+      // is not added
+      _choice.quantity = 1;
+      _choice.choiceGroupId = groupId;
+      boundSetSelectedToppings(selectedProductChoices.concat([_choice]));
+    } else {
+      // is added
+      boundSetSelectedToppings(selectedProductChoices.map(selectedChoice => {
+        if (selectedChoice.id === _choice.id) {
+          selectedChoice.quantity += 1;
+        }
+        return selectedChoice;
+      }));
     }
   }
 
   const handleRemoveClick = (choice) => {
-    boundSetSelectedToppings(selectedProductChoices.filter(selectedChoice => selectedChoice.id !== choice.id))
+    // quantity equals 1, we remove it
+    const alreadyAdded = isChoiceAdded(choice);
+    if (!alreadyAdded) return choice; 
+
+    const addedChoice = selectedProductChoices.filter(selectedChoice => selectedChoice.id === choice.id)[0];
+    if (addedChoice.quantity === 1) {
+      boundSetSelectedToppings(selectedProductChoices.filter(selectedChoice => selectedChoice.id !== choice.id));
+      return choice;
+    }
+    // has quantity more than 1, so we just decrease it
+    boundSetSelectedToppings(selectedProductChoices.map(selectedChoice => {
+      if (selectedChoice.id === choice.id) {
+        selectedChoice.quantity -= 1;
+      }
+      return selectedChoice;
+    }));
+    return choice;
   }
 
   const validate = () => {
@@ -105,6 +132,7 @@ const ChoicesSection = ({ choiceGroup }) => {
               onAdd={() => handleAddClick(choiceItem)}
               onRemove={() => handleRemoveClick(choiceItem)}
               isSelected={isChoiceAdded(choiceItem)}
+              inMeal={inMeal}
             />
           </div>
         );

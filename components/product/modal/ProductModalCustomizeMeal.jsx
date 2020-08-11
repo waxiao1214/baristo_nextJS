@@ -42,6 +42,14 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
     return price.price;
   }
 
+  const calcSelectedChoicesPrice = (choices) => {
+    let total = 0;
+    choices.forEach(choice => {
+      total += choice.price;
+    });
+    return total;
+  }
+
   /**
    * Generate query object
    *
@@ -149,10 +157,18 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
             <div className="row">
               <div className="col-md-6">
                 <div className="total-menu">
+                  {/* item price  */}
                   <div className="flex-center-between mgb-10">
                     <span className="font-24 text-ghi">{t('order_total')}</span>
                     <span className="font-weight-bold font-36 text-green">
                       {`${currency} ${selectedPrice.price}`}
+                    </span>
+                  </div>
+                  {/* choices  */}
+                  <div className="flex-center-between mgb-10">
+                    <span className="font-24 text-ghi">{t('choices_total')}</span>
+                    <span className="font-weight-bold font-36 text-green">
+                      {`${currency} ${calcSelectedChoicesPrice(selectedProductChoices)}`}
                     </span>
                   </div>
                   {/* discount  */}
@@ -204,7 +220,7 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
             {!isLoading && choiceGroups.length !== 0 &&
               choiceGroups.map(choiceGroup => {
                 return (
-                  <div>
+                  <div key={choiceGroup.id}>
                     <h2 className="title text-left font-36 mgb-40">
                       <span>{choiceGroup.choiceGroup}</span>
                     </h2>

@@ -18,6 +18,7 @@ export default {
     "select_at_least_one_choice": "Select at least one choice",
     "select_at_least": "Select at least",
     "select_at_max": "Select at max",
+    "choices_total": "Choices total",
     "order_now": "Order now",
     "from": "From",
     "to": "To",

@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-const ToppingCard = ({ topping, isSelected, onAdd, onRemove }) => {
+const ToppingCard = ({ topping, isSelected, onAdd, onRemove, inMeal }) => {
   const { t } = useTranslation(['common']);
   const { currency } = useSelector((state) => state.root.settings);
 
@@ -21,7 +21,7 @@ const ToppingCard = ({ topping, isSelected, onAdd, onRemove }) => {
             <div className="font-weight-bold font-32 text-yellow">
               {`${currency} ${topping.price}`}
             </div>
-            {isSelected ? <button
+            {inMeal && (isSelected ? <button
               type="button"
               className="btn-remove-op btn-optional font-18 font-demi mgt-30"
               onClick={() => onRemove(topping.id)}
@@ -34,7 +34,26 @@ const ToppingCard = ({ topping, isSelected, onAdd, onRemove }) => {
                 className="btn-add-op btn-optional font-18 font-demi mgt-30"
               >
                 {t('add')}
-              </button>
+              </button>)
+            }
+            {!inMeal &&
+              (<div className="d-flex">
+                <button
+                  type="button"
+                  className="btn-remove-op btn-optional font-18 font-demi mgt-30 mr-3"
+                  onClick={() => onRemove(topping.id)}
+                  disabled={!isSelected}
+                >
+                  {t('remove')}
+                </button>
+                <button
+                  onClick={() => onAdd(topping.id)}
+                  type="button"
+                  className="btn-add-op btn-optional font-18 font-demi mgt-30"
+                >
+                  {t('add')}
+                </button>
+              </div>)
             }
           </div>
         </div>
