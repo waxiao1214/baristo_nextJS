@@ -60,16 +60,16 @@ const HeaderBottom = () => {
 				<div className="row">
 					<div className="col-md-2 between-mb flex-center">
 						<div className="logo">
-							<a href="index.html" title="">
+							<a href={`/${branchId}/`} title="">
 								<img src={logo} alt="" />{' '}
 							</a>
 						</div>
 						<div className="right-mb relative visible-mobile">
 							<button className="btn-default btn-search-mb">
-								<i className="fa fa-search" />{' '}
+								<i className="fa fa-search" />
 							</button>
 							<button className="btn-default btn-user-mb">
-								<i className="fa fa-user-o" />{' '}
+								<i className="fa fa-user-o" />
 							</button>
 
 							<ul className="user-abs">
