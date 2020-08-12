@@ -5,11 +5,6 @@ const useProductPriceAndDiscountValueToShow = (product) => {
     const { mealPrices } = product;
     const [mainMeal, setMainMeal] = useState({});
 
-    if (isNil(mealPrices)) return {
-        isDiscountStillInRange: false,
-        mainMeal: {}
-    }
-
 	/**
 	 * Check if the discount is still
 	 * valid in terms of date range
@@ -30,32 +25,38 @@ const useProductPriceAndDiscountValueToShow = (product) => {
     };
 
     useEffect(() => {
+        if (!mealPrices) return;
+
         setMainMeal(mealPrices[0]);
         // set the meal price
         // it should be the cheapest one with the highest discount value
         let cheapestMeal = mealPrices[0];
+        let highestDiscount = {};
         mealPrices.forEach((mealPrice) => {
             if (cheapestMeal.price > mealPrice.price) {
                 cheapestMeal = mealPrice;
             }
-        });
-
-        let highestDiscount = cheapestMeal.mealSettings[0];
-        cheapestMeal.mealSettings.forEach((mealSetting) => {
-            if (!mealSetting.discount) return;
-            if (!mealSetting.discount) return;
-            if (!highestDiscount.discount) {
-                highestDiscount = mealSetting;
-                return;
-            }
-            if (highestDiscount.discount < mealSetting.discount) {
-                highestDiscount.discount = mealSetting.discount;
-            }
+            // set highest discount rate
+            mealPrice.mealSettings.forEach(mealSetting => {
+                if (!mealSetting.discount) return;
+                if (!highestDiscount.discount) {
+                    highestDiscount = mealSetting;
+                    return;
+                }
+                if (highestDiscount.discount < mealSetting.discount) {
+                    highestDiscount.discount = mealSetting.discount;
+                }
+            })
         });
 
         cheapestMeal.mealSettings = [highestDiscount];
         setMainMeal(cheapestMeal);
     }, [mealPrices]);
+
+    if (isNil(mealPrices)) return {
+        isDiscountStillInRange: false,
+        mainMeal: {}
+    }
 
     return {
         isDiscountStillInRange,
