@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import axios from '../../../lib/axios';
-import _ from 'lodash';
 
 const PageSectionIndexDeliveryAvailability = () => {
     const [postalCodes, setPostalCodes] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [deliveryMessage, setDeliveryMessage] = useState('');
     const { t } = useTranslation(['common']);
+    const { id: branchId } = useSelector(state => state.root.currentBranch);
 
-    const getPostalCodes = async (inputValue) => {
+    const getPostalCodes = async (val) => {
         try {
-            const url = `customer/web/home-service/postal-codes?postalCodeSearch=${inputValue}`
+            const url = `customer/web/home-service/postal-codes?postalCodeSearch=${val}`
             const response = await axios.get(url);
 
             return response.data.result;
@@ -22,9 +23,9 @@ const PageSectionIndexDeliveryAvailability = () => {
         }
     };
 
-    const deliveryCheck = async (inputValue) => {
+    const deliveryCheck = async (val) => {
         try {
-            const url = `customer/web/home-service/delivery-check?branchId=1&postalCode=${inputValue}`
+            const url = `customer/web/home-service/delivery-check?branchId=${branchId}&postalCode=${val}`
             const response = await axios.get(url);
 
             return response.data.result;
@@ -41,10 +42,10 @@ const PageSectionIndexDeliveryAvailability = () => {
         const result = await deliveryCheck(inputValue);
         const { specialMessage, isDeliveryAvailable } = result;
         if (isDeliveryAvailable) {
-            message = specialMessage ? specialMessage : t('available');
+            message = specialMessage || t('available');
             setDeliveryMessage(message);
         } else {
-            message = specialMessage ? specialMessage : t('not_available');
+            message = specialMessage || t('not_available');
             setDeliveryMessage(message);
         }
     }
@@ -79,7 +80,7 @@ const PageSectionIndexDeliveryAvailability = () => {
                             onChange={handleChange}
                         />
                         {postalCodes.length === 0 ? '' :
-                            <ul className="list-group" style={{'marginBottom': '2rem'}}>
+                            <ul className="list-group" style={{ 'marginBottom': '2rem' }}>
                                 {
                                     postalCodes.map(code => {
                                         return (
