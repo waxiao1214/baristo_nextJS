@@ -35,7 +35,7 @@ const ProductsContainer = ({ products, productCardType }) => {
   if (!_.isArray(products)) return '';
 
   return (
-    <div>
+    <div className="col-12">
       <div className="row">
         {products.map((product, index) => (
           <div className="col-md-4" key={product.id}>
