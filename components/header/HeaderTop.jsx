@@ -6,6 +6,7 @@ import BaseSocialLink from '../base/BaseSocialLink';
 const HeaderTop = () => {
     const { languages, tenantDetails } = useSelector((state) => state.root.settings);
     const { i18n } = useTranslation();
+    const { currency } = useSelector((state) => state.root.settings);
     const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
     const [socialLinks, setSocialLinks] = useState([])
 
@@ -44,10 +45,14 @@ const HeaderTop = () => {
     return (<section className="header-top">
         <div className="container">
             <div className="row">
-                <div className="col-md-6 col-6">
-                </div>
+                <div className="col-md-6 col-6"/>
                 <div className="col-md-6 col-6">
                     <div className="header-top_right flex-center-end">
+                        <button type="button" className="btn-default d-flex align-items-center header-top__cart mr-4 px-3 py-2">
+                            <span className="top__cart__currency mr-1">{currency}</span>
+                            <span className="header-top__cart__total mr-2">0.00</span>
+                            <img src="/images/icon/cart.svg" alt="" style={{height: '1rem'}}/>
+                        </button>
                         <div className="language">
                             <span className="language-value" onClick={toggleLanguageDropdown}>{i18n.language}</span>
                             {dropdown(isLanguageDropdownOpen)}

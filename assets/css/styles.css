@@ -36,12 +36,24 @@ a {
 .header-top {
   background: #080040;
   font-weight: 500;
-  padding: 15px 0;
+  padding: 0;
 }
 .header-top,
 .header-top a {
   color: #fff;
   font-weight: 500;
+}
+.header-top__cart {
+  background-color: #fbaf02 !important;
+  color: #fff;
+}
+.header-top__cart__currency {
+  font-size: 1rem;
+  font-weight: 400;
+}
+.header-top__cart__total {
+  font-size: 1.25rem;
+  font-weight: bold;
 }
 .header-reser {
   display: flex;
