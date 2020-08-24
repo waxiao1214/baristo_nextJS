@@ -144,9 +144,10 @@ export async function getServerSideProps(context) {
 	const comboCategories = await getComboCategories(currentBranch.id);
 
 	// get initial meals
-	let initialMeals = [];
-	const { initialCurrentPage } = context.query;
-	if (!isNil(initialCurrentPage)) initialMeals = 
+	// let initialMeals = [];
+	// const { initialCurrentPage } = context.query;
+	// if (!isNil(initialCurrentPage)) initialMeals = initialCurrentPage;
+
 	return {
 		props: {
 			settings,
