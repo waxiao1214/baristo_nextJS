@@ -11,7 +11,13 @@ const initialState = {
     currentActiveProductIndex: 0,
     deliveryType: 'Delivery', // Delivery or PickUp,
     selectedPrice: {},
-    selectedProductChoices: []
+    selectedProductChoices: [],
+    orderItems: [],
+    comboOrderItems: [],
+    orderAddressFk: {
+        postalCodeId: 0,
+        orderAddressFk: null
+    }
 };
 
 export default function cart(state = initialState, action) {

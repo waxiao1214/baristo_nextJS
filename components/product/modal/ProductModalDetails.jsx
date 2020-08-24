@@ -61,10 +61,10 @@ const ProductModalDetails = ({
   const dispatch = useDispatch();
   const { t } = useTranslation(['common']);
   const { currency } = useSelector((state) => state.root.settings);
-  const { deliveryType, selectedPrice } = useSelector((state) => state.cart);
+  const { deliveryType, selectedPrice, orderItems, comboOrderItems } = useSelector((state) => state.cart);
   const { mealPrices } = productDetails;
   const { loyaltyPointsBase } = useSelector((state) => state.root.settings);
-  
+
   const boundSetDeliveryType = (type) => dispatch(setDeliveryType(type));
   const boundSetSelectedPrice = (price) => dispatch(setSelectedPrice(price));
 
@@ -75,7 +75,7 @@ const ProductModalDetails = ({
   }
   const calcFinalPrice = (price) => {
     if (isNil(price)) return 0;
-    
+
     if (price.mealSettings.length === 0) return price.price;
 
     const mealSettings = price.mealSettings[0];
@@ -139,7 +139,7 @@ const ProductModalDetails = ({
                                 <li>
                                   <span>
                                     <img
-                                      style={{height: '1.5rem'}}
+                                      style={{ height: '1.5rem' }}
                                       src={productDetails.category.imagePath}
                                       alt={productDetails.category.category}
                                     />
@@ -178,9 +178,12 @@ const ProductModalDetails = ({
                             )}
                           </div>
                           <div className="group-price">
-                            <div className="row">
-                              <DeliveryTypeSwitch deliveryType={deliveryType} onChange={(type) => boundSetDeliveryType(type)} />
-                            </div>
+                            {/* show delivery switch if cart is empty  */}
+                            {orderItems.length === 0 && comboOrderItems.length === 0 &&
+                              <div className="row">
+                                <DeliveryTypeSwitch deliveryType={deliveryType} onChange={(type) => boundSetDeliveryType(type)} />
+                              </div>
+                            }
                             <div className="row py-4">
                               {mealPrices.map((price, index) => {
                                 if (price.menuPriceOption !== deliveryType) return '';
