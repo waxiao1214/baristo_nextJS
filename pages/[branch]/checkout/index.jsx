@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { isUndefined } from 'lodash';
+import { useSelector } from 'react-redux';
 import ErrorPage from 'next/error';
 import Link from 'next/link';
 import usePageOnLoad from '../../../hooks/page/usePageOnLoad';
@@ -55,6 +56,8 @@ export default function Index(props) {
 
   const { currentBranch } = props;
 
+  const { deliveryType } = useSelector((state) => state.cart);
+
   return (
     <DefaultLayout>
       <TheHeader />
@@ -80,41 +83,43 @@ export default function Index(props) {
                   <i className="ti-plus mgr-10" />ADD ANOTHER MENU ITEM
                                 </button>
               </div>
-              <div className="menu-item menu-item-pick">
-                <h2 className="font-24 font-demi mgb-40 flex-center"><img src="images/icon/icon-clock.svg" alt="" title="" className="mgr-15" />Delivery Time </h2>
-                <div className="box-060">
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label className="label-check relative">
-                        <input type="radio" name="delivery-time" className="hide-abs" checked />
-                        <span>Quickest (11:28 AM)</span>
-                      </label>
-                    </div>
-                    <div className="col-md-6">
-                      <label className="label-check relative check-flex">
-                        <input type="radio" name="delivery-time" className="hide-abs" />
-                        <span>
-                          <span>Specific Time:</span>
-                          <input type="text" id="timepicker" className="input-time text-center" value="17 : 3" />
-                        </span>
-                      </label>
+              {deliveryType === 'Delivery' &&
+                <div className="menu-item menu-item-pick">
+                  <h2 className="font-24 font-demi mgb-40 flex-center"><img src="images/icon/icon-clock.svg" alt="" title="" className="mgr-15" />Delivery Time </h2>
+                  <div className="box-060">
+                    <div className="row">
+                      <div className="col-md-6">
+                        <label className="label-check relative">
+                          <input type="radio" name="delivery-time" className="hide-abs" checked />
+                          <span>Quickest</span>
+                        </label>
+                      </div>
+                      <div className="col-md-6">
+                        <label className="label-check relative check-flex">
+                          <input type="radio" name="delivery-time" className="hide-abs" />
+                          <span>
+                            <span>Specific Time:</span>
+                            <input type="text" id="timepicker" className="input-time text-center" value="17 : 3" />
+                          </span>
+                        </label>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              }
               <div className="menu-item menu-item-pick">
                 <h2 className="font-24 font-demi mgb-40 flex-center"><img src="images/icon/icon-clock.svg" alt="" title="" className="mgr-15" />Pick Up Type </h2>
                 <div className="box-060">
-                  <div className="row">
+                  <div className="row" style={{ opacity: 0.5 }}>
                     <div className="col-md-6">
                       <label className="label-check relative">
-                        <input type="radio" name="pick-type" className="hide-abs" checked />
+                        <input type="radio" name="pick-type" className="hide-abs" checked={deliveryType === 'PickUp'} disabled/>
                         <span>Pick Up</span>
                       </label>
                     </div>
                     <div className="col-md-6">
                       <label className="label-check relative">
-                        <input type="radio" name="pick-type" className="hide-abs" />
+                        <input type="radio" name="pick-type" className="hide-abs" checked={deliveryType === 'Delivery'} disabled/>
                         <span>Delivery</span>
                       </label>
                     </div>
