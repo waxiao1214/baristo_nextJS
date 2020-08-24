@@ -12,6 +12,7 @@
     "i18next": "^19.6.2",
     "lodash": "^4.17.19",
     "next": "latest",
+    "next-i18next": "^6.0.2",
     "prop-types": "^15.7.2",
     "query-string": "^6.13.1",
     "react": "^16.9.0",

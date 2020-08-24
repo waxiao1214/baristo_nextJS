@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import _, { isNil } from 'lodash';
 import DefaultLayout from '../../layouts/DefaultLayout';
 import TheHeader from '../../components/header/TheHeader';
 import TheFooter from '../../components/footer/TheFooter';
@@ -8,8 +10,6 @@ import PageSectionMenuMealList from '../../components/pageSection/menu/PageSecti
 import usePageOnLoad from '../../hooks/page/usePageOnLoad';
 import axios from '../../lib/axios';
 import i18n from '../../i18n/i18n';
-import { useRouter } from 'next/router';
-import _ from 'lodash';
 
 /**
  * Get popular meals
@@ -87,6 +87,31 @@ const getComboCategories = async (branchId) => {
 	}
 };
 
+/**
+ * Get initial meals
+ *
+ * @return {Array} array of products
+ */
+const getInitialMeals = async (branchId) => {
+	try {
+		const query = {
+			Sorting: 'Id',
+			MaxResultCount: count,
+			SkipCount: currentPage * count,
+			branchId: currentBranch.id,
+			culture: i18n.language,
+		};
+		const url = `customer/web/meals-service/category-meals?${query}`;
+		const response = await axios.get(url);
+
+		return response.data.result.items
+	} catch (error) {
+		console.error(error);
+
+		return [];
+	}
+};
+
 const getSettings = async () => {
 	try {
 		const url = `/settings?mediaTypeFilters=LOGO&mediaTypeFilters=FAVI_ICON&mediaTypeFilters=MOBILE_PROFILE_IMAGE&mediaTypeFilters=MOBILE_START_SCREEN&mediaTypeFilters=MOBILE_WELCOME_SCREEN`;
@@ -118,6 +143,10 @@ export async function getServerSideProps(context) {
 	const mealCategories = await getMealCategories(currentBranch.id);
 	const comboCategories = await getComboCategories(currentBranch.id);
 
+	// get initial meals
+	let initialMeals = [];
+	const { initialCurrentPage } = context.query;
+	if (!isNil(initialCurrentPage)) initialMeals = 
 	return {
 		props: {
 			settings,

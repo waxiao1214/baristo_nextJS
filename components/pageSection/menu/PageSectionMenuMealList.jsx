@@ -5,7 +5,6 @@ import queryString from 'query-string';
 import ReactPaginate from 'react-paginate';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
-import ProductChefItemCardV2 from '../../product/ProductChefItemCardV2';
 import axios from '../../../lib/axios';
 import BaseLoader from '../../base/BaseLoader';
 import ProductContainer from '../../../containers/products/ProductsContainer';
@@ -38,7 +37,7 @@ const PageSectionMenuMealList = ({
 	const [mealsToShow, setMealsToShow] = useState([]);
 
 	// pagination
-	const [count, setCount] = useState(12); // count for each page
+	const [count] = useState(12); // count for each page
 	const [totalCount, setTotalCount] = useState(0);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
@@ -178,6 +177,21 @@ const PageSectionMenuMealList = ({
 		setCurrentPage(page);
 	};
 
+	/**
+	 * Method to generate the href 
+	 * for the pagination anchore tag
+	 * 
+	 * @param {*} page 
+	 */
+	const hrefBuilder = (page) => {
+		const query = queryString.stringify({
+			initialCurrentPage: page
+		});
+
+		console.log(query);
+		return `./${currentBranch.id}/menu?${query}`
+	}
+
 	useEffect(() => {
 		const { category } = router.query;
 
@@ -314,6 +328,7 @@ const PageSectionMenuMealList = ({
 										onPageChange={(page) =>
 											onPageChange(page.selected)
 										}
+										hrefBuilder={hrefBuilder}
 									/>
 								</ul>
 							</div>
