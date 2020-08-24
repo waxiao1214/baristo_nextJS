@@ -7,7 +7,7 @@ import { isNil } from 'lodash';
 import axios from '../../../lib/axios';
 import BaseLoader from '../../base/BaseLoader';
 import ChoicesSection from '../topping/ChoicesSection';
-import { toggleConfirmProductModal } from '../../../store/actions/cart.actions';
+import { toggleConfirmProductModal, toggleCustomizeProductModal } from '../../../store/actions/cart.actions';
 
 const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productType }) => {
   const dispatch = useDispatch();
@@ -24,6 +24,7 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
   const [isLoading, setIsLoading] = useState(false);
 
   const boundToggleConfirmProductModal = () => dispatch(toggleConfirmProductModal());
+  const boundToggleCustomizeProductModal = () => dispatch(toggleCustomizeProductModal());
 
   const calcFinalPrice = (price) => {
     if (isNil(price)) return 0;
@@ -212,6 +213,13 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
                   >
                     <span className="mgr-15">{t('check_out')}</span>
                     <i className="ti-arrow-right" />
+                  </button>
+                  <button
+                    type="button"
+                    className="d-flex justify-content-center btn-default mx-auto mt-3 text-center"
+                    onClick={boundToggleCustomizeProductModal}
+                  >
+                    <span className="mgr-15">{t('discard')}</span>
                   </button>
                 </div>
               </div>

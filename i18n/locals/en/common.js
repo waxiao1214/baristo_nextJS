@@ -1,5 +1,6 @@
 export default {
     "available": "Available",
+    "discard": "Discard",
     "apply": "Apply",    
     "add": "Add",
     "order_total": "Order total",
