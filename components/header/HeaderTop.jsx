@@ -10,9 +10,9 @@ const HeaderTop = () => {
     const [socialLinks, setSocialLinks] = useState([])
 
     useEffect(() => {
-        const socialLinks = !tenantDetails.socialLinks ? [] : tenantDetails.socialLinks.split(';');
+        const socialLinksList = !tenantDetails.socialLinks ? [] : tenantDetails.socialLinks.split(';');
 
-        setSocialLinks(socialLinks);
+        setSocialLinks(socialLinksList);
     }, [tenantDetails])
     
     
