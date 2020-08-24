@@ -10,6 +10,7 @@ import useUserFetchCurrentUser from '../../../hooks/user/useUserFetchCurrentUser
 import TheHeader from '../../../components/header/TheHeader';
 import TheFooter from '../../../components/footer/TheFooter';
 import axios from '../../../lib/axios';
+import CheckoutProductCard from '../../../components/checkout/product/CheckoutProductCard';
 
 const getSettings = async () => {
   try {
@@ -65,19 +66,7 @@ export default function Index(props) {
         <div className="container">
           <div className="confirm-checkout wrapper-white pd-55">
             <div className="cofirm-item">
-              <div className="menu-item menu-item-1 flex-center">
-                <div className="cover-item"><img src="images/picture/special-2.png" alt="" title="" /> </div>
-                <div className="text-item">
-                  <h1 className="font-weight-bold font-36 mgb-10">Healthy Pizza of Seafood</h1>
-                  <div className="desc font-22 text-xam mgb-30">x2 Cheese, Crab, Grimp, no tomato sauce, Sausage</div>
-                  <div className="action-item flex-center font-24 font-medium">
-                    <button type="button" className="btn-default">Remove</button>
-                    <button type="button" className="btn-default">Edit</button>
-                    <button type="button" className="btn-default">Duplicate</button>
-                  </div>
-                </div>
-                <div className="price-item text-yellow font-medium font-56">$ 76.00</div>
-              </div>
+              <CheckoutProductCard />
               <div className="menu-item menu-item-2 text-center">
                 <button type="button" className="btn btn-yellow btn-h60 font-20">
                   <i className="ti-plus mgr-10" />ADD ANOTHER MENU ITEM
