@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import _ from 'lodash';
+import { i18n, withTranslation } from '../i18n/i18n';
 import usePageOnLoad from '../hooks/page/usePageOnLoad';
-import i18n from '../i18n/i18n';
 import DefaultLayout from '../layouts/DefaultLayout';
 import useUserFetchCurrentUser from '../hooks/user/useUserFetchCurrentUser';
 import TheHeader from '../components/header/TheHeader';
@@ -93,7 +92,7 @@ const getSettings = async () => {
 	}
 };
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
 	const settings = await getSettings();
 
 	// get current branch
@@ -119,7 +118,7 @@ export async function getServerSideProps(context) {
 	};
 }
 
-export default function Index(props) {
+function Index(props) {
 	useUserFetchCurrentUser();
 	usePageOnLoad(props);
 	const { currentBranch } = props;
@@ -184,3 +183,5 @@ export default function Index(props) {
 		</DefaultLayout>
 	);
 }
+
+export default withTranslation('index')(Index);
