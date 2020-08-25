@@ -9,6 +9,7 @@ const initialState = {
     productsBatch: [],
     currentActiveProductId: 0,
     currentActiveProductIndex: 0,
+    currentCustomizeProductMode: 'add', // add or edit
     deliveryType: 'Delivery', // Delivery or PickUp,
     selectedPrice: {},
     selectedProductChoices: [],
@@ -76,6 +77,16 @@ export default function cart(state = initialState, action) {
             return {
                 ...state,
                 selectedProductChoices: action.payload.selectedToppings
+            }
+        case cartConstants.SET_ORDER_ITEMS:
+            return {
+                ...state,
+                orderItems: action.payload.items
+            }
+        case cartConstants.SET_COMBO_ORDER_ITEMS:
+            return {
+                ...state,
+                comboOrderItems: action.payload.items
             }
 
         default:

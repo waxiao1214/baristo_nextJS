@@ -100,3 +100,21 @@ export const setDeliveryType = (type) => {
     }
 }
 
+export const setOrderItems = (items) => {
+    return {
+        type: cartConstants.SET_ORDER_ITEMS,
+        payload: {
+            items
+        }
+    }
+}
+
+export const setComboOrderItems = (items) => {
+    return {
+        type: cartConstants.SET_COMBO_ORDER_ITEMS,
+        payload: {
+            items
+        }
+    }
+}
+

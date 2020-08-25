@@ -1,30 +1,34 @@
+/* eslint-disable no-param-reassign */
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import queryString from 'query-string';
-import { isNil } from 'lodash';
+import { isNil, isUndefined, findLastKey } from 'lodash';
 import axios from '../../../lib/axios';
 import BaseLoader from '../../base/BaseLoader';
 import ChoicesSection from '../topping/ChoicesSection';
-import { toggleConfirmProductModal, toggleCustomizeProductModal } from '../../../store/actions/cart.actions';
+import { toggleConfirmProductModal, toggleCustomizeProductModal, setOrderItems, setComboOrderItems } from '../../../store/actions/cart.actions';
 
 const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productType }) => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation(['common']);
   const { currency } = useSelector((state) => state.root.settings);
-  const { selectedPrice, selectedProductChoices } = useSelector((state) => state.cart);
+  const { selectedPrice, selectedProductChoices, orderItems, comboOrderItems, currentCustomizeProductMode, orderDeliveryType } = useSelector((state) => state.cart);
   const { id: branchId } = useSelector((state) => state.root.currentBranch);
   const { loyaltyPointsBase } = useSelector((state) => state.root.settings);
 
   // eslint-disable-next-line no-unused-vars
   const [choiceGroups, setChoiceGroups] = useState([]);
-  const [isValidChoices, setIsValidChoices] = useState(true);
+  // const [isValidChoices, setIsValidChoices] = useState(true);
   // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingAll, setIsLoadingAll] = useState(false);
 
   const boundToggleConfirmProductModal = () => dispatch(toggleConfirmProductModal());
   const boundToggleCustomizeProductModal = () => dispatch(toggleCustomizeProductModal());
+  const boundSetOrderItems = (items) => dispatch(setOrderItems(items));
+  const boundSetComboOrderItems = (items) => dispatch(setComboOrderItems(items));
 
   const calcFinalPrice = (price) => {
     if (isNil(price)) return 0;
@@ -93,6 +97,74 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
     }
   };
 
+  /**
+   * Add an item to the cart
+   */
+  const addToCart = async () => {
+    // detect if meal or combo
+    const isMeal = !isUndefined(productDetails.mealPrices);
+
+    let currentQuantity;
+    if (isMeal) {
+      // get current quantity
+      currentQuantity = orderItems.filter(item => {
+        return item.mealId === productDetails.id;
+      })[0]?.quantity ?? 0;
+      
+      let items = [];
+      if (currentQuantity === 0) {
+        items = [...orderItems, {
+          mealId: productDetails.id,
+          mealPriceId: selectedPrice.id,
+          quantity: currentQuantity + 1,
+          orderItemChoices: selectedProductChoices
+        }];
+      } else {
+        items = orderItems.map(item => {
+          if (item.mealId === productDetails.id) {
+            item.quantity = currentQuantity + 1;
+          }
+          return item;
+        });
+      }
+
+      boundSetOrderItems(items);
+    } else {
+      // get current quantity
+      currentQuantity = comboOrderItems.filter(item => {
+        return item.mealId === productDetails.id;
+      })[0]?.quantity ?? 1;
+
+      console.log(currentQuantity);
+    }
+
+    // create cart
+    setIsLoadingAll(true);
+    try {
+      const response = await axios.post('/customer/web/checkout-service/order', {
+        orderDeliveryType,
+        isTest: true,
+        branchId,
+        orderItems,
+        orderAddressFK: {
+          "customerName": "Some Customer Name",
+          "no": "200",
+          "street": "Lehenmattstrasse",
+          "city": "Basel",
+          "postalCodeId": 240,
+          "countryId": 1
+        }
+      });
+
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+      alert('An error happend');
+    } finally {
+      setIsLoadingAll(false);
+    }
+  }
+
   useEffect(() => {
     if (!isActive) return;
 
@@ -104,7 +176,8 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
   return (
     <div>
       <div className="customize-food show">
-        <div className="customize-main">
+        <div className="customize-main relative">
+          {isLoadingAll && <BaseLoader />}
           <div className="customize-top relative">
             <h2 className="title">
               <span>{t('build_your_meal')}</span>
@@ -207,13 +280,16 @@ const ProductModalCustomizeMeal = ({ isActive, productDetails, close, productTyp
                       </div>
                     }
                   </div>
+                  {/* add to cart button  */}
                   <button
                     type="button"
                     className="btn btn-block btn-yellow btn-h80 font-24 font-weight-bold"
+                    onClick={addToCart}
                   >
-                    <span className="mgr-15">{t('check_out')}</span>
+                    <span className="mgr-15">{t('add_to_cart')}</span>
                     <i className="ti-arrow-right" />
                   </button>
+                  {/* discard button  */}
                   <button
                     type="button"
                     className="d-flex justify-content-center btn-default mx-auto mt-3 text-center"
