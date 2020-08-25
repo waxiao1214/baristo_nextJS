@@ -43,6 +43,9 @@ a {
   color: #fff;
   font-weight: 500;
 }
+.header-top, .header-top li a {
+  color: #000;
+}
 .header-top__cart {
   background-color: #fbaf02 !important;
   color: #fff;

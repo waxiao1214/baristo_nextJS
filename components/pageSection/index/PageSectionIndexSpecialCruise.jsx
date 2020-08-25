@@ -1,9 +1,7 @@
-import { useTranslation } from 'react-i18next';
+import { withTranslation } from '../../../i18n/i18n';
 import ProductsContainer from '../../../containers/products/ProductsContainer';
 
-const PageSectionIndexSpecialCruise = ({ specialCruises }) => {
-	const { t } = useTranslation(['home']);
-
+const PageSectionIndexSpecialCruise = ({ specialCruises, t }) => {
 	return (
 		<section className="special-cruise pd-100">
 			<div className="container">
@@ -16,4 +14,4 @@ const PageSectionIndexSpecialCruise = ({ specialCruises }) => {
 	);
 };
 
-export default PageSectionIndexSpecialCruise;
+export default withTranslation()(PageSectionIndexSpecialCruise);

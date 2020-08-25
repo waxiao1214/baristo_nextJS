@@ -1,10 +1,10 @@
-// import ProductChefItemCard from '../../product/ProductChefItemCard';
+import { withTranslation } from '../../../i18n/i18n';
 import ProductsContainer from '../../../containers/products/ProductsContainer';
 
-const PageSectionIndexChefsChoices = ({ chefChoices }) => {
+const PageSectionIndexChefsChoices = ({ chefChoices, t }) => {
     return (<section className="chef-choice pd-100">
         <div className="container">
-            <h2 className="title"><span>Chef’s Choice</span></h2>
+            <h2 className="title"><span>{t('chef_choices')}</span></h2>
             <div className="row">
                 <div className="col-md-6 offset-md-3">
                     <div className="chef text-center">
@@ -23,4 +23,4 @@ const PageSectionIndexChefsChoices = ({ chefChoices }) => {
     </section>)
 }
 
-export default PageSectionIndexChefsChoices;
+export default withTranslation()(PageSectionIndexChefsChoices);

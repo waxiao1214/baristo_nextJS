@@ -1,44 +1,10 @@
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
-import enCommon from './locals/en/common.js';
-import enHome from './locals/en/home.js';
+const NextI18Next = require('next-i18next').default;
+const path = require('path');
 
-// the translations
-// (tip move them in a JSON file and import them)
-const resources = {
-    "en": {
-        "translation": {
-            'test': 'test2',
-            "delivery": {
-                "available": 'Delivery is available',
-                "notAvailable": 'Delivery is not available'
-            }
-        },
-        "common": enCommon,
-        "home": enHome
+module.exports = new NextI18Next({
+    otherLanguages: ['de'],
+    localeSubpaths: {
+        de: 'de'
     },
-    "de": {
-        translation: {
-            'test': 'asdf',
-            "delivery": {
-                "available": 'asdf',
-                "notAvailable": 'asdfasdf'
-            }
-        },
-    }
-};
-
-i18n
-    .use(initReactI18next) // passes i18n down to react-i18next
-    .init({
-        resources,
-        lng: "en",
-
-        keySeparator: false, // we do not use keys in form messages.welcome
-
-        interpolation: {
-            escapeValue: false // react already safes from xss
-        }
-    });
-
-export default i18n;
+    localePath: path.resolve('./public/static/locales')
+})
