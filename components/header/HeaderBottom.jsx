@@ -46,7 +46,7 @@ const HeaderBottom = () => {
 	}
 
 	return (
-		<section className="header-bottom">
+		<div className="header-left">
 			<ModalFilterSearch
 				isActive={isFilterModalActive}
 				close={() => setIsFilterModalActive(false)}
@@ -58,7 +58,7 @@ const HeaderBottom = () => {
 			/>
 			<div className="container">
 				<div className="row">
-					<div className="col-md-2 between-mb flex-center">
+					<div className="col-md-2 col-lg-2 between-mb flex-center">
 						<div className="logo">
 							<a href={`/${branchId}/`} title="">
 								<img src={logo} alt="" />{' '}
@@ -82,10 +82,10 @@ const HeaderBottom = () => {
 							</ul>
 						</div>
 					</div>
-					<div className="col-md-10">
+					<div className="col-md-10 col-lg-10">
 						<div className="header-main">
 							<div className="row">
-								<div className="col-md-6 abs-mb">
+								<div className="col-lg-6 col-md-4 abs-mb">
 									<div className="search-relative relative">
 										<form
 											className="search"
@@ -110,7 +110,7 @@ const HeaderBottom = () => {
 										</button>
 									</div>
 								</div>
-								<div className="col-md-6 visible-desktop">
+								<div className="col-lg-6 col-md-8 visible-desktop">
 									<div className="header-action">
 										{branchName && (
 											<div
@@ -127,7 +127,7 @@ const HeaderBottom = () => {
 										{isUserLoggedIn ? (
 											<button>{t('account')}</button>
 										) : (
-												<div>
+												<div className="btn-join1">
 													<button
 														onClick={
 															boundToggleLoginModal
@@ -153,7 +153,7 @@ const HeaderBottom = () => {
 					</div>
 				</div>
 			</div>
-		</section>
+		</div>
 	);
 };
 

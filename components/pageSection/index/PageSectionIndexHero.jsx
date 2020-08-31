@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore, { Autoplay } from 'swiper';
 import axios from '../../../lib/axios';
+import { withTranslation } from '../../../i18n/i18n';
 
-const PageSectionIndexHero = () => {
+SwiperCore.use([Autoplay]);
+
+const PageSectionIndexHero = ({i18n}) => {
     const [slides, setSlides] = useState([]);
-    const { t, i18n } = useTranslation();
 
     const fetchData = async () => {
         try {
@@ -33,7 +35,7 @@ const PageSectionIndexHero = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [i18n.language]);
 
     return (<section className="banner">
         <div className="banner-slider">
@@ -41,6 +43,11 @@ const PageSectionIndexHero = () => {
                 spaceBetween={0}
                 slidesPerView={1}
                 pagination={{ clickable: true }}
+                loop={true}
+                autoplay={{
+                    delay: 2000,
+                    disableOnInteraction: false
+                }}
             >
                 {slides.map((slide, index) => {
                     return (<SwiperSlide key={index}>
@@ -62,4 +69,4 @@ const PageSectionIndexHero = () => {
     </section>)
 }
 
-export default PageSectionIndexHero;
+export default withTranslation()(PageSectionIndexHero);

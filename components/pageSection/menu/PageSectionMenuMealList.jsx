@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import queryString from 'query-string';
@@ -248,6 +248,7 @@ const PageSectionMenuMealList = ({
 		}
 	}, [totalCount]);
 
+
 	return (
 		<section className="menu-list pd-100">
 			<div className="container">
@@ -298,10 +299,10 @@ const PageSectionMenuMealList = ({
 					</ul>
 				</div>
 				<div className="container">
-					<div className="tab-content tab-content--relative">
+					<div className="tab-content tab-content--relative" style={{position: 'relative', top: '-100px'}}>
 						{isLoading && <BaseLoader />}
-						<div className="fade in show active">
-							<div className="row tab-pane--h-md">
+						<div className="fade in show active menu_list_right">
+							<div className="row tab-pane--h-md" style={{marginTop: '100px'}}>
 								<ProductContainer productType={currentActiveTab} products={mealsToShow} productCardType="v2" />
 							</div>
 							{mealsToShow.length === 0 && !isLoading && (

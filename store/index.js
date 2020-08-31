@@ -13,7 +13,8 @@ const initialState = {
     count: 0,
     settings: {},
     currentBranch: {},
-    logo: ''
+    logo: '',
+    start: false
   }
 }
 
@@ -33,6 +34,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         logo: action.payload.logo
+      }
+    }
+    case "SET_START": {
+      return {
+        ...state,
+        start: action.payload.start
       }
     }
     default:

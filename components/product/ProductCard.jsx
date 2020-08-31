@@ -1,11 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import useProductPriceAndDiscountValueToShow from '../../hooks/product/useProductPriceAndDiscountValueToShow';
+import { withTranslation } from '../../i18n/i18n';
 
-
-const ProductCard = ({ product, openMoreDetails }) => {
-	const { t } = useTranslation(['common']);
+const ProductCard = ({ product, openMoreDetails, t }) => {
 	const { currency } = useSelector((state) => state.root.settings);
 	const {
 		isDiscountStillInRange,
@@ -80,4 +78,4 @@ const ProductCard = ({ product, openMoreDetails }) => {
 	);
 };
 
-export default ProductCard;
+export default withTranslation()(ProductCard);

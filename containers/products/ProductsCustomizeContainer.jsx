@@ -4,14 +4,17 @@ import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { isNil } from 'lodash';
 import ProductModalDetails from '../../components/product/modal/ProductModalDetails';
+import MenuModalDetails from '../../components/product/modal/MenuModalDetails';
 import ProductModalCustomizeMeal from '../../components/product/modal/ProductModalCustomizeMeal';
 import ProductModalConfirmMeal from '../../components/product/modal/ProductModalConfirmMeal';
+
 import {
   setProductDetails,
   toggleProductDetailsModal,
   toggleProductDetailsModalLoader,
   toggleCustomizeProductModal,
-  toggleConfirmProductModal
+  toggleConfirmProductModal,
+  setProductDetailsTrigger
 } from '../../store/actions/cart.actions';
 import axios from '../../lib/axios';
 
@@ -27,12 +30,14 @@ const ProductsModalsContainer = ({ productType }) => {
     isProductDetailsLoaderActive,
     isConfirmProductModalActive,
     productDetails,
+    isProductDetailsTrigger,
+    isMenuDetailsTrigger
   } = useSelector((state) => state.cart);
 
   const boundToggleProductDetailsModal = () =>
     dispatch(toggleProductDetailsModal());
 
-  const boundToggleCustomizeProductModal = () =>
+    const boundToggleCustomizeProductModal = () =>
     dispatch(toggleCustomizeProductModal());
 
   const boundSetProductDetails = (product) =>
@@ -106,11 +111,18 @@ const ProductsModalsContainer = ({ productType }) => {
 
     window.location = `#productId=${id}`;
     fetchProductDetails(id);
-  }, [currentActiveProductId, currentActiveProductIndex]);
+  }, [isProductDetailsTrigger, isMenuDetailsTrigger]);
 
   return (
     <div>
       <ProductModalDetails
+        isActive={isProductDetailsActive}
+        isLoading={isProductDetailsLoaderActive}
+        productDetails={productDetails}
+        close={boundToggleProductDetailsModal}
+        order={() => handleOrder()}
+      />
+      <MenuModalDetails
         isActive={isProductDetailsActive}
         isLoading={isProductDetailsLoaderActive}
         productDetails={productDetails}

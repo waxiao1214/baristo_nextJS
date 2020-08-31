@@ -58,6 +58,30 @@ a {
   font-size: 1.25rem;
   font-weight: bold;
 }
+.header-left {
+  padding: 10px 0 10px 0; 
+}
+.header-top_right {
+  padding-top: 5px;
+}
+.header-main {
+  padding-top: 5px;
+}
+.sticky {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  width: 100%;
+  animation: moveDown 0.5s ease-in-out;
+}
+@keyframes moveDown {
+  from {
+    transform: translateY(-5rem);
+  }
+  to {
+    transform: translateY(0rem);
+  }
+}
 .header-reser {
   display: flex;
   align-items: center;
@@ -179,6 +203,9 @@ a {
   margin-left: 30px;
   width: 146px;
 }
+.btn-join1 {
+  padding-top: 3px
+}
 .btn-login {
   width: auto;
 }
@@ -200,7 +227,7 @@ a {
   color: #fbaf02;
 }
 .location {
-  margin-right: 90px;
+  margin-right: 80px;
   position: relative;
 }
 .location i {
@@ -219,7 +246,7 @@ a {
   padding-top: 35px;
 }
 .banner-item {
-  padding: 200px 0 150px;
+  padding: 200px 0 150px 0;
 }
 .banner-text h4 {
   font-size: 40px;
@@ -353,7 +380,8 @@ a {
 }
 .chef-item {
   background-color: #f2f2f2;
-  padding: 130px 30px 100px;
+  padding: 110px 30px 100px;
+  height: 600px;
 }
 .ch-image {
   position: absolute;
@@ -368,6 +396,30 @@ a {
   border-radius: 9999px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
+.ch-text_title {
+  margin-bottom: 30px;
+  height: 140px;
+  line-height: 140px;
+}
+.ch-more_details {
+  background-color: beige;
+  border-radius: 25px;
+  width: 80%;
+  height: 50px;
+  font-size: 25px;
+  border-color: burlywood;
+  border-width: thin;
+}
+.ch-more_details:hover {
+  background-color: #3ee785;
+}
+
+.ch-text_title p {
+  line-height: 1.5;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .order-abs {
   position: absolute;
   left: 0;
@@ -820,13 +872,27 @@ a {
   left: 0;
   top: 0;
   bottom: 0;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 .menu-abs h4 {
   font-size: 32px;
   font-weight: bold;
   padding: 20px 0 0 20px;
   border-right: 1px dashed #e0e0e0;
+}
+.menu_list_right {
+  height: 1350px;
+  overflow-y: auto;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.menu_list_right::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.menu_list_right {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 .menu-abs ul li {
   border-bottom: 1px dashed #e0e0e0;

@@ -71,6 +71,18 @@ export const setCurrentActiveProductIndex = (index) => {
     }
 }
 
+export const setProductDetailsTrigger = () => {
+    return {
+        type: cartConstants.SET_PRODUCT_DETAILS_TRIGGER
+    }
+}
+
+export const setMenuDetailsTrigger = () => {
+    return {
+        type: cartConstants.SET_MENU_DETAILS_TRIGGER
+    }
+}
+
 export const setSelectedPrice = (selectedPrice) => {
     return {
         type: cartConstants.SET_SELECTED_PRICE,

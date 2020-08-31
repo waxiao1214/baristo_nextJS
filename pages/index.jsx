@@ -81,13 +81,12 @@ const getChefStory = async (branchId) => {
 
 const getSettings = async () => {
 	try {
-		const url = `/settings?mediaTypeFilters=LOGO&mediaTypeFilters=FAVI_ICON&mediaTypeFilters=MOBILE_PROFILE_IMAGE&mediaTypeFilters=MOBILE_START_SCREEN&mediaTypeFilters=MOBILE_WELCOME_SCREEN`;
+		const url = `settings?mediaTypeFilters=LOGO&mediaTypeFilters=FAVI_ICON&mediaTypeFilters=MOBILE_PROFILE_IMAGE&mediaTypeFilters=MOBILE_START_SCREEN&mediaTypeFilters=MOBILE_WELCOME_SCREEN`;
 		const response = await axios.get(url);
 
 		return response.data.result;
 	} catch (error) {
 		console.error(error);
-
 		return [];
 	}
 };
@@ -184,4 +183,4 @@ function Index(props) {
 	);
 }
 
-export default withTranslation('index')(Index);
+export default withTranslation()(Index);

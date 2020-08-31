@@ -3,6 +3,7 @@ import BannerAuthenticationVerifyEmail from '../components/banner/authentication
 import AuthenticationContainer from '../containers/authentication/AuthenticationContainer';
 import ProductsCustomizeContainer from '../containers/products/ProductsCustomizeContainer';
 import CheckoutModalCartDetails from '../components/checkout/modal/CheckoutModalCartDetails';
+import AddInformation from '../components/modal/addInformation';
 
 const DefaultLayout = ({ children }) => {
     return (
@@ -11,6 +12,7 @@ const DefaultLayout = ({ children }) => {
 			<AuthenticationContainer />
 			<ProductsCustomizeContainer />
 			<CheckoutModalCartDetails />
+			<AddInformation/>
 			{children}
 		</div>
 	);
