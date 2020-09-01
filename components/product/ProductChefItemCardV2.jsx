@@ -14,18 +14,13 @@ const ProductChefItemCardV2 = ({ product, openMoreDetails }) => {
 	} = useProductPriceAndDiscountValueToShow(product);
 	const chText = useRef(null);
 	const [isMore, setMore] = useState(false);
+	const [showMore, setShowMore] = useState(false)
 
 	useEffect(() => {
-		setMore(false);		
-	}, [product])
-
-	useEffect(() => {
-		if (chText.current && product.description) {
-			if (chText.current.getBoundingClientRect().height > 400) {
-				setMore(true);
-			}
+		if(product.description.length > 200) {
+			setMore(true)
 		}
-	}, [chText.current ?. getBoundingClientRect()])
+	}, [product])
 
 	return (
 		<div className="chef-item relative">
@@ -38,12 +33,12 @@ const ProductChefItemCardV2 = ({ product, openMoreDetails }) => {
 				<h3 className="title-sm mgb-10">
 					<div className="ch-text_title"><p>{product.title}</p></div>
 				</h3>
-				{
-					isMore ? 
-					<p className="desc text-gray font-18"><button className="ch-more_details">More Details...</button></p>
-					:
-					<p className="desc text-gray font-18">{product.description}</p>
-				}
+						<div className = "more-wrapper" 
+							style = {{height: showMore ? "fit-content": "130px"}}
+						>
+						<p className="desc text-gray font-18">{product.description}</p>
+						</div>
+						{isMore && <button onClick = {() => setShowMore(!showMore)} className="ch-more_details">More Details...</button>}
 			</div>
 			<div className="d-flex flex-column align-items-center">
 				<div className="d-flex justify-content-center align-items-center my-4">

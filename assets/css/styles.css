@@ -45,6 +45,13 @@ a {
 .header-top, .header-top li a {
   color: #000;
 }
+
+.more-wrapper {
+  height: 155px;
+  overflow-y: hidden;
+  transition: 0.5s;
+  margin-bottom: 10px;
+}
 .header-top__cart {
   background-color: #fbaf02 !important;
   color: #fff;
@@ -380,7 +387,8 @@ a {
 .chef-item {
   background-color: #f2f2f2;
   padding: 110px 30px 100px;
-  height: 600px;
+  min-height: 600px;
+  height: fit-content;
 }
 .ch-image {
   position: absolute;
@@ -401,18 +409,19 @@ a {
   line-height: 140px;
 }
 .ch-more_details {
-  background-color: beige;
   border-radius: 25px;
-  width: 80%;
-  height: 50px;
-  font-size: 25px;
-  border-color: burlywood;
+  width: 40%;
+  height: 30px;
+  font-size: 16px;
+  border: none;
   border-width: thin;
 }
 .ch-more_details:hover {
   background-color: #3ee785;
 }
-
+.ch-more_details:focus {
+  background-color: #52f897;
+}
 .ch-text_title p {
   line-height: 1.5;
   display: inline-block;
