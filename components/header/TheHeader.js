@@ -15,29 +15,29 @@ const TheHeader = () => {
         }
     }
 
-    const debounce = (func, wait = 20, immediate = true) => {
-        let timeOut
-        return () => {
-          let context = this,
-            args = arguments
-          const later = () => {
-            timeOut = null
-            if (!immediate) func.apply(context, args)
-          }
-          const callNow = immediate && !timeOut
-          clearTimeout(timeOut)
-          timeOut = setTimeout(later, wait)
-          if (callNow) func.apply(context, args)
-        }
-    }
+    // const debounce = (func, wait = 20, immediate = true) => {
+    //     let timeOut
+    //     return () => {
+    //       let context = this,
+    //         args = arguments
+    //       const later = () => {
+    //         timeOut = null
+    //         if (!immediate) func.apply(context, args)
+    //       }
+    //       const callNow = immediate && !timeOut
+    //       clearTimeout(timeOut)
+    //       timeOut = setTimeout(later, wait)
+    //       if (callNow) func.apply(context, args)
+    //     }
+    // }
 
     useEffect(() => {
-        window.addEventListener('scroll', debounce(handleScroll));
+        window.addEventListener('scroll', handleScroll);
 
         return () => {
             window.removeEventListener('scroll', () => handleScroll)
         }
-    }, [debounce, handleScroll]);
+    }, [handleScroll]);
 
     return (
         <div className={`${isSticky ? 'sticky': 'header-wrapper'}`} ref={ref}>

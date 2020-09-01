@@ -6,8 +6,20 @@ import { useRouter } from 'next/router';
 
 const getSettings = async (fullAddress, long, lat, postalCode) => {
 	try {
-		const url = `settings/nearest-branch?fullAddress=${fullAddress}${lat!==''??'&lat=' + lat}${long !== ''?? '&lng=' + long}${postalCode !== ''?? '&postalCode=' + postalCode}`;
-		const response = await axios.get(url);
+    var url;
+    var response;
+    if (fullAddress || long || postalCode) {
+      if (fullAddress) {
+        url = `settings/nearest-branch?fullAddress=${fullAddress}`;
+      } else if (long) {
+        url = `settings/nearest-branch?lat=${lat}&lng=${long}`;
+      } else {
+        url = `settings/nearest-branch?postalCode=${postalCode}`;
+      }
+      response = await axios.get(url);
+    } else {
+      return [];
+    }
 
 		return response.data.result;
 	} catch (error) {
@@ -20,16 +32,39 @@ const AddInformation = (props) => {
 	const router = useRouter();
   const { t, i18n } = useTranslation(['common']);
   const fullAddress = useRef(null);
-  const long = useRef(null);
-  const lat = useRef(null);
-  const postalCode = useRef(null);
-  const [start, setStart] = useState(false);
+  const [start, setStart] = useState(true);
 
   useEffect(() => {
     if (router.pathname === '/') {
-      setStart(false);
-    } else {
-      setStart(true);
+      const getCurrentPosition = () => {
+        return new Promise(resolve => {
+          navigator.geolocation.getCurrentPosition(position => {
+            let lat = position.coords.latitude;
+            let long = position.coords.longitude;
+            resolve({status: 'allowed', lat, long});
+          }, error => {
+            if (error.code == error.PERMISSION_DENIED) {
+              resolve({status: 'blocked', error})
+            } else {
+              resolve({status: 'other', error})
+            }
+          });
+        })
+      }
+
+      const _process = async () => {
+        var position = await getCurrentPosition();
+        if (position.status === 'allowed') {
+          setStart(true);
+          const res =  await getSettings(null, position?.long, position?.lat, null);
+          if (res?.zone?.branchId) {
+            router.push(`/${res.zone.branchId}`);
+          }
+        } else {
+          setStart(false);
+        }
+      }
+      _process();
     }
   }, [])
 
@@ -38,12 +73,20 @@ const AddInformation = (props) => {
   }
 
   const onGoSite = async () => {
-    if (postalCode?.current || fullAddress?.current || long?.current || lat?.current) {
-      const res =  await getSettings(fullAddress?.current?.value, long?.current?.value, lat?.current?.value, postalCode?.current?.value);
-      setStart(true);
-      if (res.zone?.branchId) {
-		    router.push(`/${res.zone.branchId}`);
+    if (fullAddress?.current?.value) {
+      if (fullAddress.current.value !== '') {
+        var res;
+        if (Number(fullAddress.current.value) && fullAddress.current.value.length === 4) {
+          res =  await getSettings(null, null, null, fullAddress?.current?.value);
+        } else {
+          res =  await getSettings(fullAddress?.current?.value, null, null, null);
+        }
+
+        if (res?.zone?.branchId) {
+          router.push(`/${res.zone.branchId}`);
+        }
       }
+      setStart(true);
     }
   }
 
@@ -55,8 +98,8 @@ const AddInformation = (props) => {
 				<div className="modal-dialog" role="document">
 					<div className="modal-content">
 						<div className="modal-top">
-							<h2 className="title" style={{marginTop: '40px'}}>
-								<span>{t('Add your Information')}</span>
+							<h2 className="title" style={{marginTop: '60px', fontSize: '32px'}}>
+								<span>{t('Please Provide Your Address or Postal Code')}</span>
 							</h2>
 							<button
 								type="button"
@@ -67,38 +110,21 @@ const AddInformation = (props) => {
 							</button>
 						</div>
 						<div className="modal-main">
-              <div className="form-group row" style={{marginBottom: '20px', marginTop: '30px'}}>
-                <label htmlFor="fullAddress" className="col-md-3 col-xs-6 col-sm-4 col-form-label" style={{textAlign: 'end'}}>FullAddress:</label>
-                <div className="col-sm-8 col-xs-6 col-md-9 ">
-                  <input type="text" className="form-control" id="fullAddress" ref={fullAddress} placeholder="Lehenmattstrasse 242 4052 Basel" style={{width: '90%'}}/>
-                </div>
-                </div>
-                <div className="form-group row" style={{marginBottom: '20px'}}>
-                  <label htmlFor="lang" className="col-md-3 col-xs-6 col-sm-4 col-form-label" style={{textAlign: 'end'}}>Longitude:</label>
-                  <div className="col-sm-8 col-xs-6 col-md-9 ">
-                    <input type="text" className="form-control" id="lang" ref={long} placeholder="23" style={{width: '90%'}}/>
+              <div className="container">
+                <div className="row justify-content-center" style={{marginBottom: '30px', marginTop: '10px'}}>
+                  <div className="col-10">
+                    <input type="text" className="form-control" ref={fullAddress} placeholder="Lehenmattstrasse 242 4052 Basel"/>
                   </div>
                 </div>
-                <div className="form-group row" style={{marginBottom: '40px'}}>
-                  <label htmlFor="lat" className="col-md-3 col-xs-6 col-sm-4 col-form-label" style={{textAlign: 'end'}}>Latitude:</label>
-                  <div className="col-sm-8 col-xs-6 col-md-9 ">
-                    <input type="text" className="form-control" id="lat" ref={lat} placeholder="32" style={{width: '90%'}}/>
-                  </div>
-                </div>
-                <div className="form-group row" style={{marginBottom: '40px'}}>
-                  <label htmlFor="postalCode" className="col-md-3 col-xs-6 col-sm-4 col-form-label" style={{textAlign: 'end'}}>Postal Code:</label>
-                  <div className="col-sm-8 col-xs-6 col-md-9 ">
-                    <input type="text" className="form-control" id="postalCode" ref={postalCode} placeholder="123423" style={{width: '90%'}}/>
-                  </div>
-                </div>
-                <div className="text-center btn-modal-submit">
-									<button
-                    className="btn btn-yellow btn-h60 font-20 font-demi"
-                    onClick={onGoSite}
-									>
-										{t('Go to Site')}
-									</button>
-								</div>
+              </div>
+              <div className="text-center btn-modal-submit">
+                <button
+                  className="btn btn-yellow btn-h60 font-20 font-demi"
+                  onClick={onGoSite}
+                >
+                  {t('Go to Site')}
+                </button>
+              </div>
 						</div>
 					</div>
 				</div>
