@@ -9,17 +9,21 @@ import BaseDiscountPill from '../../base/BaseDiscountPill';
 import { setDeliveryType, setSelectedPrice } from '../../../store/actions/cart.actions';
 
 const MealPrice = ({ price, onClick, isSelected }) => {
+  const { discountType } = price.mealSettings[0] && price.mealSettings[0]
   const { currency } = useSelector((state) => state.root.settings);
-
+  console.log(discountType, "size")
   // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-  return (<div onClick={onClick} className="col-md-12 d-flex justify-content-between align-items-center mb-3" style={{ cursor: 'pointer', opacity: isSelected ? 1 : 0.4 }}>
+  return (<div onClick={onClick} className="" style={{ cursor: 'pointer', opacity: isSelected ? 1 : 0.4 }}>
     <span
       className="font-weight-bold"
       style={{
         whiteSpace: 'nowrap',
-        fontSize: '1.25rem'
+        fontSize: '1rem'
       }}
     >
+      {discountType == "Fixed" ? 
+        <i className="">{`${currency} ${price.price} - ${price.size}`}</i> : <></>
+      }
       {`${currency} ${price.price} - ${price.size}`}
     </span>
   </div>)
@@ -29,14 +33,14 @@ const DeliveryTypeSwitch = ({ deliveryType, onChange }) => {
   const types = ['Delivery', 'PickUp'];
 
   return (
-      <div className="col-md-12" style={{display: "flex", flexDirection: 'row', justifyContent: 'flex-start'}}>
-        {types.map((type) => {
-          return (
-            <button onClick={() => onChange(type)} type="button" key={type} className="px-5 mr-5 btn btn-primary inflex-center-center btn-gray btn-h46">
-              {type}
-            </button>)
-        })
-        }
+    <div className="col-md-12" style={{ display: "flex", flexDirection: 'row', justifyContent: 'flex-start' }}>
+      {types.map((type) => {
+        return (
+          <button onClick={() => onChange(type)} type="button" key={type} className="px-5 mr-5 btn btn-primary inflex-center-center btn-gray btn-h46">
+            {type}
+          </button>)
+      })
+      }
     </div>
   )
 }
@@ -179,7 +183,7 @@ const MenuModalDetails = ({
                             {orderItems.length === 0 && comboOrderItems.length === 0 &&
                               <div className="form-inline">
                                 <div className="container">
-                                  <div style={{marginTop: '20px', marginBottom: '20px', fontSize: '18px'}}>
+                                  <div style={{ marginTop: '20px', marginBottom: '20px', fontSize: '18px' }}>
                                     <span>Do you want to get {productDetails.title} by delivery or pickup?</span>
                                   </div>
                                   <div className="row">
@@ -189,31 +193,25 @@ const MenuModalDetails = ({
                               </div>
                             }
                             <div className="form-inline">
-                              <div className="container">
-                                <div style={{marginTop: '40px', marginBottom: '20px', fontSize: '18px'}}>
-                                  <span>Please select the meal size.</span>
-                                </div>
-                                <div className="row">
-                                  <div className="col-md-12 mealSize" style={{display: "flex", flexDirection: 'row', justifyContent: 'flex-start'}}>
-                                    <button type="button" className="px-5 mr-5 btn btn-primary inflex-center-center btn-gray btn-h46" style={{width: '150px'}}>
-                                      Regular
-                                    </button>
-                                    <button type="button" className="px-5 mr-5 btn btn-primary btn-gray btn-h46" style={{width: '150px'}}>
-                                      <span className="discount inflex-center-center btn-gray btn-bgLeft" style={{backgroundColor: 'transparent', zIndex: '100'}}>Large</span>
-                                    </button>
-                                    <button type="button" className="px-5 mr-5 btn btn-primary btn-gray btn-h46" style={{width: '160px'}}>
-                                      <span className="discount inflex-center-center btn-gray  btn-bgLeft" style={{backgroundColor: 'transparent', zIndex: '100'}}>Ex.Large</span>
-                                    </button>
+                              {
+                                productDetails.offeredInSizes && <div className="container">
+                                  <div style={{ marginTop: '40px', marginBottom: '20px', fontSize: '18px' }}>
+                                    <span>Please select the meal size.</span>
+                                  </div>
+                                  <div className="row">
+                                    <div className="col-md-12 mealSize" style={{ display: "flex", flexDirection: 'row', justifyContent: 'flex-start' }}>
+                                      {mealPrices.map((price, index) => {
+                                        if (price.menuPriceOption !== deliveryType) return '';
+                                        return <button type="button"
+                                          onClick={() => selectPrice(price.id)} isSelected={selectedPrice.id === price.id}
+                                          className="px-5 mr-5 btn btn-primary inflex-center-center btn-gray btn-h46" style={{ width: '150px' }}>
+                                          <MealPrice key={index} price={price} />
+                                        </button>
+                                      })}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </div>
-
-                            <div className="row py-4" style={{marginTop: '10px'}}>
-                              {mealPrices.map((price, index) => {
-                                if (price.menuPriceOption !== deliveryType) return '';
-                                return <MealPrice key={index} price={price} onClick={() => selectPrice(price.id)} isSelected={selectedPrice.id === price.id} />
-                              })}
+                              }
                             </div>
                             <div className="row">
                               <div className="col-md-6">
