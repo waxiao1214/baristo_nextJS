@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import queryString from 'query-string';
 import ReactPaginate from 'react-paginate';
 import { useRouter } from 'next/router';
-import _ from 'lodash';
+import _, { set } from 'lodash';
 import axios from '../../../lib/axios';
 import BaseLoader from '../../base/BaseLoader';
 import ProductContainer from '../../../containers/products/ProductsContainer';
@@ -41,7 +41,65 @@ const PageSectionMenuMealList = ({
 	const [totalCount, setTotalCount] = useState(0);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
+	const ref = useRef(null);
+	const [sticky, setSticky] = useState(false);
+	const [sticky2, setSticky2] = useState(false);
+	const rigthTab = useRef(null);
+	const discovery = useRef(null);
+	const [start, setStart] = useState(false);
 
+	const categoriesScrollWheeling = e => {
+		e.preventDefault();
+		if (start) {
+			const slider = document.getElementById('sticky');
+			console.log('hre', slider, slider.scrollHeight, slider.scrollTop)
+			slider.scrollTop += (e.deltaY / Math.abs(e.deltaY)) * 100;
+			// slider.scrollLeft += (e.deltaY / Math.abs(e.deltaY)) * 100;
+		}
+	}
+
+	const handlescroll1 = () => {
+		var rightOffset = document.getElementById('rightMain').getBoundingClientRect().top;
+		var leftOffset = document.getElementById('leftMenu').getBoundingClientRect().top;
+		
+		var height = window.innerHeight - document.getElementById('rightMain').clientHeight;
+		if (rightOffset <= 200 && rightOffset >= height) {
+			document.getElementById('leftMenu').style.top = (200 - rightOffset) + 'px';
+			document.getElementById('rightMain').style.top = '0px';
+		} else if (rightOffset < height && leftOffset >= -636) {
+			document.getElementById('leftMenu').style.top = 200 - height + 'px';
+			document.getElementById('rightMain').style.top = (196 - leftOffset) + 'px';
+		}
+		// if (ref.current && rigthTab.current && discovery.current) {
+		// 	if (window.scrollY > 1400) {
+		// 		if (window.scrollY < rigthTab.current.getBoundingClientRect().height + 600) {
+		// 			setSticky(true);
+		// 			setSticky2(false)
+		// 			setStart(false);
+		// 		}
+		// 		else {
+		// 			setSticky(true)
+		// 			setSticky2(true)
+		// 			// console.log("fefefsefs");
+		// 			setStart(true);
+		// 			// document.getElementById('discovery').onwheel = categoriesScrollWheeling;
+		// 			// ref.current.style.top = '2500px';
+		// 			// rigthTab.current.style.position = 'fixed';
+		// 		}
+		// 	} else {
+		// 		setStart(false);
+		// 		setSticky(false)
+		// 		setSticky2(false)
+		// 	}
+		// }
+	}
+
+	useEffect(() => {
+		window.addEventListener('scroll', handlescroll1);
+		return () => {
+				window.removeEventListener('scroll', () => handlescroll1)
+		}
+}, [handlescroll1]);
 	/**
 	 * Check if a category is active
 	 * @param {Number} id ;
@@ -274,8 +332,8 @@ const PageSectionMenuMealList = ({
 					})}
 				</ul>
 			</div>
-			<div className="discovery relative row">
-				<div className="menu-abs col-1">
+			<div className="discovery relative" id="discovery" ref={discovery}>
+				<div id="leftMenu" className={`menu-abs ${sticky?'sticky-menu':''}`} ref={ref} style={{marginBottom: '900px'}}>
 					<h4>{t('discover')}</h4>
 					<ul className="nav nav-tabs">
 						{categoriesToShow.map((category, index) => {
@@ -298,10 +356,10 @@ const PageSectionMenuMealList = ({
 						})}
 					</ul>
 				</div>
-				<div className="container col-11">
-					<div className="tab-content tab-content--relative" style={{position: 'relative', top: '-100px'}}>
+				<div id="rightMain" className="container" style={{float: 'right', position: 'relative', marginBottom: '900px'}}>
+					<div className="tab-content tab-content--relative" style={{position: 'relative', top: '-100px'}} id="sticky">
 						{isLoading && <BaseLoader />}
-						<div className="fade in show active menu_list_right">
+						<div className={`fade in show active menu_list_right ${sticky2?'right-list-menu':''}`} ref={rigthTab}>
 							<div className="row tab-pane--h-md" style={{marginTop: '100px'}}>
 								<ProductContainer productType={currentActiveTab} products={mealsToShow} productCardType="v2" />
 							</div>

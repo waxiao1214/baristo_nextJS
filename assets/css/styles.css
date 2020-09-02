@@ -876,10 +876,15 @@ a {
 }
 .menu-abs {
   border-top: 1px dashed #e0e0e0;
-  position: sticky;
-  top: 100px;
+  position: relative;
+  left: 0;
+  top: 0;
   bottom: 0;
+  float: left;
   /* overflow-y: auto; */
+}
+#rightMain {
+  left: -200px;
 }
 .tab-content-right {
   position: absolute;
@@ -920,9 +925,9 @@ a {
 }
 .discovery {
   margin: 150px 0 0 0;
-  height: 1350px;
+  /* height: 1350px;
   overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-x: hidden; */
 }
 /* .discovery::-webkit-scrollbar {
   display: none;
