@@ -274,8 +274,8 @@ const PageSectionMenuMealList = ({
 					})}
 				</ul>
 			</div>
-			<div className="discovery relative">
-				<div className="menu-abs">
+			<div className="discovery relative row">
+				<div className="menu-abs col-1">
 					<h4>{t('discover')}</h4>
 					<ul className="nav nav-tabs">
 						{categoriesToShow.map((category, index) => {
@@ -298,7 +298,7 @@ const PageSectionMenuMealList = ({
 						})}
 					</ul>
 				</div>
-				<div className="container">
+				<div className="container col-11">
 					<div className="tab-content tab-content--relative" style={{position: 'relative', top: '-100px'}}>
 						{isLoading && <BaseLoader />}
 						<div className="fade in show active menu_list_right">

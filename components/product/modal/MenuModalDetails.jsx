@@ -22,9 +22,10 @@ const MealPrice = ({ price, onClick, isSelected }) => {
       }}
     >
       {discountType == "Fixed" ? 
-        <i className="">{`${currency} ${price.price} - ${price.size}`}</i> : <></>
+        <span className="discount inflex-center-center btn-gray btn-bgLeft" style={{backgroundColor: 'transparent', zIndex: '100'}}>{`${currency} ${price.price} - ${price.size}`}</span> : 
+        <span>{`${currency} ${price.price} - ${price.size}`}</span>
       }
-      {`${currency} ${price.price} - ${price.size}`}
+      
     </span>
   </div>)
 }
@@ -202,9 +203,10 @@ const MenuModalDetails = ({
                                     <div className="col-md-12 mealSize" style={{ display: "flex", flexDirection: 'row', justifyContent: 'flex-start' }}>
                                       {mealPrices.map((price, index) => {
                                         if (price.menuPriceOption !== deliveryType) return '';
-                                        return <button type="button"
+                                        return <button type="button" style = {{ padding: "0px", marginBottom:"20px"}} 
+
                                           onClick={() => selectPrice(price.id)} isSelected={selectedPrice.id === price.id}
-                                          className="px-5 mr-5 btn btn-primary inflex-center-center btn-gray btn-h46" style={{ width: '150px' }}>
+                                          className="px-5 mr-5 btn btn-primary inflex-center-center btn-gray btn-h46">
                                           <MealPrice key={index} price={price} />
                                         </button>
                                       })}
@@ -214,10 +216,10 @@ const MenuModalDetails = ({
                               }
                             </div>
                             <div className="row">
-                              <div className="col-md-6">
+                              <div className="col-md-5">
                                 <div className="new-price">{`${currency} ${calcFinalPrice(selectedPrice)}`}</div>
                               </div>
-                              <div className="col-md-6 d-flex justify-content-end">
+                              <div className="col-md-5 d-flex justify-content-end">
                                 <button
                                   type="button"
                                   className="btn btn-yellow btn-h60 font-18 font-demi w230 btn-order"

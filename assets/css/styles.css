@@ -876,11 +876,14 @@ a {
 }
 .menu-abs {
   border-top: 1px dashed #e0e0e0;
-  position: absolute;
-  left: 0;
-  top: 0;
+  position: sticky;
+  top: 100px;
   bottom: 0;
   /* overflow-y: auto; */
+}
+.tab-content-right {
+  position: absolute;
+  left: 200px;
 }
 .menu-abs h4 {
   font-size: 32px;
@@ -889,8 +892,6 @@ a {
   border-right: 1px dashed #e0e0e0;
 }
 .menu_list_right {
-  height: 1350px;
-  overflow-y: auto;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -919,7 +920,18 @@ a {
 }
 .discovery {
   margin: 150px 0 0 0;
+  height: 1350px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
+/* .discovery::-webkit-scrollbar {
+  display: none;
+}
+
+.discovery {
+-ms-overflow-style: none;  
+scrollbar-width: none;
+} */
 .tab-content .chef-item {
   margin-bottom: 200px;
 }
@@ -1046,6 +1058,9 @@ a {
   position: absolute;
   right: 20px;
   top: 12px;
+}
+.group-price {
+  margin-top: 0px;
 }
 .search-item label {
   color: #828282;
@@ -1991,6 +2006,7 @@ body.modal-open-2 {
 }
 .detail-slider {
   min-height: 20rem;
+  overflow-x: hidden;
 }
 .detail-slider .slick-arrow {
   color: #ffffff;
