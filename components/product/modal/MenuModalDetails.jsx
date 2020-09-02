@@ -94,13 +94,18 @@ const MenuModalDetails = ({
   if (!isActive) return '';
   if (isNil(productDetails)) return '';
 
+  const onClose = () => {
+    close();
+    window.location.hash = ""
+  }
+
   return (
     <div>
       <div className="modal fade full-box show" id="product-detail">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="product-details">
-              <button type="button" className="close" onClick={close}>
+              <button type="button" className="close" onClick={onClose}>
                 <i className="ti-close" />
               </button>
               <div className="detail-slider">
