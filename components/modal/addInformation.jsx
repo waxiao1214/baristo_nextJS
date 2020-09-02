@@ -33,46 +33,54 @@ const AddInformation = (props) => {
   const { t, i18n } = useTranslation(['common']);
   const fullAddress = useRef(null);
   const [start, setStart] = useState(true);
+  const [error, setError] = useState("")
+  const getCurrentPosition = () => {
+    return new Promise(resolve => {
+      navigator.geolocation.getCurrentPosition(position => {
+        let lat = position.coords.latitude;
+        let long = position.coords.longitude;
+        resolve({status: 'allowed', lat, long});
+      }, error => {
+        if (error.code == error.PERMISSION_DENIED) {
+          resolve({status: 'blocked', error})
+        } else {
+          resolve({status: 'other', error})
+        }
+      });
+    })
+  }
+
+  const _process = async () => {
+    var position = await getCurrentPosition();
+    if (position.status === 'allowed') {
+      setStart(true);
+      const res =  await getSettings(null, position?.long, position?.lat, null);
+      if (res?.zone?.branchId) {
+        router.push(`/${res.zone.branchId}`);
+      }
+    } else {
+      setStart(false);
+    }
+  }
 
   useEffect(() => {
     if (router.pathname === '/') {
-      const getCurrentPosition = () => {
-        return new Promise(resolve => {
-          navigator.geolocation.getCurrentPosition(position => {
-            let lat = position.coords.latitude;
-            let long = position.coords.longitude;
-            resolve({status: 'allowed', lat, long});
-          }, error => {
-            if (error.code == error.PERMISSION_DENIED) {
-              resolve({status: 'blocked', error})
-            } else {
-              resolve({status: 'other', error})
-            }
-          });
-        })
-      }
-
-      const _process = async () => {
-        var position = await getCurrentPosition();
-        if (position.status === 'allowed') {
-          setStart(true);
-          const res =  await getSettings(null, position?.long, position?.lat, null);
-          if (res?.zone?.branchId) {
-            router.push(`/${res.zone.branchId}`);
-          }
-        } else {
-          setStart(false);
-        }
-      }
       _process();
     }
-  }, [])
+    if(localStorage.getItem("LOCATION_ALLOWED")) {
+      setStart(true)
+      console.log(localStorage.getItem("LOCATION_ALLOWED", "localstorage"))
+    } else {
+      setStart(false)
+    }
+  })
 
   const onClose = (e) => {
     setStart(true);
   }
 
   const onGoSite = async () => {
+    setError("")
     if (fullAddress?.current?.value) {
       if (fullAddress.current.value !== '') {
         var res;
@@ -81,12 +89,17 @@ const AddInformation = (props) => {
         } else {
           res =  await getSettings(fullAddress?.current?.value, null, null, null);
         }
-
+        
         if (res?.zone?.branchId) {
           router.push(`/${res.zone.branchId}`);
+          localStorage.setItem("LOCATION_ALLOWED", "ALLOWED");
+          setStart(true);
+        } else {
+          setStart(false)
+          setError("Invalid Address")
         }
       }
-      setStart(true);
+      
     }
   }
 
@@ -114,6 +127,7 @@ const AddInformation = (props) => {
                 <div className="row justify-content-center" style={{marginBottom: '30px', marginTop: '10px'}}>
                   <div className="col-10">
                     <input type="text" className="form-control" ref={fullAddress} placeholder="Lehenmattstrasse 242 4052 Basel"/>
+                    <p style={{color:"red", marginTop:"10px"}}>{error && error}</p>
                   </div>
                 </div>
               </div>
