@@ -118,6 +118,7 @@ export async function getServerSideProps() {
 }
 
 function Index(props) {
+
 	useUserFetchCurrentUser();
 	usePageOnLoad(props);
 	const { currentBranch } = props;
@@ -126,7 +127,7 @@ function Index(props) {
 		isDeliveryAvailabilitySectionVisible,
 		setIsDeliveryAvailabilitySectionVisible,
 	] = useState(true);
-
+	console.log("language", i18n.language)
 	// set which section to show and hide
 	useEffect(() => {
 		if (!currentBranch.contentWidgets) return;

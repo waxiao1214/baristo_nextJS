@@ -17,7 +17,7 @@ const ProductChefItemCardV2 = ({ product, openMoreDetails }) => {
 	const [showMore, setShowMore] = useState(false)
 
 	useEffect(() => {
-		if(product.description.length > 200) {
+		if(product.description && product.description.length > 200) {
 			setMore(true)
 		}
 	}, [product])

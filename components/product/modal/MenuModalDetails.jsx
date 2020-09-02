@@ -99,6 +99,8 @@ const MenuModalDetails = ({
     window.location.hash = ""
   }
 
+  console.log(productDetails, "product")
+
   return (
     <div>
       <div className="modal fade full-box show" id="product-detail">

@@ -21,14 +21,21 @@ const HeaderTop = () => {
         setSocialLinks(socialLinksList);
     }, [tenantDetails])
 
-
     const toggleLanguageDropdown = () => {
         setIsLanguageDropdownOpen(!isLanguageDropdownOpen)
     };
 
-    const changeLanguage = (language) => {
-        i18n.changeLanguage(language);
+    const changeLanguage = async language => {
+        await i18n.changeLanguage(language);
         setIsLanguageDropdownOpen(false);
+        console.log(i18n.language, "language")
+        if (i18n.language == "en") {
+            window.location.pathname = "/";
+            console.log(window.location, "pathname", "-- en --")
+        } else if (i18n.language == "de") {
+            console.log(window.location, "pathname", "-- de  --")
+            window.location.pathname = "/de"
+        }
     }
 
     const dropdown = (isActive) => {
@@ -57,7 +64,7 @@ const HeaderTop = () => {
                 <img src="/images/icon/cart.svg" alt="" style={{ height: '1rem' }} />
             </button>
             <div className="language">
-                <span className="language-value" onClick={toggleLanguageDropdown} style={{color: '#fff'}}>{i18n.language}</span>
+                <span className="language-value" onClick={toggleLanguageDropdown} style={{ color: '#fff' }}>{i18n.language}</span>
                 {dropdown(isLanguageDropdownOpen)}
             </div>
             {
