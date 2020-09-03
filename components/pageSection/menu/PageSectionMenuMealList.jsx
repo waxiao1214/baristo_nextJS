@@ -58,48 +58,48 @@ const PageSectionMenuMealList = ({
 		}
 	}
 
-	const handlescroll1 = () => {
-		var rightOffset = document.getElementById('rightMain').getBoundingClientRect().top;
-		var leftOffset = document.getElementById('leftMenu').getBoundingClientRect().top;
+	// const handlescroll1 = () => {
+	// 	var rightOffset = document.getElementById('rightMain').getBoundingClientRect().top;
+	// 	var leftOffset = document.getElementById('leftMenu').getBoundingClientRect().top;
 		
-		var height = window.innerHeight - document.getElementById('rightMain').clientHeight;
-		if (rightOffset <= 200 && rightOffset >= height) {
-			document.getElementById('leftMenu').style.top = (200 - rightOffset) + 'px';
-			document.getElementById('rightMain').style.top = '0px';
-		} else if (rightOffset < height && leftOffset >= -636) {
-			document.getElementById('leftMenu').style.top = 200 - height + 'px';
-			document.getElementById('rightMain').style.top = (196 - leftOffset) + 'px';
-		}
-		// if (ref.current && rigthTab.current && discovery.current) {
-		// 	if (window.scrollY > 1400) {
-		// 		if (window.scrollY < rigthTab.current.getBoundingClientRect().height + 600) {
-		// 			setSticky(true);
-		// 			setSticky2(false)
-		// 			setStart(false);
-		// 		}
-		// 		else {
-		// 			setSticky(true)
-		// 			setSticky2(true)
-		// 			// console.log("fefefsefs");
-		// 			setStart(true);
-		// 			// document.getElementById('discovery').onwheel = categoriesScrollWheeling;
-		// 			// ref.current.style.top = '2500px';
-		// 			// rigthTab.current.style.position = 'fixed';
-		// 		}
-		// 	} else {
-		// 		setStart(false);
-		// 		setSticky(false)
-		// 		setSticky2(false)
-		// 	}
-		// }
-	}
+	// 	var height = window.innerHeight - document.getElementById('rightMain').clientHeight;
+	// 	if (rightOffset <= 200 && rightOffset >= height) {
+	// 		document.getElementById('leftMenu').style.top = (200 - rightOffset) + 'px';
+	// 		document.getElementById('rightMain').style.top = '0px';
+	// 	} else if (rightOffset < height && leftOffset >= -636) {
+	// 		document.getElementById('leftMenu').style.top = 200 - height + 'px';
+	// 		document.getElementById('rightMain').style.top = (196 - leftOffset) + 'px';
+	// 	}
+	// 	// if (ref.current && rigthTab.current && discovery.current) {
+	// 	// 	if (window.scrollY > 1400) {
+	// 	// 		if (window.scrollY < rigthTab.current.getBoundingClientRect().height + 600) {
+	// 	// 			setSticky(true);
+	// 	// 			setSticky2(false)
+	// 	// 			setStart(false);
+	// 	// 		}
+	// 	// 		else {
+	// 	// 			setSticky(true)
+	// 	// 			setSticky2(true)
+	// 	// 			// console.log("fefefsefs");
+	// 	// 			setStart(true);
+	// 	// 			// document.getElementById('discovery').onwheel = categoriesScrollWheeling;
+	// 	// 			// ref.current.style.top = '2500px';
+	// 	// 			// rigthTab.current.style.position = 'fixed';
+	// 	// 		}
+	// 	// 	} else {
+	// 	// 		setStart(false);
+	// 	// 		setSticky(false)
+	// 	// 		setSticky2(false)
+	// 	// 	}
+	// 	// }
+	// }
 
-	useEffect(() => {
-		window.addEventListener('scroll', handlescroll1);
-		return () => {
-				window.removeEventListener('scroll', () => handlescroll1)
-		}
-}, [handlescroll1]);
+// 	useEffect(() => {
+// 		window.addEventListener('scroll', handlescroll1);
+// 		return () => {
+// 				window.removeEventListener('scroll', () => handlescroll1)
+// 		}
+// }, [handlescroll1]);
 	/**
 	 * Check if a category is active
 	 * @param {Number} id ;
@@ -308,6 +308,7 @@ const PageSectionMenuMealList = ({
 
 
 	return (
+		<div>
 		<section className="menu-list pd-100">
 			<div className="container">
 				<ul className="nav nav-tabs">
@@ -333,7 +334,8 @@ const PageSectionMenuMealList = ({
 				</ul>
 			</div>
 			<div className="discovery relative" id="discovery" ref={discovery}>
-				<div id="leftMenu" className={`menu-abs ${sticky?'sticky-menu':''}`} ref={ref} style={{marginBottom: '900px'}}>
+			<div className="sticky-wrapper" style={{height:"3160px"}}>
+				<div id="leftMenu" className="menu-abs" ref={ref}>
 					<h4>{t('discover')}</h4>
 					<ul className="nav nav-tabs">
 						{categoriesToShow.map((category, index) => {
@@ -356,7 +358,8 @@ const PageSectionMenuMealList = ({
 						})}
 					</ul>
 				</div>
-				<div id="rightMain" className="container" style={{float: 'right', position: 'relative', marginBottom: '900px'}}>
+
+				<div id="rightMain" className="container" style={{float: 'right', position: 'relative'}}>
 					<div className="tab-content tab-content--relative" style={{position: 'relative', top: '-100px'}} id="sticky">
 						{isLoading && <BaseLoader />}
 						<div className={`fade in show active menu_list_right ${sticky2?'right-list-menu':''}`} ref={rigthTab}>
@@ -394,8 +397,10 @@ const PageSectionMenuMealList = ({
 						</div>
 					</div>
 				</div>
+				</div>	
 			</div>
 		</section>
+		</div>
 	);
 };
 

@@ -895,12 +895,17 @@ a {
 }
 .menu-abs {
   border-top: 1px dashed #e0e0e0;
-  position: relative;
+  position: sticky;
   left: 0;
-  top: 0;
+  top: 100px;
+  height: 90vh;
   bottom: 0;
   float: left;
-  /* overflow-y: auto; */
+  overflow-y: scroll;
+}
+
+.menu-abs::-webkit-scrollbar {
+  display: none;
 }
 #rightMain {
   left: -200px;
