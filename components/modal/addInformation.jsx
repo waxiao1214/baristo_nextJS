@@ -29,11 +29,13 @@ const getSettings = async (fullAddress, long, lat, postalCode) => {
 };
 
 const AddInformation = (props) => {
+
 	const router = useRouter();
   const { t, i18n } = useTranslation(['common']);
   const fullAddress = useRef(null);
-  const [start, setStart] = useState(true);
+  const [start, setStart] = useState(props.start);
   const [error, setError] = useState("")
+
   const getCurrentPosition = () => {
     return new Promise(resolve => {
       navigator.geolocation.getCurrentPosition(position => {

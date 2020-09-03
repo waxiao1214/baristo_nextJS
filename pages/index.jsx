@@ -125,11 +125,8 @@ function Index(props) {
 		isDeliveryAvailabilitySectionVisible,
 		setIsDeliveryAvailabilitySectionVisible,
 	] = useState(true);
+	const [prop, setProp] = useState(props)
 	// set which section to show and hide
-
-	useEffect(() => {
-		console.log("----    ------")
-	}, [])
 
 	useEffect(() => {
 		if (!currentBranch.contentWidgets) return;
@@ -150,6 +147,22 @@ function Index(props) {
 				deliveryOption === 'DeliveryAndPickup'
 		);
 	}, [currentBranch]);
+
+	useEffect(async () => {
+		const specialCruises = await getSpecialCruises(currentBranch.id);
+		const chefChoices = await getChefChoices(currentBranch.id);
+		const appResources = await getAppResources(currentBranch.id);
+		const subBanner = await getSubBanner(currentBranch.id);
+		const chefStory = await getChefStory(currentBranch.id);
+		setProp({
+			...prop,
+			specialCruises,
+			chefChoices,
+			appResources,
+			subBanner,
+			chefStory
+		})
+	}, [])
 
 	return (
 		<DefaultLayout>

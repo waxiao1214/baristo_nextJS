@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router'
 import usePageOnLoad from '../../hooks/page/usePageOnLoad';
 import i18n from '../../i18n/i18n';
 import DefaultLayout from '../../layouts/DefaultLayout';
@@ -129,7 +130,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Index(props) {
-	console.log(props, "props")
+
 	useUserFetchCurrentUser();
 	usePageOnLoad(props);
 	const { currentBranch } = props;
@@ -165,12 +166,11 @@ export default function Index(props) {
 	}, [currentBranch]);
 
 	useEffect(async () => {
-		let branchId = 1
-		const specialCruises = await getSpecialCruises(branchId);
-		const chefChoices = await getChefChoices(branchId);
-		const appResources = await getAppResources(branchId);
-		const subBanner = await getSubBanner(branchId);
-		const chefStory = await getChefStory(branchId);
+		const specialCruises = await getSpecialCruises(props.currentBranch.id);
+		const chefChoices = await getChefChoices(props.currentBranch.id);
+		const appResources = await getAppResources(props.currentBranch.id);
+		const subBanner = await getSubBanner(props.currentBranch.id);
+		const chefStory = await getChefStory(props.currentBranch.id);
 		setProp({
 			...prop,
 			specialCruises,
@@ -179,8 +179,8 @@ export default function Index(props) {
 			subBanner,
 			chefStory
 		})
-		console.log(props, "------------")
 	}, [])
+
 	return (
 		<DefaultLayout>
 			<TheHeader />
