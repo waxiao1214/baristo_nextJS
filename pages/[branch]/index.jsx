@@ -18,7 +18,7 @@ import _ from 'lodash';
 
 const getSpecialCruises = async (branchId) => {
 	try {
-		const url = `customer/web/home-service/special-cruise?branchId=${branchId}&culture=${i18n.language}&deliveryType=Delivery`;
+		const url = `customer/web/home-service/special-cruise?branchId=${branchId}&culture=${i18n.i18n.language}&deliveryType=Delivery`;
 		const response = await axios.get(url);
 
 		return response.data.result;
@@ -30,7 +30,7 @@ const getSpecialCruises = async (branchId) => {
 
 const getChefChoices = async (branchId) => {
 	try {
-		const url = `customer/web/home-service/chef-choice?branchId=${branchId}&culture=${i18n.language}`;
+		const url = `customer/web/home-service/chef-choice?branchId=${branchId}&culture=${i18n.i18n.language}`;
 		const response = await axios.get(url);
 
 		return response.data.result;
@@ -69,9 +69,8 @@ const getSubBanner = async (branchId) => {
 
 const getChefStory = async (branchId) => {
 	try {
-		const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${i18n.language}`;
+		const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${i18n.i18n.language}`;
 		const response = await axios.get(url);
-		console.log("chefstory", response.data.result)
 		return response.data.result;
 	} catch (error) {
 		console.error(error);
@@ -140,6 +139,7 @@ export default function Index(props) {
 		setIsDeliveryAvailabilitySectionVisible,
 	] = useState(true);
 
+	const [prop, setProp] = useState(props)
 	// set which section to show and hide
 	useEffect(() => {
 		if (!currentBranch.contentWidgets) return;
@@ -164,31 +164,48 @@ export default function Index(props) {
 		);
 	}, [currentBranch]);
 
+	useEffect(async () => {
+		let branchId = 1
+		const specialCruises = await getSpecialCruises(branchId);
+		const chefChoices = await getChefChoices(branchId);
+		const appResources = await getAppResources(branchId);
+		const subBanner = await getSubBanner(branchId);
+		const chefStory = await getChefStory(branchId);
+		setProp({
+			...prop,
+			specialCruises,
+			chefChoices,
+			appResources,
+			subBanner,
+			chefStory
+		})
+		console.log(props, "------------")
+	}, [])
 	return (
 		<DefaultLayout>
 			<TheHeader />
 			{contentWidgets.CAROUSEL && <PageSectionIndexHero />}
 			{contentWidgets.SPECIALCRUISE && (
 				<PageSectionIndexSpecialCruise
-					specialCruises={props.specialCruises}
+					specialCruises={prop.specialCruises}
 				/>
 			)}
 			{isDeliveryAvailabilitySectionVisible && (
 				<PageSectionIndexDeliveryAvailability />
 			)}
 			{contentWidgets.CHEFSCHOICE && (
-				<PageSectionIndexChefsChoices chefChoices={props.chefChoices} />
+				<PageSectionIndexChefsChoices chefChoices={prop.chefChoices} />
 			)}
 			{contentWidgets.SUBBANNER && (
-				<PageSectionIndexOurRestaurant subBanner={props.subBanner} />
+				<PageSectionIndexOurRestaurant subBanner={prop.subBanner} />
 			)}
 			{contentWidgets.CHEFSSTORY && (
-				<PageSectionIndexOurChef chefStory={props.chefStory} />
+				<PageSectionIndexOurChef chefStory={prop.chefStory} />
 			)}
 			<PageSectionIndexOurLocation />
 			{contentWidgets.APPRESOURCES && (
 				<PageSectionIndexOurResource
-					appResources={props.appResources}
+					appResources={prop.appResources}
 				/>
 			)}
 			<TheFooter />
