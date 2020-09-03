@@ -73,7 +73,7 @@ const AddInformation = (props) => {
     } else {
       setStart(false)
     }
-  })
+  },[])
 
   const onClose = (e) => {
     setStart(true);

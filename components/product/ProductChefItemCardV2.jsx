@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { isEmpty } from 'lodash';
+import ProductModalMore from '../product/modal/ProductModalMore'
 import useProductPriceAndDiscountValueToShow from '../../hooks/product/useProductPriceAndDiscountValueToShow';
 import { useRef } from 'react';
 
@@ -17,28 +18,31 @@ const ProductChefItemCardV2 = ({ product, openMoreDetails }) => {
 	const [showMore, setShowMore] = useState(false)
 
 	useEffect(() => {
-		if(product.description && product.description.length > 200) {
+		if (product.description && product.description.length > 200) {
 			setMore(true)
 		}
 	}, [product])
 
+	const closeModal = () => {
+		setShowMore(!showMore)
+	}
 	return (
 		<div className="chef-item relative">
 			<div className="ch-image">
 				<div>
-					<img src={product.thumbnail} alt={product.title}/>
+					<img src={product.thumbnail} alt={product.title} />
 				</div>
 			</div>
 			<div className="ch-text text-center" ref={chText}>
 				<h3 className="title-sm mgb-10">
 					<div className="ch-text_title"><p>{product.title}</p></div>
 				</h3>
-						<div className = "more-wrapper" 
-							style = {{height: showMore ? "fit-content": "130px"}}
-						>
-						<p className="desc text-gray font-18">{product.description}</p>
-						</div>
-						{isMore && <button onClick = {() => setShowMore(!showMore)} className="ch-more_details">More Details...</button>}
+				<div className="more-wrapper"
+					style={{ height: "130px" }}
+				>
+					<p className="desc text-gray font-18">{product.description}</p>
+				</div>
+				<button onClick={() => setShowMore(!showMore)} className="ch-more_details">More Details...</button>
 			</div>
 			<div className="d-flex flex-column align-items-center">
 				<div className="d-flex justify-content-center align-items-center my-4">
@@ -71,6 +75,7 @@ const ProductChefItemCardV2 = ({ product, openMoreDetails }) => {
 					{t('order_now')}
 				</button>
 			</div>
+			{showMore && <ProductModalMore closeModal={closeModal} product={product} />}
 		</div>
 	);
 };

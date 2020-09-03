@@ -390,6 +390,25 @@ a {
   min-height: 600px;
   height: fit-content;
 }
+.more-content {
+  padding: 50px;
+  text-align: center;
+}
+#product-more {
+  margin: auto;
+  max-width: 600px;
+  padding: 50px;
+}
+.ch-more-image {
+  margin: auto;
+  text-align: center;
+  overflow: hidden;
+  z-index: 2;
+  height: 10rem;
+  width: 10rem;
+  border-radius: 9999px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
 .ch-image {
   position: absolute;
   left: 50%;
@@ -410,7 +429,7 @@ a {
 }
 .ch-more_details {
   border-radius: 25px;
-  width: 40%;
+  width: 60%;
   height: 30px;
   font-size: 16px;
   border: none;
