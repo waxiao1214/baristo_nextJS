@@ -1,6 +1,9 @@
 @import '/.reset.css';
 @import './fonts.css';
 
+body {
+  overflow-x: hidden;
+}
 a {
   cursor: pointer;
 }
