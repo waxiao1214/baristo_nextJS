@@ -71,7 +71,7 @@ const getChefStory = async (branchId) => {
 	try {
 		const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${i18n.language}`;
 		const response = await axios.get(url);
-
+		console.log("chefstory", response.data.result)
 		return response.data.result;
 	} catch (error) {
 		console.error(error);
@@ -130,6 +130,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Index(props) {
+	console.log(props, "props")
 	useUserFetchCurrentUser();
 	usePageOnLoad(props);
 	const { currentBranch } = props;

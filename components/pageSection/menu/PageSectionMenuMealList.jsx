@@ -42,11 +42,20 @@ const PageSectionMenuMealList = ({
 	const [currentPage, setCurrentPage] = useState(0);
 	const [totalPages, setTotalPages] = useState(0);
 	const ref = useRef(null);
-	const [sticky, setSticky] = useState(false);
 	const [sticky2, setSticky2] = useState(false);
 	const rigthTab = useRef(null);
 	const discovery = useRef(null);
 	const [start, setStart] = useState(false);
+	const [height, setHeight] = useState(3000)
+
+	useEffect(() => {
+		let rightHeight = document.getElementById("rightMain").offsetHeight
+		let leftHeight = document.getElementById("leftMenu").offsetHeight
+		console.log(rightHeight,"height")
+		setHeight(rightHeight)
+		if(leftHeight > rightHeight)
+			setHeight(leftHeight)
+	},[isLoading])
 
 	const categoriesScrollWheeling = e => {
 		e.preventDefault();
@@ -57,49 +66,6 @@ const PageSectionMenuMealList = ({
 			// slider.scrollLeft += (e.deltaY / Math.abs(e.deltaY)) * 100;
 		}
 	}
-
-	// const handlescroll1 = () => {
-	// 	var rightOffset = document.getElementById('rightMain').getBoundingClientRect().top;
-	// 	var leftOffset = document.getElementById('leftMenu').getBoundingClientRect().top;
-		
-	// 	var height = window.innerHeight - document.getElementById('rightMain').clientHeight;
-	// 	if (rightOffset <= 200 && rightOffset >= height) {
-	// 		document.getElementById('leftMenu').style.top = (200 - rightOffset) + 'px';
-	// 		document.getElementById('rightMain').style.top = '0px';
-	// 	} else if (rightOffset < height && leftOffset >= -636) {
-	// 		document.getElementById('leftMenu').style.top = 200 - height + 'px';
-	// 		document.getElementById('rightMain').style.top = (196 - leftOffset) + 'px';
-	// 	}
-	// 	// if (ref.current && rigthTab.current && discovery.current) {
-	// 	// 	if (window.scrollY > 1400) {
-	// 	// 		if (window.scrollY < rigthTab.current.getBoundingClientRect().height + 600) {
-	// 	// 			setSticky(true);
-	// 	// 			setSticky2(false)
-	// 	// 			setStart(false);
-	// 	// 		}
-	// 	// 		else {
-	// 	// 			setSticky(true)
-	// 	// 			setSticky2(true)
-	// 	// 			// console.log("fefefsefs");
-	// 	// 			setStart(true);
-	// 	// 			// document.getElementById('discovery').onwheel = categoriesScrollWheeling;
-	// 	// 			// ref.current.style.top = '2500px';
-	// 	// 			// rigthTab.current.style.position = 'fixed';
-	// 	// 		}
-	// 	// 	} else {
-	// 	// 		setStart(false);
-	// 	// 		setSticky(false)
-	// 	// 		setSticky2(false)
-	// 	// 	}
-	// 	// }
-	// }
-
-// 	useEffect(() => {
-// 		window.addEventListener('scroll', handlescroll1);
-// 		return () => {
-// 				window.removeEventListener('scroll', () => handlescroll1)
-// 		}
-// }, [handlescroll1]);
 	/**
 	 * Check if a category is active
 	 * @param {Number} id ;
@@ -334,7 +300,7 @@ const PageSectionMenuMealList = ({
 				</ul>
 			</div>
 			<div className="discovery relative" id="discovery" ref={discovery}>
-			<div className="sticky-wrapper" style={{height:"3160px"}}>
+			<div className="sticky-wrapper" style={{height: `${height}px`}}>
 				<div id="leftMenu" className="menu-abs" ref={ref}>
 					<h4>{t('discover')}</h4>
 					<ul className="nav nav-tabs">

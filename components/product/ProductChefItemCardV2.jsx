@@ -42,7 +42,7 @@ const ProductChefItemCardV2 = ({ product, openMoreDetails }) => {
 				>
 					<p className="desc text-gray font-18">{product.description}</p>
 				</div>
-				<button onClick={() => setShowMore(!showMore)} className="ch-more_details">More Details...</button>
+				{ isMore && <button onClick={() => setShowMore(!showMore)} className="ch-more_details">More Details...</button>}
 			</div>
 			<div className="d-flex flex-column align-items-center">
 				<div className="d-flex justify-content-center align-items-center my-4">
