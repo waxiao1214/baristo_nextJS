@@ -68,7 +68,8 @@ const getSubBanner = async (branchId) => {
 
 const getChefStory = async (branchId) => {
 	try {
-		const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${i18n.i18n.language}`;
+		console.log(i18n.language, "language")
+		const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${i18n.language}`;
 		const response = await axios.get(url);
 		return response.data.result;
 	} catch (error) {
@@ -92,24 +93,12 @@ const getSettings = async () => {
 
 export async function getServerSideProps() {
 	const settings = await getSettings();
-
-	// get current branch
 	const { branches } = settings;
 	const currentBranch = branches.filter((branch) => branch.primaryBranch)[0];
-
-	const specialCruises = await getSpecialCruises(currentBranch.id);
-	const chefChoices = await getChefChoices(currentBranch.id);
-	const appResources = await getAppResources(currentBranch.id);
-	const subBanner = await getSubBanner(currentBranch.id);
-	const chefStory = await getChefStory(currentBranch.id);
+	console.log(currentBranch.id, "currentbranch Id")
 
 	return {
 		props: {
-			specialCruises,
-			chefChoices,
-			appResources,
-			subBanner,
-			chefStory,
 			settings,
 			currentBranch,
 		},
@@ -125,7 +114,7 @@ function Index(props) {
 		isDeliveryAvailabilitySectionVisible,
 		setIsDeliveryAvailabilitySectionVisible,
 	] = useState(true);
-	const [prop, setProp] = useState(props)
+	const [prop, setProp] = useState()
 	// set which section to show and hide
 
 	useEffect(() => {
@@ -137,6 +126,9 @@ function Index(props) {
 		setContentWidgets(contentWidgets);
 	}, [currentBranch]);
 
+	useEffect(() => {
+		console.log(i18n.language, "language -- client")
+	}, [])
 	// set if delivery availability section is visible
 	useEffect(() => {
 		if (!currentBranch.contentWidgets) return;
@@ -144,7 +136,7 @@ function Index(props) {
 		const { deliveryOption } = currentBranch.deliverySetting;
 		setIsDeliveryAvailabilitySectionVisible(
 			deliveryOption === 'DeliveryOnly' ||
-				deliveryOption === 'DeliveryAndPickup'
+			deliveryOption === 'DeliveryAndPickup'
 		);
 	}, [currentBranch]);
 
@@ -155,6 +147,7 @@ function Index(props) {
 		const appResources = await getAppResources(props.currentBranch.id);
 		const subBanner = await getSubBanner(props.currentBranch.id);
 		const chefStory = await getChefStory(props.currentBranch.id);
+		console.log(chefStory, "chefstory")
 		setProp({
 			...prop,
 			specialCruises,
@@ -169,7 +162,7 @@ function Index(props) {
 		<DefaultLayout>
 			<TheHeader />
 			{contentWidgets.CAROUSEL && <PageSectionIndexHero />}
-			{contentWidgets.SPECIALCRUISE && (
+			{contentWidgets.SPECIALCRUISE && prop && (
 				<PageSectionIndexSpecialCruise
 					specialCruises={prop.specialCruises}
 				/>
@@ -177,17 +170,17 @@ function Index(props) {
 			{isDeliveryAvailabilitySectionVisible && (
 				<PageSectionIndexDeliveryAvailability />
 			)}
-			{contentWidgets.CHEFSCHOICE && (
+			{contentWidgets.CHEFSCHOICE && prop && (
 				<PageSectionIndexChefsChoices chefChoices={prop.chefChoices} />
 			)}
-			{contentWidgets.SUBBANNER && (
+			{contentWidgets.SUBBANNER && prop && (
 				<PageSectionIndexOurRestaurant subBanner={prop.subBanner} />
 			)}
-			{contentWidgets.CHEFSSTORY && (
+			{contentWidgets.CHEFSSTORY && prop && (
 				<PageSectionIndexOurChef chefStory={prop.chefStory} />
 			)}
 			<PageSectionIndexOurLocation />
-			{contentWidgets.APPRESOURCES && (
+			{contentWidgets.APPRESOURCES && prop && (
 				<PageSectionIndexOurResource
 					appResources={prop.appResources}
 				/>

@@ -102,7 +102,6 @@ export async function getServerSideProps(context) {
 	const currentBranch = branches.filter((branch) => {
 		return branch.id === parseInt(branchId);
     })[0];
-
     // if branch is not found
 	if (_.isNil(currentBranch)) {
 		context.res.statusCode = 404;
@@ -110,19 +109,8 @@ export async function getServerSideProps(context) {
 		return;
 	}
 
-	const specialCruises = await getSpecialCruises(branchId);
-	const chefChoices = await getChefChoices(branchId);
-	const appResources = await getAppResources(branchId);
-	const subBanner = await getSubBanner(branchId);
-	const chefStory = await getChefStory(branchId);
-
 	return {
 		props: {
-			specialCruises,
-			chefChoices,
-			appResources,
-			subBanner,
-			chefStory,
 			settings,
 			currentBranch,
 		},
@@ -140,7 +128,7 @@ export default function Index(props) {
 		setIsDeliveryAvailabilitySectionVisible,
 	] = useState(true);
 
-	const [prop, setProp] = useState(props)
+	const [prop, setProp] = useState()
 	// set which section to show and hide
 	useEffect(() => {
 		if (!currentBranch.contentWidgets) return;
@@ -185,25 +173,25 @@ export default function Index(props) {
 		<DefaultLayout>
 			<TheHeader />
 			{contentWidgets.CAROUSEL && <PageSectionIndexHero />}
-			{contentWidgets.SPECIALCRUISE && (
+			{contentWidgets.SPECIALCRUISE && prop && (
 				<PageSectionIndexSpecialCruise
 					specialCruises={prop.specialCruises}
 				/>
 			)}
-			{isDeliveryAvailabilitySectionVisible && (
+			{isDeliveryAvailabilitySectionVisible && prop && (
 				<PageSectionIndexDeliveryAvailability />
 			)}
-			{contentWidgets.CHEFSCHOICE && (
+			{contentWidgets.CHEFSCHOICE && prop && (
 				<PageSectionIndexChefsChoices chefChoices={prop.chefChoices} />
 			)}
-			{contentWidgets.SUBBANNER && (
+			{contentWidgets.SUBBANNER && prop && (
 				<PageSectionIndexOurRestaurant subBanner={prop.subBanner} />
 			)}
-			{contentWidgets.CHEFSSTORY && (
+			{contentWidgets.CHEFSSTORY && prop && (
 				<PageSectionIndexOurChef chefStory={prop.chefStory} />
 			)}
 			<PageSectionIndexOurLocation />
-			{contentWidgets.APPRESOURCES && (
+			{contentWidgets.APPRESOURCES && prop && (
 				<PageSectionIndexOurResource
 					appResources={prop.appResources}
 				/>
