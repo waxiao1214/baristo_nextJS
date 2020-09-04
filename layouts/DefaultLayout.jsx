@@ -21,7 +21,9 @@ const DefaultLayout = ({ children }) => {
 			<AuthenticationContainer />
 			<ProductsCustomizeContainer />
 			<CheckoutModalCartDetails />
-			<AddInformation start={start} />
+			{
+				start ? <div></div> : <AddInformation start={start} />
+			}
 			{children}
 		</div>
 	);

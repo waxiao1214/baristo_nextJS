@@ -68,7 +68,7 @@ const getSubBanner = async (branchId) => {
 
 const getChefStory = async (branchId) => {
 	try {
-		const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${i18n.language}`;
+		const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${i18n.i18n.language}`;
 		const response = await axios.get(url);
 		return response.data.result;
 	} catch (error) {
@@ -149,11 +149,12 @@ function Index(props) {
 	}, [currentBranch]);
 
 	useEffect(async () => {
-		const specialCruises = await getSpecialCruises(currentBranch.id);
-		const chefChoices = await getChefChoices(currentBranch.id);
-		const appResources = await getAppResources(currentBranch.id);
-		const subBanner = await getSubBanner(currentBranch.id);
-		const chefStory = await getChefStory(currentBranch.id);
+		console.log(props.currentBranch.id, "props")
+		const specialCruises = await getSpecialCruises(props.currentBranch.id);
+		const chefChoices = await getChefChoices(props.currentBranch.id);
+		const appResources = await getAppResources(props.currentBranch.id);
+		const subBanner = await getSubBanner(props.currentBranch.id);
+		const chefStory = await getChefStory(props.currentBranch.id);
 		setProp({
 			...prop,
 			specialCruises,
@@ -170,25 +171,25 @@ function Index(props) {
 			{contentWidgets.CAROUSEL && <PageSectionIndexHero />}
 			{contentWidgets.SPECIALCRUISE && (
 				<PageSectionIndexSpecialCruise
-					specialCruises={props.specialCruises}
+					specialCruises={prop.specialCruises}
 				/>
 			)}
 			{isDeliveryAvailabilitySectionVisible && (
 				<PageSectionIndexDeliveryAvailability />
 			)}
 			{contentWidgets.CHEFSCHOICE && (
-				<PageSectionIndexChefsChoices chefChoices={props.chefChoices} />
+				<PageSectionIndexChefsChoices chefChoices={prop.chefChoices} />
 			)}
 			{contentWidgets.SUBBANNER && (
-				<PageSectionIndexOurRestaurant subBanner={props.subBanner} />
+				<PageSectionIndexOurRestaurant subBanner={prop.subBanner} />
 			)}
 			{contentWidgets.CHEFSSTORY && (
-				<PageSectionIndexOurChef chefStory={props.chefStory} />
+				<PageSectionIndexOurChef chefStory={prop.chefStory} />
 			)}
 			<PageSectionIndexOurLocation />
 			{contentWidgets.APPRESOURCES && (
 				<PageSectionIndexOurResource
-					appResources={props.appResources}
+					appResources={prop.appResources}
 				/>
 			)}
 			<TheFooter />

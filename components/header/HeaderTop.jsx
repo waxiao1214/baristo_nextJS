@@ -30,11 +30,13 @@ const HeaderTop = () => {
         setIsLanguageDropdownOpen(false);
         console.log(i18n.language, "language")
         if (i18n.language == "en") {
-            window.location.pathname = "/";
-            console.log(window.location, "pathname", "-- en --")
+            let path = window.location.pathname.split("/")
+            path.splice(1,1)
+            window.location.pathname = path.join("/");
         } else if (i18n.language == "de") {
-            console.log(window.location, "pathname", "-- de  --")
-            window.location.pathname = "/de"
+            let path = window.location.pathname.split("/")
+            path[0] = "/de"
+            window.location.pathname = path.join("/")
         }
     }
 

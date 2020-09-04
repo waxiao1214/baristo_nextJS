@@ -33,7 +33,7 @@ const AddInformation = (props) => {
 	const router = useRouter();
   const { t, i18n } = useTranslation(['common']);
   const fullAddress = useRef(null);
-  const [start, setStart] = useState(props.start);
+  const [start, setStart] = useState(false);
   const [error, setError] = useState("")
 
   const getCurrentPosition = () => {
@@ -105,9 +105,9 @@ const AddInformation = (props) => {
     }
   }
 
-  if (start) return '';
 
   return (
+    start? <div></div>:
     <div>
 			<div className="modal fade modal-box show" id="search-filter">
 				<div className="modal-dialog" role="document">
