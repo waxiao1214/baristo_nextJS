@@ -17,9 +17,9 @@ import PageSectionIndexHero from '../../components/pageSection/index/PageSection
 import axios from '../../lib/axios';
 import _ from 'lodash';
 
-const getSpecialCruises = async (branchId) => {
+const getSpecialCruises = async (branchId, language) => {
 	try {
-		const url = `customer/web/home-service/special-cruise?branchId=${branchId}&culture=${i18n.i18n.language}&deliveryType=Delivery`;
+		const url = `customer/web/home-service/special-cruise?branchId=${branchId}&culture=${language}&deliveryType=Delivery`;
 		const response = await axios.get(url);
 
 		return response.data.result;
@@ -29,9 +29,9 @@ const getSpecialCruises = async (branchId) => {
 	}
 };
 
-const getChefChoices = async (branchId) => {
+const getChefChoices = async (branchId, language) => {
 	try {
-		const url = `customer/web/home-service/chef-choice?branchId=${branchId}&culture=${i18n.i18n.language}`;
+		const url = `customer/web/home-service/chef-choice?branchId=${branchId}&culture=${language}`;
 		const response = await axios.get(url);
 
 		return response.data.result;
@@ -68,9 +68,9 @@ const getSubBanner = async (branchId) => {
 	}
 };
 
-const getChefStory = async (branchId) => {
+const getChefStory = async (branchId, language) => {
 	try {
-		const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${i18n.i18n.language}`;
+		const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${language}`;
 		const response = await axios.get(url);
 		return response.data.result;
 	} catch (error) {
@@ -109,8 +109,19 @@ export async function getServerSideProps(context) {
 		return;
 	}
 
+	const specialCruises = await getSpecialCruises(branchId);
+	const chefChoices = await getChefChoices(branchId);
+	const appResources = await getAppResources(branchId);
+	const subBanner = await getSubBanner(branchId);
+	const chefStory = await getChefStory(branchId);
+
 	return {
 		props: {
+			specialCruises,
+			chefChoices,
+			appResources,
+			subBanner,
+			chefStory,
 			settings,
 			currentBranch,
 		},
@@ -128,7 +139,7 @@ export default function Index(props) {
 		setIsDeliveryAvailabilitySectionVisible,
 	] = useState(true);
 
-	const [prop, setProp] = useState()
+	const [prop, setProp] = useState(props)
 	// set which section to show and hide
 	useEffect(() => {
 		if (!currentBranch.contentWidgets) return;
@@ -154,17 +165,14 @@ export default function Index(props) {
 	}, [currentBranch]);
 
 	useEffect(async () => {
-		const specialCruises = await getSpecialCruises(props.currentBranch.id);
-		const chefChoices = await getChefChoices(props.currentBranch.id);
-		const appResources = await getAppResources(props.currentBranch.id);
-		const subBanner = await getSubBanner(props.currentBranch.id);
-		const chefStory = await getChefStory(props.currentBranch.id);
+		let language = i18n.language
+		const specialCruises = await getSpecialCruises(props.currentBranch.id, language);
+		const chefChoices = await getChefChoices(props.currentBranch.id, language);
+		const chefStory = await getChefStory(props.currentBranch.id, language);
 		setProp({
 			...prop,
 			specialCruises,
 			chefChoices,
-			appResources,
-			subBanner,
 			chefStory
 		})
 	}, [])
