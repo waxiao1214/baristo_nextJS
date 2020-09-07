@@ -19,7 +19,7 @@ import i18n from '../../i18n/i18n';
  */
 const getPopularMeals = async (branchId) => {
 	try {
-		const url = `customer/web/meals-service/popular-meals?Sorting=Id&MaxResultCount=2&SkipCount=0&branchId=${branchId}&isDelivery=true&culture=${i18n.language}`;
+		const url = `customer/web/meals-service/popular-meals?Sorting=Id&MaxResultCount=2&SkipCount=0&branchId=${branchId}&isDelivery=true&culture=${i18n.i18n.language}`;
 		const response = await axios.get(url);
 
 		return response.data.result.items;
@@ -38,7 +38,7 @@ const getPopularMeals = async (branchId) => {
  */
 const getDiscountedMeals = async (branchId) => {
 	try {
-		const url = `customer/web/meals-service/discounted-meals?Sorting=Id&MaxResultCount=3&SkipCount=0&branchId=${branchId}&culture=${i18n.language}`;
+		const url = `customer/web/meals-service/discounted-meals?Sorting=Id&MaxResultCount=3&SkipCount=0&branchId=${branchId}&culture=${i18n.i18n.language}`;
 		const response = await axios.get(url);
 
 		return response.data.result.items;
@@ -57,7 +57,7 @@ const getDiscountedMeals = async (branchId) => {
  */
 const getMealCategories = async (branchId) => {
 	try {
-		const url = `customer/web/meals-service/meal-categories?branchId=${branchId}&culture=${i18n.language}`;
+		const url = `customer/web/meals-service/meal-categories?branchId=${branchId}&culture=${i18n.i18n.language}`;
 		const response = await axios.get(url);
 
 		return response.data.result.items;
@@ -76,7 +76,7 @@ const getMealCategories = async (branchId) => {
  */
 const getComboCategories = async (branchId) => {
 	try {
-		const url = `customer/web/meals-service/combo-categories?branchId=${branchId}&culture=${i18n.language}`;
+		const url = `customer/web/meals-service/combo-categories?branchId=${branchId}&culture=${i18n.i18n.language}`;
 		const response = await axios.get(url);
 
 		return response.data.result.items;
@@ -175,7 +175,6 @@ export default function Gallery(props) {
 	}
 	// search
 	const [isSearching, setIsSearching] = useState(initialIsSearching);
-
 
 	return (
 		<DefaultLayout>

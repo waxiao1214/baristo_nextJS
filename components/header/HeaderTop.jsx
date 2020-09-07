@@ -21,14 +21,23 @@ const HeaderTop = () => {
         setSocialLinks(socialLinksList);
     }, [tenantDetails])
 
-
     const toggleLanguageDropdown = () => {
         setIsLanguageDropdownOpen(!isLanguageDropdownOpen)
     };
 
-    const changeLanguage = (language) => {
-        i18n.changeLanguage(language);
+    const changeLanguage = async language => {
+        await i18n.changeLanguage(language);
         setIsLanguageDropdownOpen(false);
+        console.log(i18n.language, "language")
+        if (i18n.language == "en") {
+            let path = window.location.pathname.split("/")
+            path.splice(1,1)
+            window.location.pathname = path.join("/");
+        } else if (i18n.language == "de") {
+            let path = window.location.pathname.split("/")
+            path[0] = "/de"
+            window.location.pathname = path.join("/")
+        }
     }
 
     const dropdown = (isActive) => {
@@ -49,37 +58,30 @@ const HeaderTop = () => {
         }
     }
 
-    return (<section className="header-top">
-        <div className="container">
-            <div className="row">
-                <div className="col-md-6 col-6" />
-                <div className="col-md-6 col-6">
-                    <div className="header-top_right flex-center-end">
-                        <button type="button" className="btn-default d-flex align-items-center header-top__cart mr-4 px-3 py-2" onClick={boundToggleCartDetailsModal}>
-                            <span className="top__cart__currency mr-1">{currency}</span>
-                            <span className="header-top__cart__total mr-2">0.00</span>
-                            <img src="/images/icon/cart.svg" alt="" style={{ height: '1rem' }} />
-                        </button>
-                        <div className="language">
-                            <span className="language-value" onClick={toggleLanguageDropdown} style={{color: '#fff'}}>{i18n.language}</span>
-                            {dropdown(isLanguageDropdownOpen)}
-                        </div>
+    return (
+        <div className="header-top_right flex-center-end">
+            <button type="button" className="btn-default d-flex align-items-center header-top__cart mr-4 px-3 py-2" onClick={boundToggleCartDetailsModal}>
+                <span className="top__cart__currency mr-1">{currency}</span>
+                <span className="header-top__cart__total mr-2">0.00</span>
+                <img src="/images/icon/cart.svg" alt="" style={{ height: '1rem' }} />
+            </button>
+            <div className="language">
+                <span className="language-value" onClick={toggleLanguageDropdown} style={{ color: '#fff' }}>{i18n.language}</span>
+                {dropdown(isLanguageDropdownOpen)}
+            </div>
+            {
+                socialLinks.length === 0 ? '' :
+                    <div className="social flex-center">
+                        <span>FOLLOW US:</span>
                         {
-                            socialLinks.length === 0 ? '' :
-                                <div className="social flex-center">
-                                    <span>FOLLOW US:</span>
-                                    {
-                                        socialLinks.map((link, index) => {
-                                            return (<BaseSocialLink link={link} key={index} />);
-                                        })
-                                    }
-                                </div>
+                            socialLinks.map((link, index) => {
+                                return (<BaseSocialLink link={link} key={index} />);
+                            })
                         }
                     </div>
-                </div>
-            </div>
+            }
         </div>
-    </section>)
+    )
 }
 
 export default withTranslation()(HeaderTop);

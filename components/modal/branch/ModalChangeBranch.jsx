@@ -29,7 +29,7 @@ const ModalChangeBranch = ({ close, isActive }) => {
                   <div className="col-12">
                     {branches.map(branch => {
                       return (
-                        <Link href={`/${branch.primaryBranch ? '' : branch.id}`}>
+                        <Link href={`/${branch.primaryBranch ? '' : branch.id}`} key={branch.id}>
                           <a className="btn btn-link mx-auto btn--no-shadow w-100 mb-2">{branch.branchName}</a>
                         </Link>
                       );

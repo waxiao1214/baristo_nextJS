@@ -8,24 +8,279 @@
     .full-box .modal-dialog {max-width: 1600px}
     .old-price > span {font-size: 32px}
     .group-price {margin-top: 90px}
+    .header-top .col-2 {
+        padding: 15px 0 15px 0;
+    }
+    .search-relative {
+        width: 600px;
+    }
+    .header-action {
+        width: 700px;
+        left: -60px;
+        position: relative;
+    }
+    .btn-join {
+        left: 40px;
+        position: relative;
+    }
 }
 @media screen and (max-width: 1899px){
     .menu-abs {
         max-width: 200px;
     }
     .modal.full-box .modal-dialog {max-width: 1200px;}
+    .header-top .col-2 {
+        padding: 15px 0 15px 0;
+    }
+    .search-relative {
+        width: 500px;
+    }
+    .header-action {
+        width: 700px;
+        left: -160px;
+        position: relative;
+    } 
+    .btn-join {
+        left: 40px;
+        position: relative;
+    }
+}
+@media screen and (min-width: 1024px) and (max-width: 1468px){
+    .header-top .col-2 {
+        padding: 15px 0 15px 0;
+    }
+    .search-relative {
+        width: 300px;
+    }
+    .header-action {
+        width: 600px;
+        left: -160px;
+        position: relative;
+    } 
+    .btn-join {
+        left: 0px;
+        position: relative;
+    }
 }
 
-@media screen and (min-width: 768px) and (max-width: 1199px){
+@media screen and (max-width: 1259px){
+    .header-top .col-2 {
+        padding: 15px 0 15px 0;
+    }
+    .search-relative {
+        width: 200px;
+    }
+    .header-action {
+        width: 430px;
+        left: -100px;
+        position: relative;
+    }
+}
 
 
+@media screen and (min-width: 1024px) and (max-width: 1199px){
+    .header-top .col-2 {
+        padding: 15px 0 15px 0;
+    }
+    .header-top_right {
+        left: 0px;
+        position: relative;
+    }
+    .btn-join1 {
+        position: relative;
+        left: -50px;
+        margin-top: 1px;
+    }
+    .header-action {
+        position: relative;
+        left: -130px;
+    }
+    .header-top {
+        height: 90px;
+    }
+    .header-top_right {
+        position: relative;
+        left: 640px;
+        top: -90px;
+    }
+    .btn-join1:nth-child(2) {
+        position: relative;
+        left: -60px !important;
+        margin-top: 1px;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px){
+    .header-top .col-2 {
+        padding: 15px 0 15px 0;
+    }
+    .header-action {
+        left: 30px;
+        position: relative;
+    }
+    .location {
+        left: 20px;
+        position: relative;
+    }
+    .btn-join1 {
+      margin-top: 1px;
+    }
+    .btn-join1:nth-child(2) {
+        left: -30px;
+        position: relative;
+    }
+    .header-top_right {
+        left: 70px;
+        position: relative;
+    }
+}
+@media screen and (min-width: 375px) and (max-width: 767px){
+    .header-top .col-2 {
+        padding: 15px 0 15px 0;
+    }
+    .right-mb {
+        position: relative;
+        left: 40px;
+        top: 110px
+    }
+    .user-abs {
+        width: 700px;
+        position: relative;
+    }
+    .header-top_right {
+        width: 500px;
+        left: -430px;
+        position: relative;
+        margin-top: 5px;
+    }
+    .product-gallery {
+        max-width: 80% !important;
+        position: relative;
+        min-height: 370px !important;
+        left: 10%;
+        margin-top: 40px;
+        margin-bottom: 20px;
+    }
+    .product-right {
+        padding-top: 0px !important;
+    }
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+    .modal-content {
+        overflow-y: auto;
+        height: 712px;
+    }
+
+}
+@media screen and (min-width: 414px){
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+    .modal-content {
+        overflow-y: auto;
+        height: 536px;
+    }
+}
+
+@media screen and (min-width: 411px){
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+    .modal-content {
+        overflow-y: auto;
+        height: 823px;
+    }
+}
+@media screen and (min-width: 360px) and (max-width: 768px){
+    .product-gallery {
+        flex: 0 0 80% !important;
+        max-width: 100% !important;
+        position: relative;
+        min-height: 450px !important;
+        left: 10%;
+        margin-top: 40px;
+        margin-bottom: 20px;
+    }
+    .product-right {
+        padding-top: 0px !important;
+    }
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+    .modal-content {
+        overflow-y: auto;
+        height: 640px;
+    }
+}
+
+@media screen and (min-width: 280px){
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+    .modal-content {
+        overflow-y: auto;
+        height: 653px;
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width: 374px){
+    .header-top .col-2 {
+        padding: 15px 0 15px 0;
+    }
+    .right-mb {
+        position: relative;
+        left: 40px;
+        top: 110px
+    }
+    .user-abs {
+        width: 700px;
+        position: relative;
+    }
+    .header-top_right {
+        width: 500px;
+        left: -430px;
+        position: relative;
+        margin-top: 5px;
+    }
+    .product-gallery {
+        max-width: 80% !important;
+        min-height: 300px !important;
+        margin-top: 40px;
+        position: relative;
+        left: 10%;
+    }
+    .product-right {
+        padding-top: 0px !important;
+    }
+}
+@media screen and (min-width: 320px){
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+    .modal-content {
+        overflow-y: auto;
+        height: 568px;
+    }
+}
+@media screen and (max-width: 319px) {
+    .product-gallery {
+        max-width: 80% !important;
+        min-height: 300px !important;
+        margin-top: 40px;
+        position: relative;
+        left: 10%;
+    }
+    .product-right {
+        padding-top: 0px !important;
+    }
 }
 @media screen and (min-width: 768px) and (max-width: 1024px){
-    .header-top .col-6:first-child {
+    .header-top .col-2:first-child {
         flex: 0 0 60%;
         max-width: 60%;
     }
-    .header-top .col-6:last-child {
+    .header-top .col-2:last-child {
         flex: 0 0 40%;
         max-width: 40%;
     }
@@ -35,6 +290,13 @@
         margin-left: 5px;
         width: 100px;
         height: 50px;
+    }
+    .btn-join:nth-child(2) {
+        position: relative;
+        left: 15px;
+    }
+    .ch-more_details:first-child {
+        font-size: 14px;
     }
     .location:after {display: none}
     .our-restaurant {
@@ -93,11 +355,24 @@
     .product-index li:after {display: none}
     .product-component, .detail-wrapper {flex-wrap: wrap}
     .product-gallery {
-        flex: 0 0 100%;
-        max-width: 100%;
+        flex: 0 0 80% !important;
+        max-width: 100% !important;
+        left: 10%;
+        position: relative;
+        margin-top: 60px;
+        margin-bottom: 30px;
+        min-height: 300px !important;
+    }
+    .product-right {
+        padding-top: 0px !important;
     }
     .modal-box-lg .modal-dialog {
         max-width: 600px;
+        overflow-y: initial !important;
+    }
+    .modal-content {
+        height: 750px;
+        overflow-y: auto;
     }
 }
 @media screen and (min-width: 768px){
@@ -111,6 +386,17 @@
         display: none;
     }
     .btn-mobile {display: none}
+}
+@media screen and (max-width: 1220px) {
+    .meal-size-button {
+        max-width: 100%;
+        min-width: 100%;
+    }
+    .deleverybutton {
+        margin-right: 0px !important;
+        margin: auto;
+        min-width: 100%;
+    }
 }
 @media screen and (max-width: 767px){
     .visible-mobile {
@@ -133,7 +419,7 @@
     .between-mb {justify-content: space-between}
     .banner-item {
         background-position: top left !important;
-        padding: 50px 0 50px;
+        padding: 50px 0 50px 0;
     }
     .right-mb button {
         background: #f2f2f2;
@@ -197,7 +483,9 @@
     .pd-100, .our-restaurant {padding: 50px 0}
     .title {font-size: 36px}
     .chef-choice.pd-100 {padding-bottom: 0}
-    .chef-item {margin-bottom: 150px}
+    .chef-item {
+        margin-bottom: 150px;
+    }
     .item-nav-cache {margin: 10px}
     .footer-2 {padding-left: 0}
     .location-map > img {
@@ -422,9 +710,38 @@
     }
 }
 @media screen and (min-width: 577px) and (max-width: 767px){
-
-
 }
 @media screen and (max-width: 576px){
 
+}
+@media screen and (min-width: 1025px){
+    .product-gallery {
+        flex: 0 0 45%;
+        max-width: 45%;
+        min-height: 550px;
+    }
+    .modal-content {
+        height: auto;
+        overflow-y: none !important;
+    }
+    .noBtn button {
+        position: relative;
+        left: -16%;
+    }
+    .lgBtn button {
+        position: relative;
+        left: -35%;
+    }
+    .lgBtn span {
+        position: relative;
+        left: -11%;
+    }
+    .exLgBtn button {
+        position: relative;
+        left: -35%;
+    }
+    .exLgBtn span {
+        position: relative;
+        left: -13%;
+    }
 }

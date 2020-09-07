@@ -16,6 +16,8 @@ const initialState = {
     selectedProductChoices: [],
     orderItems: [],
     comboOrderItems: [],
+    isProductDetailsTrigger: true,
+    isMenuDetailsTrigger: true,
     orderAddressFk: {
         postalCodeId: 0,
         orderAddressFk: null
@@ -68,6 +70,16 @@ export default function cart(state = initialState, action) {
             return {
                 ...state,
                 currentActiveProductId: action.payload.id
+            }
+        case cartConstants.SET_PRODUCT_DETAILS_TRIGGER:
+            return {
+                ...state,
+                isProductDetailsTrigger: !state.isProductDetailsTrigger
+            }
+        case cartConstants.SET_MENU_DETAILS_TRIGGER:
+            return {
+                ...state,
+                isMenuDetailsTrigger: !state.isMenuDetailsTrigger
             }
         case cartConstants.SET_DELIVERY_TYPE:
             return {

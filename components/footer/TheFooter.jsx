@@ -37,7 +37,7 @@ const TheFooter = () => {
 	}, [isAllSchedulesVisible, branchSchedules]);
 
 	return (
-		<section className="footer">
+		<section className="footer" style={{clear: 'both'}}>
 			<div className="container">
 				<div className="row">
 					<div className="col-md-4">

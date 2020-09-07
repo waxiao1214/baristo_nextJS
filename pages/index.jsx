@@ -15,9 +15,9 @@ import PageSectionIndexOurLocation from '../components/pageSection/index/PageSec
 import PageSectionIndexHero from '../components/pageSection/index/PageSectionIndexHero';
 import axios from '../lib/axios';
 
-const getSpecialCruises = async (branchId) => {
+const getSpecialCruises = async (branchId, language = "en") => {
 	try {
-		const url = `customer/web/home-service/special-cruise?branchId=${branchId}&culture=${i18n.language}&deliveryType=Delivery`;
+		const url = `customer/web/home-service/special-cruise?branchId=${branchId}&culture=${language}&deliveryType=Delivery`;
 		const response = await axios.get(url);
 
 		return response.data.result;
@@ -27,9 +27,9 @@ const getSpecialCruises = async (branchId) => {
 	}
 };
 
-const getChefChoices = async (branchId) => {
+const getChefChoices = async (branchId, language = "en") => {
 	try {
-		const url = `customer/web/home-service/chef-choice?branchId=${branchId}&culture=${i18n.language}`;
+		const url = `customer/web/home-service/chef-choice?branchId=${branchId}&culture=${language}`;
 		const response = await axios.get(url);
 
 		return response.data.result;
@@ -66,11 +66,11 @@ const getSubBanner = async (branchId) => {
 	}
 };
 
-const getChefStory = async (branchId) => {
+const getChefStory = async (branchId, language = "en") => {
 	try {
-		const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${i18n.language}`;
+		console.log(i18n.language, "language")
+		const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${language}`;
 		const response = await axios.get(url);
-
 		return response.data.result;
 	} catch (error) {
 		console.error(error);
@@ -81,24 +81,22 @@ const getChefStory = async (branchId) => {
 
 const getSettings = async () => {
 	try {
-		const url = `/settings?mediaTypeFilters=LOGO&mediaTypeFilters=FAVI_ICON&mediaTypeFilters=MOBILE_PROFILE_IMAGE&mediaTypeFilters=MOBILE_START_SCREEN&mediaTypeFilters=MOBILE_WELCOME_SCREEN`;
+		const url = `settings?mediaTypeFilters=LOGO&mediaTypeFilters=FAVI_ICON&mediaTypeFilters=MOBILE_PROFILE_IMAGE&mediaTypeFilters=MOBILE_START_SCREEN&mediaTypeFilters=MOBILE_WELCOME_SCREEN`;
 		const response = await axios.get(url);
 
 		return response.data.result;
 	} catch (error) {
 		console.error(error);
-
 		return [];
 	}
 };
 
 export async function getServerSideProps() {
 	const settings = await getSettings();
-
 	// get current branch
 	const { branches } = settings;
 	const currentBranch = branches.filter((branch) => branch.primaryBranch)[0];
-
+	console.log(currentBranch.id, "currentbranch Id")
 	const specialCruises = await getSpecialCruises(currentBranch.id);
 	const chefChoices = await getChefChoices(currentBranch.id);
 	const appResources = await getAppResources(currentBranch.id);
@@ -127,17 +125,15 @@ function Index(props) {
 		isDeliveryAvailabilitySectionVisible,
 		setIsDeliveryAvailabilitySectionVisible,
 	] = useState(true);
-
+	const [prop, setProp] = useState(props)
 	// set which section to show and hide
+
 	useEffect(() => {
 		if (!currentBranch.contentWidgets) return;
-
 		const contentWidgets = {};
-
 		currentBranch.contentWidgets.forEach(({ name, isActive }) => {
 			contentWidgets[name] = isActive;
 		});
-
 		setContentWidgets(contentWidgets);
 	}, [currentBranch]);
 
@@ -148,35 +144,59 @@ function Index(props) {
 		const { deliveryOption } = currentBranch.deliverySetting;
 		setIsDeliveryAvailabilitySectionVisible(
 			deliveryOption === 'DeliveryOnly' ||
-				deliveryOption === 'DeliveryAndPickup'
+			deliveryOption === 'DeliveryAndPickup'
 		);
 	}, [currentBranch]);
+
+	useEffect(async () => {
+		let language = i18n.language
+		const specialCruises = await getSpecialCruises(props.currentBranch.id, language);
+		const chefChoices = await getChefChoices(props.currentBranch.id, language);
+		const chefStory = await getChefStory(props.currentBranch.id, language);
+
+		setProp({
+			...prop,
+			specialCruises,
+			chefChoices,
+			chefStory
+		})
+	}, [])
+
+	console.log(prop.specialCruises, "whatis--")
 
 	return (
 		<DefaultLayout>
 			<TheHeader />
 			{contentWidgets.CAROUSEL && <PageSectionIndexHero />}
-			{contentWidgets.SPECIALCRUISE && (
+
+			{ 
+				contentWidgets.SPECIALCRUISE && prop ? 
+				<div className = "" style = {{height:"100px", width:"200px"}}>shimma effect</div>:
+				<div className = "shine" style = {{height:"100px", width:"200px"}}>shimma effect</div>
+			}
+  
+			{contentWidgets.SPECIALCRUISE && prop &&
 				<PageSectionIndexSpecialCruise
-					specialCruises={props.specialCruises}
+					specialCruises={prop.specialCruises}
 				/>
-			)}
+			}
+
 			{isDeliveryAvailabilitySectionVisible && (
 				<PageSectionIndexDeliveryAvailability />
 			)}
-			{contentWidgets.CHEFSCHOICE && (
-				<PageSectionIndexChefsChoices chefChoices={props.chefChoices} />
+			{contentWidgets.CHEFSCHOICE && prop && (
+				<PageSectionIndexChefsChoices chefChoices={prop.chefChoices} />
 			)}
-			{contentWidgets.SUBBANNER && (
-				<PageSectionIndexOurRestaurant subBanner={props.subBanner} />
+			{contentWidgets.SUBBANNER && prop && (
+				<PageSectionIndexOurRestaurant subBanner={prop.subBanner} />
 			)}
-			{contentWidgets.CHEFSSTORY && (
-				<PageSectionIndexOurChef chefStory={props.chefStory} />
+			{contentWidgets.CHEFSSTORY && prop && (
+				<PageSectionIndexOurChef chefStory={prop.chefStory} />
 			)}
 			<PageSectionIndexOurLocation />
-			{contentWidgets.APPRESOURCES && (
+			{contentWidgets.APPRESOURCES && prop && (
 				<PageSectionIndexOurResource
-					appResources={props.appResources}
+					appResources={prop.appResources}
 				/>
 			)}
 			<TheFooter />
@@ -184,4 +204,4 @@ function Index(props) {
 	);
 }
 
-export default withTranslation('index')(Index);
+export default withTranslation()(Index);

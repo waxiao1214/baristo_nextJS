@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router'
 import usePageOnLoad from '../../hooks/page/usePageOnLoad';
 import i18n from '../../i18n/i18n';
 import DefaultLayout from '../../layouts/DefaultLayout';
@@ -16,9 +17,9 @@ import PageSectionIndexHero from '../../components/pageSection/index/PageSection
 import axios from '../../lib/axios';
 import _ from 'lodash';
 
-const getSpecialCruises = async (branchId) => {
+const getSpecialCruises = async (branchId, language) => {
 	try {
-		const url = `customer/web/home-service/special-cruise?branchId=${branchId}&culture=${i18n.language}&deliveryType=Delivery`;
+		const url = `customer/web/home-service/special-cruise?branchId=${branchId}&culture=${language}&deliveryType=Delivery`;
 		const response = await axios.get(url);
 
 		return response.data.result;
@@ -28,9 +29,9 @@ const getSpecialCruises = async (branchId) => {
 	}
 };
 
-const getChefChoices = async (branchId) => {
+const getChefChoices = async (branchId, language) => {
 	try {
-		const url = `customer/web/home-service/chef-choice?branchId=${branchId}&culture=${i18n.language}`;
+		const url = `customer/web/home-service/chef-choice?branchId=${branchId}&culture=${language}`;
 		const response = await axios.get(url);
 
 		return response.data.result;
@@ -67,11 +68,10 @@ const getSubBanner = async (branchId) => {
 	}
 };
 
-const getChefStory = async (branchId) => {
+const getChefStory = async (branchId, language) => {
 	try {
-		const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${i18n.language}`;
+		const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${language}`;
 		const response = await axios.get(url);
-
 		return response.data.result;
 	} catch (error) {
 		console.error(error);
@@ -82,7 +82,7 @@ const getChefStory = async (branchId) => {
 
 const getSettings = async () => {
 	try {
-		const url = `/settings?mediaTypeFilters=LOGO&mediaTypeFilters=FAVI_ICON&mediaTypeFilters=MOBILE_PROFILE_IMAGE&mediaTypeFilters=MOBILE_START_SCREEN&mediaTypeFilters=MOBILE_WELCOME_SCREEN`;
+		const url = `settings?mediaTypeFilters=LOGO&mediaTypeFilters=FAVI_ICON&mediaTypeFilters=MOBILE_PROFILE_IMAGE&mediaTypeFilters=MOBILE_START_SCREEN&mediaTypeFilters=MOBILE_WELCOME_SCREEN`;
 		const response = await axios.get(url);
 
 		return response.data.result;
@@ -102,7 +102,6 @@ export async function getServerSideProps(context) {
 	const currentBranch = branches.filter((branch) => {
 		return branch.id === parseInt(branchId);
     })[0];
-
     // if branch is not found
 	if (_.isNil(currentBranch)) {
 		context.res.statusCode = 404;
@@ -130,6 +129,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Index(props) {
+
 	useUserFetchCurrentUser();
 	usePageOnLoad(props);
 	const { currentBranch } = props;
@@ -139,6 +139,7 @@ export default function Index(props) {
 		setIsDeliveryAvailabilitySectionVisible,
 	] = useState(true);
 
+	const [prop, setProp] = useState(props)
 	// set which section to show and hide
 	useEffect(() => {
 		if (!currentBranch.contentWidgets) return;
@@ -163,31 +164,44 @@ export default function Index(props) {
 		);
 	}, [currentBranch]);
 
+	useEffect(async () => {
+		let language = i18n.language
+		const specialCruises = await getSpecialCruises(props.currentBranch.id, language);
+		const chefChoices = await getChefChoices(props.currentBranch.id, language);
+		const chefStory = await getChefStory(props.currentBranch.id, language);
+		setProp({
+			...prop,
+			specialCruises,
+			chefChoices,
+			chefStory
+		})
+	}, [])
+
 	return (
 		<DefaultLayout>
 			<TheHeader />
 			{contentWidgets.CAROUSEL && <PageSectionIndexHero />}
-			{contentWidgets.SPECIALCRUISE && (
+			{contentWidgets.SPECIALCRUISE && prop && (
 				<PageSectionIndexSpecialCruise
-					specialCruises={props.specialCruises}
+					specialCruises={prop.specialCruises}
 				/>
 			)}
-			{isDeliveryAvailabilitySectionVisible && (
+			{isDeliveryAvailabilitySectionVisible && prop && (
 				<PageSectionIndexDeliveryAvailability />
 			)}
-			{contentWidgets.CHEFSCHOICE && (
-				<PageSectionIndexChefsChoices chefChoices={props.chefChoices} />
+			{contentWidgets.CHEFSCHOICE && prop && (
+				<PageSectionIndexChefsChoices chefChoices={prop.chefChoices} />
 			)}
-			{contentWidgets.SUBBANNER && (
-				<PageSectionIndexOurRestaurant subBanner={props.subBanner} />
+			{contentWidgets.SUBBANNER && prop && (
+				<PageSectionIndexOurRestaurant subBanner={prop.subBanner} />
 			)}
-			{contentWidgets.CHEFSSTORY && (
-				<PageSectionIndexOurChef chefStory={props.chefStory} />
+			{contentWidgets.CHEFSSTORY && prop && (
+				<PageSectionIndexOurChef chefStory={prop.chefStory} />
 			)}
 			<PageSectionIndexOurLocation />
-			{contentWidgets.APPRESOURCES && (
+			{contentWidgets.APPRESOURCES && prop && (
 				<PageSectionIndexOurResource
-					appResources={props.appResources}
+					appResources={prop.appResources}
 				/>
 			)}
 			<TheFooter />

@@ -5,7 +5,9 @@ import { useDispatch } from 'react-redux';
 import {
   setProductsBatch,
   setCurrentActiveProductId,
-  setCurrentActiveProductIndex
+  setCurrentActiveProductIndex,
+  setProductDetailsTrigger,
+  setMenuDetailsTrigger
 } from '../../store/actions/cart.actions';
 import ProductCard from '../../components/product/ProductCard';
 import ProductChefItemCardV2 from '../../components/product/ProductChefItemCardV2';
@@ -23,6 +25,14 @@ const ProductsContainer = ({ products, productCardType }) => {
   const boundSetCurrentActiveProductIndex = (index) =>
     dispatch(setCurrentActiveProductIndex(index));
 
+  const boundSetProductsDetailsTrigger = () => {
+    dispatch(setProductDetailsTrigger());
+  }
+
+  const boundSetMenuDetailsTrigger = () => {
+    dispatch(setMenuDetailsTrigger());
+  }
+
   const openMoreDetailsModal = (id, index) => {
     // set the products batch 
     boundSetProductsBatch(products);
@@ -30,10 +40,16 @@ const ProductsContainer = ({ products, productCardType }) => {
     boundSetCurrentActiveProductId(id);
     // set the current active product index
     boundSetCurrentActiveProductIndex(index);
+    // if v3 type
+    if (productCardType === 'v3') {
+      boundSetMenuDetailsTrigger();
+    } else {
+      // trigger the product details changes
+      boundSetProductsDetailsTrigger();
+    }
   };
 
   if (!_.isArray(products)) return '';
-
   return (
     <div className="col-12">
       <div className="row">

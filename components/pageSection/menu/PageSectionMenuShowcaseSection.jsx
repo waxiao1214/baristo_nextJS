@@ -37,7 +37,7 @@ const PageSectionMenuShowcaseSection = ({ discountedMeals }) => {
 						</div>
 					</div>
 				) : (
-					<ProductsContainer products={products} />
+					<ProductsContainer products={products} productCardType='v3'/>
 				)}
 			</div>
 		</section>
