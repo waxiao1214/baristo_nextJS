@@ -387,6 +387,17 @@
     }
     .btn-mobile {display: none}
 }
+@media screen and (max-width: 1220px) {
+    .meal-size-button {
+        max-width: 100%;
+        min-width: 100%;
+    }
+    .deleverybutton {
+        margin-right: 0px !important;
+        margin: auto;
+        min-width: 100%;
+    }
+}
 @media screen and (max-width: 767px){
     .visible-mobile {
         display: block;

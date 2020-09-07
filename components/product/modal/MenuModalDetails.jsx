@@ -36,18 +36,20 @@ const selectMealSize = (discountType, currency, price) => {
     return <span className="discount-percentage  inflex-center-center btn-gray btn-bgLeft" style={{ backgroundColor: 'transparent', zIndex: '100' }}>{`${currency} ${price.price} - ${price.size}`}</span>
   }
 }
-
+// 251 175 2
 const DeliveryTypeSwitch = ({ deliveryType, onChange }) => {
   const types = ['Delivery', 'PickUp'];
-  return (
-    <div className="col-md-12" style={{ display: "flex", flexDirection: 'row', justifyContent: 'flex-start' }}>
+  return (<div className = "row">
       {types.map((type) => {
         return (
-          <button style={{ marginBottom: "50px" }} onClick={() => onChange(type)} type="button" key={type} className="px-5 mr-5 btn btn-primary inflex-center-center btn-gray btn-h46">
-            <div style={{ opacity: deliveryType === type ? 1 : 0.4, fontWeight: 900 }}>
+          <div className="col-md-6 col-sm-12" style={{ display: "flex", flexDirection: 'row', justifyContent: 'flex-start' }}>
+          <button style={{ marginBottom: "50px" }} onClick={() => onChange(type)} type="button" key={type} 
+          className={`px-5 mr-5 btn btn-primary deleverybutton inflex-center-center btn-h46 ${deliveryType === type? "btn-yellow":"btn-gray"}`}>
+            <div style={{opacity: deliveryType === type ? 1 : 0.4, fontWeight: 900 }}>
               {type}
             </div>
-          </button>)
+          </button>
+          </div>)
       })
       }
     </div>
@@ -218,9 +220,7 @@ const MenuModalDetails = ({
                                   <div style={{ marginTop: '20px', marginBottom: '20px', fontSize: '18px' }}>
                                     <span>Do you want to get {productDetails.title} by delivery or pickup?</span>
                                   </div>
-                                  <div className="row">
                                     <DeliveryTypeSwitch deliveryType={deliveryType} onChange={(type) => boundSetDeliveryType(type)} />
-                                  </div>
                                 </div>
                               </div>
                             }
@@ -231,17 +231,17 @@ const MenuModalDetails = ({
                                     <span>Please select the meal size.</span>
                                   </div>
                                   <div className="row">
-                                    <div className="col-md-12 mealSize" style={{ display: "flex", flexDirection: 'row', justifyContent: 'flex-start' }}>
                                       {mealPrices.map((price, index) => {
                                         console.log(price, "size--")
                                         if (price.menuPriceOption !== deliveryType) return <div></div>;
-                                        return <button type="button" style={{ padding: "0px", marginBottom: "20px" }}
+                                        return <div className="col-md-6 col-sm-12 mealSize" style={{ display: "flex", flexDirection: 'row', justifyContent: 'flex-start' }}>
+                                          <button type="button" style={{ padding: "0px", marginBottom: "20px" }}
                                           onClick={() => selectPrice(price.id)} isSelected={selectedPrice.id === price.id}
-                                          className="px-5 mr-5 btn btn-primary inflex-center-center btn-gray btn-h46">
+                                          className={`px-5 mr-5 btn btn-primary inflex-center-center meal-size-button ${selectedPrice.id === price.id? "btn-yellow":"btn-gray"} btn-h46`}>
                                           <MealPrice key={index} price={price} isSelected={selectedPrice.id === price.id} />
                                         </button>
+                                        </div>
                                       })}
-                                    </div>
                                   </div>
                                 </div>
                               }
