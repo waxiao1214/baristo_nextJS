@@ -15,7 +15,7 @@ import PageSectionIndexOurLocation from '../components/pageSection/index/PageSec
 import PageSectionIndexHero from '../components/pageSection/index/PageSectionIndexHero';
 import axios from '../lib/axios';
 
-const getSpecialCruises = async (branchId, language) => {
+const getSpecialCruises = async (branchId, language = "en") => {
 	try {
 		const url = `customer/web/home-service/special-cruise?branchId=${branchId}&culture=${language}&deliveryType=Delivery`;
 		const response = await axios.get(url);
@@ -27,7 +27,7 @@ const getSpecialCruises = async (branchId, language) => {
 	}
 };
 
-const getChefChoices = async (branchId, language) => {
+const getChefChoices = async (branchId, language = "en") => {
 	try {
 		const url = `customer/web/home-service/chef-choice?branchId=${branchId}&culture=${language}`;
 		const response = await axios.get(url);
@@ -66,7 +66,7 @@ const getSubBanner = async (branchId) => {
 	}
 };
 
-const getChefStory = async (branchId, language) => {
+const getChefStory = async (branchId, language = "en") => {
 	try {
 		console.log(i18n.language, "language")
 		const url = `customer/web/home-service/chef-story?branchId=${branchId}&culture=${language}`;
@@ -137,9 +137,6 @@ function Index(props) {
 		setContentWidgets(contentWidgets);
 	}, [currentBranch]);
 
-	useEffect(() => {
-		console.log(i18n.language, "language -- client")
-	}, [])
 	// set if delivery availability section is visible
 	useEffect(() => {
 		if (!currentBranch.contentWidgets) return;
@@ -165,15 +162,25 @@ function Index(props) {
 		})
 	}, [])
 
+	console.log(prop.specialCruises, "whatis--")
+
 	return (
 		<DefaultLayout>
 			<TheHeader />
 			{contentWidgets.CAROUSEL && <PageSectionIndexHero />}
-			{contentWidgets.SPECIALCRUISE && prop && (
+
+			{ 
+				contentWidgets.SPECIALCRUISE && prop ? 
+				<div className = "" style = {{height:"100px", width:"200px"}}>shimma effect</div>:
+				<div className = "shine" style = {{height:"100px", width:"200px"}}>shimma effect</div>
+			}
+  
+			{contentWidgets.SPECIALCRUISE && prop &&
 				<PageSectionIndexSpecialCruise
 					specialCruises={prop.specialCruises}
 				/>
-			)}
+			}
+
 			{isDeliveryAvailabilitySectionVisible && (
 				<PageSectionIndexDeliveryAvailability />
 			)}

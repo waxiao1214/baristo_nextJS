@@ -176,7 +176,6 @@ export default function Gallery(props) {
 	// search
 	const [isSearching, setIsSearching] = useState(initialIsSearching);
 
-
 	return (
 		<DefaultLayout>
 			<TheHeader />

@@ -235,6 +235,36 @@ a {
 .btn-login:hover {
   color: #fbaf02;
 }
+
+.shine {
+  background: #f6f7f8;
+  background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+  background-repeat: no-repeat;
+  display: inline-block;
+  position: relative;
+  animation-duration: 1s;
+  animation-fill-mode: forwards; 
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
+  }
+
+text {
+  display: block!important;
+  width: 325px; 
+  height: 100px; 
+  margin-top: 15px;
+}
+
+@keyframes placeholderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  
+  100% {
+    background-position: 468px 0; 
+  }
+}
 .location {
   margin-right: 80px;
   position: relative;
@@ -255,7 +285,7 @@ a {
   padding-top: 35px;
 }
 .banner-item {
-  padding: 200px 0 150px 0;
+  padding: 200px 0px 150px 0;
 }
 .banner-text h4 {
   font-size: 40px;
@@ -338,7 +368,20 @@ a {
 }
 .discount {
   background-image: url('../images/icon/icon-percen.svg');
-  font-weight: 500;
+  font-weight: 900;
+  font-size: 18px;
+  padding-right: 20px;
+}
+.discount-fixed {
+  background-image: url('../images/icon/icon-fixed.png');
+  background-size: contain;
+  font-weight: 900;
+  font-size: 18px;
+  padding-right: 20px;
+}
+.discount-percentage {
+  background-image: url('../images/icon/icon-percen.svg');
+  font-weight: 900;
   font-size: 18px;
   padding-right: 20px;
 }
@@ -390,8 +433,8 @@ a {
 .chef-item {
   background-color: #f2f2f2;
   padding: 110px 30px 100px;
-  min-height: 600px;
-  height: fit-content;
+  min-height: 650px;
+  max-height: 650px;
 }
 .more-content {
   padding: 50px;
@@ -2029,13 +2072,17 @@ body.modal-open-2 {
 }
 .old-price {
   display: flex;
+  font-size: 30px;
   align-items: center;
+  color: #fbaf02;
+  font-weight: bold;
 }
 .new-price {
   color: #fbaf02;
-  font-size: 42px;
+  font-size: 30px;
   font-weight: bold;
 }
+
 .detail-slider {
   min-height: 20rem;
   overflow-x: hidden;

@@ -3,7 +3,7 @@
 import { isNil, isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import BaseLoader from '../../base/BaseLoader';
 import BaseDiscountPill from '../../base/BaseDiscountPill';
 import { setDeliveryType, setSelectedPrice } from '../../../store/actions/cart.actions';
@@ -11,9 +11,9 @@ import { setDeliveryType, setSelectedPrice } from '../../../store/actions/cart.a
 const MealPrice = ({ price, onClick, isSelected }) => {
   const { discountType } = price.mealSettings[0] && price.mealSettings[0]
   const { currency } = useSelector((state) => state.root.settings);
-  console.log(discountType, "size")
+  console.log(price, discountType, isSelected, "size----")
   // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-  return (<div onClick={onClick} className="" style={{ cursor: 'pointer', opacity: isSelected ? 1 : 0.4 }}>
+  return (<div className="delevery-pickup" style={{ cursor: 'pointer', opacity: isSelected ? 1 : 0.4 }}>
     <span
       className="font-weight-bold"
       style={{
@@ -21,29 +21,47 @@ const MealPrice = ({ price, onClick, isSelected }) => {
         fontSize: '1rem'
       }}
     >
-      {discountType == "Fixed" ? 
-        <span className="discount inflex-center-center btn-gray btn-bgLeft" style={{backgroundColor: 'transparent', zIndex: '100'}}>{`${currency} ${price.price} - ${price.size}`}</span> : 
-        <span>{`${currency} ${price.price} - ${price.size}`}</span>
-      }
-      
+      {selectMealSize(discountType, currency, price)}
+
     </span>
   </div>)
 }
 
+const selectMealSize = (discountType, currency, price) => {
+  if (discountType === "Fixed") {
+    return <span className="discount-fixed inflex-center-center btn-gray btn-bgLeft" style={{ backgroundColor: 'transparent', zIndex: '100' }}>{`${currency} ${price.price} - ${price.size}`}</span>
+  } else if (discountType === "None") {
+    return <span className="" style={{ backgroundColor: 'transparent', zIndex: '100' }}>{`${currency} ${price.price} - ${price.size}`}</span>
+  } else {
+    return <span className="discount-percentage  inflex-center-center btn-gray btn-bgLeft" style={{ backgroundColor: 'transparent', zIndex: '100' }}>{`${currency} ${price.price} - ${price.size}`}</span>
+  }
+}
+
 const DeliveryTypeSwitch = ({ deliveryType, onChange }) => {
   const types = ['Delivery', 'PickUp'];
-
   return (
     <div className="col-md-12" style={{ display: "flex", flexDirection: 'row', justifyContent: 'flex-start' }}>
       {types.map((type) => {
         return (
-          <button onClick={() => onChange(type)} type="button" key={type} className="px-5 mr-5 btn btn-primary inflex-center-center btn-gray btn-h46">
-            {type}
+          <button style={{ marginBottom: "50px" }} onClick={() => onChange(type)} type="button" key={type} className="px-5 mr-5 btn btn-primary inflex-center-center btn-gray btn-h46">
+            <div style={{ opacity: deliveryType === type ? 1 : 0.4, fontWeight: 900 }}>
+              {type}
+            </div>
           </button>)
       })
       }
     </div>
   )
+}
+
+function compare(a, b) {
+  if (a.price < b.price) {
+    return 1
+  }
+  if (a.price > b.price) {
+    return -1
+  }
+  return 0;
 }
 
 const MenuModalDetails = ({
@@ -59,10 +77,9 @@ const MenuModalDetails = ({
   const { deliveryType, selectedPrice, orderItems, comboOrderItems } = useSelector((state) => state.cart);
   const { mealPrices } = productDetails;
   const { loyaltyPointsBase } = useSelector((state) => state.root.settings);
-
   const boundSetDeliveryType = (type) => dispatch(setDeliveryType(type));
   const boundSetSelectedPrice = (price) => dispatch(setSelectedPrice(price));
-
+  const [nonePrice, setNonePrice] = useState()
   const selectPrice = (id) => {
     if (selectedPrice.id === id) return;
 
@@ -71,18 +88,32 @@ const MenuModalDetails = ({
   const calcFinalPrice = (price) => {
     if (isNil(price)) return 0;
 
-    if (price.mealSettings.length === 0) return price.price;
+    if (price.mealSettings && price.mealSettings.length === 0) return price.price;
 
-    const mealSettings = price.mealSettings[0];
+    const mealSettings = price.mealSettings && price.mealSettings[0];
 
-    if (!mealSettings.applyDiscount) return price.price;
+    if (mealSettings && !mealSettings.applyDiscount) return price.price;
 
-    if (mealSettings.discountType === 'Fixed') return price.price - mealSettings.discount;
+    if (mealSettings && mealSettings.discountType === 'Fixed') return price.price - mealSettings.discount;
 
-    if (mealSettings.discountType === 'Percentage') return price.price - (mealSettings.discount * price.price / 100);
+    if (mealSettings && mealSettings.discountType === 'Percentage') return price.price - (mealSettings.discount * price.price / 100);
 
     return price.price;
   }
+
+  useEffect(() => {
+    if (mealPrices && mealPrices.length > 0) {
+      mealPrices.sort(compare)
+      for (let mealprice in mealPrices) {
+        if (mealPrices[mealprice].mealSettings[0].discountType == "None") {
+          console.log("noneprice", typeof (mealPrices[mealprice].price))
+          console.log(typeof (calcFinalPrice(selectedPrice)), "noneprice")
+          console.log(Number(calcFinalPrice(selectedPrice)) === Number(mealPrices[mealprice].price), "noneprice")
+          return setNonePrice(mealPrices[mealprice].price)
+        }
+      }
+    }
+  }, [mealPrices])
 
   useEffect(() => {
     if (isNil(mealPrices) || isEmpty(mealPrices)) return;
@@ -104,7 +135,7 @@ const MenuModalDetails = ({
     window.location.hash = ""
   }
 
-  console.log(productDetails, "product")
+  console.log(mealPrices, "product")
 
   return (
     <div>
@@ -202,12 +233,12 @@ const MenuModalDetails = ({
                                   <div className="row">
                                     <div className="col-md-12 mealSize" style={{ display: "flex", flexDirection: 'row', justifyContent: 'flex-start' }}>
                                       {mealPrices.map((price, index) => {
-                                        if (price.menuPriceOption !== deliveryType) return '';
-                                        return <button type="button" style = {{ padding: "0px", marginBottom:"20px"}} 
-
+                                        console.log(price, "size--")
+                                        if (price.menuPriceOption !== deliveryType) return <div></div>;
+                                        return <button type="button" style={{ padding: "0px", marginBottom: "20px" }}
                                           onClick={() => selectPrice(price.id)} isSelected={selectedPrice.id === price.id}
                                           className="px-5 mr-5 btn btn-primary inflex-center-center btn-gray btn-h46">
-                                          <MealPrice key={index} price={price} />
+                                          <MealPrice key={index} price={price} isSelected={selectedPrice.id === price.id} />
                                         </button>
                                       })}
                                     </div>
@@ -215,20 +246,34 @@ const MenuModalDetails = ({
                                 </div>
                               }
                             </div>
-                            <div className="row">
-                              <div className="col-md-5">
-                                <div className="new-price">{`${currency} ${calcFinalPrice(selectedPrice)}`}</div>
+                            {productDetails.offeredInSizes &&
+                              <div className="row">
+                                <div className="col-md-5">
+                                  {mealPrices &&
+                                    mealPrices[0].price == calcFinalPrice(selectedPrice) ?
+                                    <div>
+                                      <div className="old-price">{`${currency} ${mealPrices && mealPrices[0].price}`}</div>
+                                      <div className="old-price"></div>
+                                    </div>
+                                     :
+                                    <div>
+                                      <div className="old-price"><span>{`${currency} ${mealPrices && mealPrices[0].price}`}</span></div>
+                                      <div className="new-price">{`${currency} ${calcFinalPrice(selectedPrice)}`}</div>
+                                    </div>
+                                  }
+                                </div>
+                                <div className="col-md-5 d-flex justify-content-end">
+                                  <button
+                                    type="button"
+                                    className="btn btn-yellow btn-h60 font-18 font-demi w230 btn-order"
+                                    onClick={order}
+                                    style={{ marginTop: "20px" }}
+                                  >
+                                    {t('add to cart')}
+                                  </button>
+                                </div>
                               </div>
-                              <div className="col-md-5 d-flex justify-content-end">
-                                <button
-                                  type="button"
-                                  className="btn btn-yellow btn-h60 font-18 font-demi w230 btn-order"
-                                  onClick={order}
-                                >
-                                  {t('add to cart')}
-                                </button>
-                              </div>
-                            </div>
+                            }
                           </div>
                         </div>
                       </div>
